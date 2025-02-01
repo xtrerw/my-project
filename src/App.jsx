@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Admin from "./admin/Admin";
 import User from "./usuario/User";
-import "./App.css"
 function App() {
 
 

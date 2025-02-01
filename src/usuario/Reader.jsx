@@ -13,7 +13,7 @@ function Reader() {
   }, []);
 
   return (
-    <div>
+    <div className='parte-titulo'>
       <h1 className='titulo'>La Plataform de Lector</h1>
       <div>
         {libros.map((libro, index) => (
