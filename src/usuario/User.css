@@ -1,3 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+.anton-regular {
+  font-family: "Anton", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.dancing-script{
+  font-family: "Lobster", serif;
+  font-size: 100px;
+  font-weight: 500;
+  
+}
 :root {
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   
@@ -7,7 +23,9 @@
     cursor: default;
 
     --bg-color-default:#fff;
+    --bg-color-default2:#854e06;
     --bg-color-main:#535bf2;
+    --bg-color-main2:#646cff;
     --height-header:40px;
   }
   
@@ -36,27 +54,46 @@
   
   main{
     padding-top: var(--height-header);
-    min-height: 100vh;
-
-    
   }
   .parte-titulo{
+    min-height: calc(100vh - var(--height-header));
     background-image: url("../img/bg-main.jpg");
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
+    /* background: var(--bg-color-default2); */
+  }
+  .parte-titulo::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background: linear-gradient(to right, #535bf2 30%, #646cff00); 
+}
+
+  .parte-primero{
+    width: 50%;
+    min-height: 100vh;
+    padding: 0 100px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
   }
   .titulo{
-    color: white;
+    color: var(--bg-color-default);
   }
   a {
     font-weight: 500;
-    color: #646cff;
+    color: var(--bg-color-main2);
     text-decoration: inherit;
     cursor: pointer;
   }
   a:hover {
-    color: #535bf2;
+    color: var(--bg-color-main);
   }
   
   h1 {

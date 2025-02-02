@@ -6,37 +6,14 @@ import Contenido from "./Contenido";
 import { useState } from "react";
 import "./User.css";
 import Categoria from "./Categoria";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/all";
-import { useGSAP } from "@gsap/react";
+
 const User = () => {
     //dividir las paginas de autores y lectores
     const [isAuthor, setIsAuthor] = useState(false)
     // items del menu
     const arrayItemsMenu=["Imprescindibles","Ficción","No Ficción","Cómic y Manga"]
 
-    // animacion del main
-    gsap.registerPlugin(ScrollTrigger)
-    useGSAP(()=>{
-      ScrollTrigger.create({
-        trigger: "header",
-        markers: true,
-        animation:
-        gsap.fromTo(".parte-titulo",{
-          filter:"grayscale(100%) blur(2px)",
-          borderRadius: 0,
-          y:10,
-          scale:1
-        },{
-          duration: 1,
-          ease: "sine.inOut",
-          filter:"grayscale(0%) blur(0px)",
-          borderRadius: 20,
-          scale:0.95,
-          y:0
-        })
-      })
-    })
+  
   return (
     <>
       {/* menu */}
@@ -63,10 +40,10 @@ const User = () => {
       {/* main */}
       <main>
         <Routes>
-          {isAuthor ? 
-            <Route path="/Author" element={<Author />} /> : 
+          
+            <Route path="/Author" element={<Author />} /> 
             <Route path="/" element={<Reader />} />
-          }
+          
           <Route path="/Author/:id" element={<Subir />} />
           <Route path="/Libros/:id" element={<Contenido />} />
 
