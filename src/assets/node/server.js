@@ -18,15 +18,22 @@ mongoose.connect(url, {
   useUnifiedTopology: true,
 }).then(()=>console.log('Conectado a MongoDB')).catch((err)=>console.log(err)).catch((err)=>console.log("Error al conectar a MongoDB: "+err));
 //agregar documento
-const addDocument=(modelo,doc)=>{
-    return modelo.findOne({nombre:doc.nombre}).then((docExiste)=>{
-        if(!docExiste){//si no existe el documento
-            return modelo.create(doc);//crea el documento
-        }else{
-            return null
-        }
-    })
-}
+const addDocument = async (modelo, docs, campoUnico = 'nombre') => {
+    if (!Array.isArray(docs)) {
+      docs = [docs]; // si lo que insertar no es Array, convertir en array
+    }
+    for (const doc of docs) {
+      const consulta = {};
+      consulta[campoUnico] = doc[campoUnico]; // consultar array dinamicamente
+
+      const docExiste = await modelo.findOne(consulta);
+      if (!docExiste) {
+        await modelo.create(doc);
+      }
+    }
+};
+
+  
 
 //administrador
 const SchemaAdmin=new mongoose.Schema({
@@ -43,7 +50,7 @@ const nuevoAdmin=[
         tipo:"admin"
     }
 ]
-addDocument(Admin,nuevoAdmin)
+
 //Reader
 const SchemaUsuario=new mongoose.Schema({
     nombre:String,
@@ -127,44 +134,71 @@ const SchemaContenido=new mongoose.Schema({
 
 const Contenido=mongoose.model('Contenido',SchemaContenido);
 //agregar libros y contenido de ejemplo
-const insertarDatos=async()=>{
-    try {
-        
-        //insertar id de autor
-        const autorInsertar=await Autor.insertMany(nuevoAutor)
-        const autorID=autorInsertar.map(a=>a._id);
-
-        //insertar id de categoría
-        const categoriaInsertar=await Categoria.insertMany(nuevoCategorias)
-        const categoriaID=categoriaInsertar.map(c=>c._id);
-
-        const nuevoLibros=[
-            {
-                img:"src/img/libro.jpg",
-                titulo:"ASAs",
-                autorID:autorID[0],
-                precio:15,
-                cateID:categoriaID[0],
-                colleccion:categoriaInsertar[0].colleccion[0],
-            }
-        ];
-        //insertar id de libro
-        const libroInsertar=await Libro.insertMany(nuevoLibros)
-        const libroID=libroInsertar.map(l=>l.id);
-        const nuevoContenidos=[
-            {
-                libroID:libroID[0],
-                contenido:"Contenido del libro ASAs"
-            }
-        ];
-
-        await Contenido.insertMany(nuevoContenidos)
-    } catch (error) {
-        console.error("Error al insertar datos:", error);
+const nuevoLibros = [
+    {
+      img:"src/img/libro.jpg",
+      titulo:"ASAs",
+      precio:15,
+      // insertar los datos luego
+      autorID:null,
+      cateID:null,
+      colleccion:null
     }
-}
+  ];
+  
+  const insertarDatos = async () => {
+    try {
+      // comprobar los datos si están establecidos
+      const autorExistente = await Autor.findOne({ usernombre: nuevoAutor[0].usernombre });
+      const categoriaExistente = await Categoria.findOne({ nombre: nuevoCategorias[0].nombre });
+  
+      if (!autorExistente || !categoriaExistente) {
+        console.log("Autor o categoría no encontrados, asegúrate de haberlos insertado primero.");
+        return;
+      }
+  
+      nuevoLibros[0].autorID = autorExistente._id;
+      nuevoLibros[0].cateID = categoriaExistente._id;
+      nuevoLibros[0].colleccion = categoriaExistente.colleccion[0];
+  
+      // si existen los libros antes de insertar los datos
+      const libroExistente = await Libro.findOne({ titulo: nuevoLibros[0].titulo });
+      if (!libroExistente) {
+        const libroInsertar = await Libro.insertMany(nuevoLibros);
+        const libroID = libroInsertar.map(l => l.id);
+  
+        const nuevoContenidos = [
+          {
+            libroID: libroID[0],
+            contenido: "Contenido del libro ASAs"
+          }
+        ];
+  
+        await Contenido.insertMany(nuevoContenidos);
+      } else {
+        console.log("El libro ya existe, no se insertará nuevamente.");
+      }
+    } catch (error) {
+      console.error("Error al insertar datos:", error);
+    }
+  };
+  
+  
+const initDB = async () => {
+    await addDocument(Admin, nuevoAdmin, 'username');
+    await addDocument(Autor, nuevoAutor, 'usernombre');
+    await addDocument(Categoria, nuevoCategorias, 'nombre');
+  
+    for (const libro of nuevoLibros) {
+      const libroExistente = await Libro.findOne({ titulo: libro.titulo });
+      if (!libroExistente) {
+        await insertarDatos(); // realizar sin existir los libros
+        break; // parar bucle depués de insertar los datos
+      }
+    }
+  };
+  
+  initDB();
 
-insertarDatos();
-
-//exposrtar todos los modelos a api.js
+//exportar todos los modelos a api.js
 export default {Usuario,Autor,Libro,Contenido,Admin,Categoria,addDocument};

@@ -6,7 +6,7 @@ import Contenido from "./Contenido";
 import { useState } from "react";
 import "./User.css";
 import Categoria from "./Categoria";
-
+import tunkIcon from "../img/tunk-icon.jpg";
 const User = () => {
     //dividir las paginas de autores y lectores
     const [isAuthor, setIsAuthor] = useState(false)
@@ -18,8 +18,9 @@ const User = () => {
     <>
       {/* menu */}
       <header>
-        <Link to="/">
-          <h2>Writers Platform</h2>
+        {/* icon de home */}
+        <Link to="/" onClick={()=>setIsAuthor(false)}>
+          <img src={tunkIcon} alt="" className="tunk-icon" />
         </Link> 
         {isAuthor? 
           null :
@@ -29,7 +30,7 @@ const User = () => {
             ))}
           </div>
         }
-        <button onClick={() => setIsAuthor(!isAuthor)}>
+        <button className="dancing-script" onClick={() => setIsAuthor(!isAuthor)}>
           {isAuthor ? 
           <Link to="/">Reader</Link> : 
           <Link to="/Author">Author</Link>

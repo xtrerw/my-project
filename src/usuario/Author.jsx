@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import Subir from './Subir';
 import { Navigate } from "react-router-dom";
+import "./Author.css";
 
 function Author() {
+    //Variables para registro de autor
     const [actionRegistro, setRegistro] = useState("iniciar");
+    //Variables para controlar el estado de registro y éxito
     const [isExito, setExisto] = useState(false);
     const [autor, setAutor] = useState('');
     const [pwd, setPwd] = useState('');
+    //Variable id para navegar al autor correspondiente
     const [id,setId]=useState()
+    //Función para iniciar sesión del autor
     const handleIniciar = async (e) => {
         e.preventDefault();
         try {
@@ -21,6 +26,7 @@ function Author() {
             const res = await response.json();
             if (response.ok) {
                 console.log(res + " con éxito");
+                //conseguir id con éxito
                 setId(res._id)
                 setExisto(true);
             }
@@ -67,10 +73,11 @@ function Author() {
 
     return (
         <>
+        {/* si inciciar sesión son éxito, va a navegar a la página para subir artículos */}
             {isExito ? (
                 <Navigate to={`/Author/${id}`} element={<Subir/>}/>
             ) : (
-                <div>
+                <div className='form-iniciar'>
                     <h2>Author Dashboard</h2>
                     {actionRegistro === "iniciar" ? (
                         <form onSubmit={handleIniciar} method='POST'>
@@ -88,11 +95,13 @@ function Author() {
                                 onChange={(e) => setPwd(e.target.value)}
                                 required
                             />
-                            <button type="submit">Iniciar Sesión</button>
-                            <p onClick={() => {
-                                setRegistro("registro");
-                                console.log("Switched to registro, actionRegistro:", actionRegistro);
-                            }}>Registrar</p>
+                            <div className='buttones'>
+                                <button type="submit">Iniciar Sesión</button>
+                                <button onClick={() => {
+                                    setRegistro("registro");
+                                    console.log("Switched to registro, actionRegistro:", actionRegistro);
+                                }}>Registrar</button>
+                            </div>
                         </form>
                     ) : actionRegistro === "registro" ? (
                         <form onSubmit={handleRegister} method='POST'>
@@ -136,8 +145,10 @@ function Author() {
                                 onChange={handleInputChange}
                                 required
                             />
-                            <button type="submit">Register</button>
-                            <p onClick={() => setRegistro("iniciar")}>Iniciar Sesión</p>
+                            <div className='buttones'>
+                                <button type="submit">Register</button>
+                                <button onClick={() => setRegistro("iniciar")}>Iniciar Sesión</button>
+                            </div>
                         </form>
                     ) : null}
                 </div>

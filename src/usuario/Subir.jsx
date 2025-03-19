@@ -6,7 +6,14 @@ const Subir = () => {
     const {id}=useParams()
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    
+    const [price, setPrice] = useState(0); // 价格状态
+    //   
+    const handlePriceChange = (e) => {
+        const value = e.target.value;
+        if (value >= 0) {
+            setPrice(value);
+        }
+    };
     //subir contenidos
     const handlePublish = async (e) => {
         e.preventDefault();
@@ -39,7 +46,7 @@ const Subir = () => {
             }
         }
     };
-
+    
 
   return (
     <form onSubmit={handlePublish}>
@@ -55,10 +62,18 @@ const Subir = () => {
             accept=".docx"
             onChange={handleFileUpload}
         />
+         <input
+                type="number"
+                placeholder="Precio en euros"
+                value={price}
+                onChange={handlePriceChange}
+                min="0"
+                step="0.01"
+            /> €
         <select>
 
         </select>
-        <button type="submit">Publish</button>
+        <button type="submit">Subir</button>
     </form>
   )
 }

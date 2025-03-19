@@ -15,7 +15,7 @@ function Reader() {
     })
   }, []);
 
-    // animacion del main
+    // animacion del titulo de parte titulo
     gsap.registerPlugin(ScrollTrigger)
     useGSAP(()=>{
       ScrollTrigger.create({
@@ -30,20 +30,44 @@ function Reader() {
           filter:"grayscale(0%) blur(0px)",
           y:0,
         }).fromTo(".titulo",{
-          textShadow:"0px 0px 0px rgba(0, 0, 0, 0.5)",
           opacity:0,
           y:10,
-          color:"rgb(0, 255, 94)",
+          x:10,
+          color:"var(--text-color3)",
         },{
-          textShadow:"5px 5px 2px rgb(101, 98, 0)",
           opacity:1,
           duration: 2,
           ease: "expo.inOut",
           y:0,
-          color:"rgba(255,215,0)"
+          x:0,
+          color:"var(--text-color)"
         },"<")
       })
     })
+  // animacion del titulo de parte TOP VENTAS
+  useGSAP(()=>{
+    ScrollTrigger.create({
+      trigger: ".parte-top-ventas",
+      markers:true,
+      start:"0 60%",
+      end:"100% 100%",
+      toggleActions:"play none none reverse",
+      scrub:false,
+      animation:
+      gsap.timeline().fromTo(".titulo-top-ventas",{
+        opacity:0,
+        y:30,
+        color:"var(--text-color3)",
+      },{
+        
+        opacity:1,
+        duration: 2,
+        ease: "expo.inOut",
+        y:0,
+        color:"var(--text-color)"
+      },"<")
+    })
+  })
 
   return (
     <div>
@@ -52,11 +76,15 @@ function Reader() {
           <h1 className='titulo dancing-script'>No dejes que tus sueños se ahoguen en la multitud</h1>
         </div>
       </div>
-      <div>
+      <div className='parte-top-ventas'>
+        <div className='titulo-top-ventas dancing-script'>
+          <h1>Top Ventas</h1>
+          <h2>Leer no es solo pasar páginas, es encender la mente. No dejes que la historia que cambiará tu vida se quede en la estantería.</h2>
+        </div>
         {libros.map((libro, index) => (
-          <Link key={index} to={`/Libros/${libro._id}`}>
-            <img src={libro.img} alt="" />
-            <h3>{libro.titulo}</h3>
+          <Link key={index} to={`/Libros/${libro._id}`} className='libros'>
+            <img src={libro.img} alt="" className='img-libros' />
+            {/* <h3>{libro.titulo}</h3> */}
           </Link>
         ))}
       </div>
