@@ -22,8 +22,10 @@
 
     --bg-color-default:#fff;
     --bg-color-default2:#854e06;
+    --bg-color-default3:#e5e4e4;
     --bg-color-main:#535bf2;
     --bg-color-main2:#646cff;
+    --bg-color-main5:#3f45b6;
     --bg-color-main3:#000000c4;
     --bg-color-main4:#000000;
     --text-color:rgba(255,215,0);
@@ -83,7 +85,56 @@ button {
     position: fixed;
     z-index: 100;
   }
+  /* menu */
+  .menu {
+    display: flex;
+    gap: 20px;
+  }
   
+  .menu-item {
+    position: relative;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .menu-item a {
+    text-decoration: none;
+    color: var(--bg-color-main2);
+  }
+  
+  .dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--bg-color-default);
+    box-shadow: 1px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+    z-index: 1000;
+  }
+  
+  .dropdown-item {
+    padding: 8px 12px;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  /* para que no impacto border radius */
+  /* .dropdown-item:first-child {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+  } */
+  .dropdown-item:last-child {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+  /* cambio de color en hover */
+  .dropdown-item:hover {
+    background-color: var(--bg-color-default3);
+    color: var(--bg-color-main5);
+  }
   main{
     padding-top: var(--height-header);
     min-height: calc(100vh - var(--height-header));

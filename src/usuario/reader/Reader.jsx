@@ -23,12 +23,12 @@ function Reader() {
         animation:
         gsap.timeline().fromTo(".parte-titulo",{
           filter:"grayscale(50%) blur(2px)",
-          y:10,
+      
         },{
           duration: 1,
           ease: "sine.inOut",
           filter:"grayscale(0%) blur(0px)",
-          y:0,
+      
         }).fromTo(".titulo",{
           opacity:0,
           y:10,
@@ -36,7 +36,7 @@ function Reader() {
           color:"var(--text-color3)",
         },{
           opacity:1,
-          duration: 2,
+          duration: 1,
           ease: "expo.inOut",
           y:0,
           x:0,

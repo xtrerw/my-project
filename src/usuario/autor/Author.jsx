@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Subir from './Subir';
+import PaginaAutor from './PaginaAuthor';
 import { Navigate } from "react-router-dom";
 import "./Author.css";
 
@@ -75,7 +75,7 @@ function Author() {
         <>
         {/* si inciciar sesión son éxito, va a navegar a la página para subir artículos */}
             {isExito ? (
-                <Navigate to={`/Author/${id}`} element={<Subir/>}/>
+                <Navigate to={`/Author/${id}`} element={<PaginaAutor/>}/>
             ) : (
                 <div className='form-iniciar'>
                     <h2>Author Dashboard</h2>
