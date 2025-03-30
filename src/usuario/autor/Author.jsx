@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import PaginaAutor from './PaginaAuthor';
-import { Navigate } from "react-router-dom";
 import "./Author.css";
-
+import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
 function Author() {
+    //Importar useNavigate para navegar a la página de MisDatos
+    const navigate = useNavigate();
     //Variables para registro de autor
     const [actionRegistro, setRegistro] = useState("iniciar");
     //Variables para controlar el estado de registro y éxito
@@ -29,6 +30,9 @@ function Author() {
                 //conseguir id con éxito
                 setId(res._id)
                 setExisto(true);
+                //guardar en local storage en caso de que se haya iniciado sesión correctamente
+                localStorage.setItem("loggedInUser", JSON.stringify(res));
+                localStorage.setItem("userId", res._id);
             }
         } catch (error) {
             console.error("Error iniciar Sesión " + error);
@@ -65,18 +69,22 @@ function Author() {
             if (data) {
                 setRegistro("iniciar");
                 console.log('User registered:', data);
+                //guardar en local storage en caso de que se haya registrado correctamente
             }
         } catch (error) {
             console.error('Error registering user:', error);
         }
     };
+    // si el registro es exitoso, navegar a la página de registro
+    useEffect(() => {
+        if (isExito) {
+            navigate('/Author/MisDatos');
+        }
+    }, [isExito, navigate]);
 
     return (
         <>
-        {/* si inciciar sesión son éxito, va a navegar a la página para subir artículos */}
-            {isExito ? (
-                <Navigate to={`/Author/${id}`} element={<PaginaAutor/>}/>
-            ) : (
+        {/* si inciciar sesión son éxito */}
                 <div className='form-iniciar'>
                     <h2>Author Dashboard</h2>
                     {actionRegistro === "iniciar" ? (
@@ -99,7 +107,6 @@ function Author() {
                                 <button type="submit">Iniciar Sesión</button>
                                 <button onClick={() => {
                                     setRegistro("registro");
-                                    console.log("Switched to registro, actionRegistro:", actionRegistro);
                                 }}>Registrar</button>
                             </div>
                         </form>
@@ -152,7 +159,6 @@ function Author() {
                         </form>
                     ) : null}
                 </div>
-            )}
         </>
     );
 }

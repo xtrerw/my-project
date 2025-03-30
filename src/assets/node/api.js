@@ -40,7 +40,7 @@ app.post('/register', async(req, res) => {
 app.post('/iniciar', async (req, res) => {
     const { username, password } = req.body;
     try {
-        const user = await ServerModel.Autor.findOne({ usernombre: username, password: hashpwd(password),tipo:"autor" });
+        const user = await ServerModel.Autor.findOne({ usernombre: username, password: hashpwd(password)});
         if (user) {
             res.status(200).json(user);
         } else {
@@ -104,6 +104,19 @@ app.get('/categorias/:id', async (req, res) => {
   }
 });
 
-
+//autores
+// Obtener información del autor por ID
+app.get('/autor/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+      const autor = await ServerModel.Autor.findById(id);
+      if (!autor) {
+          return res.status(404).json({ message: "Autor no encontrado" });
+      }
+      res.status(200).json(autor);
+  } catch (error) {
+      res.status(500).json({ message: "Error al obtener autor", error });
+  }
+});
 
 app.listen(5001,()=>console.log('Servidor corriendo en el puerto 5001'));

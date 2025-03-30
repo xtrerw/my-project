@@ -28,11 +28,21 @@
     --bg-color-main5:#3f45b6;
     --bg-color-main3:#000000c4;
     --bg-color-main4:#000000;
+    --bg-color-main6:#646cff8f;
     --text-color:rgba(255,215,0);
     --text-color2:rgb(101, 98, 0);
     --text-color3:rgb(0, 255, 94);
 
     --height-header:60px;
+    /* footer */
+    --color-linea:#333;
+    --color-texto-footer:#777;
+    --color-texto-footer2:#aaa;
+    --color-texto-footer3:#fff;
+    
+    --color-text-primary: #333;
+  --color-text-secondary: #555;
+  --color-border-default: #ccc;
   }
   
   h1,h2,h3,p{
@@ -135,6 +145,7 @@ button {
     background-color: var(--bg-color-default3);
     color: var(--bg-color-main5);
   }
+  /* parte principal */
   main{
     padding-top: var(--height-header);
     min-height: calc(100vh - var(--height-header));
@@ -249,3 +260,106 @@ button {
   width: 300px;
   height: 400px;
 }
+/* footer */
+footer {
+  background-color: var(--bg-color-main4);
+  color: var(--color-texto-footer3);
+  padding: 2rem 5%;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* categoria */
+.footer-categories {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.categories-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  text-align: left;
+}
+
+.category-column {
+  flex: 1;
+  min-width: 200px;
+}
+
+.category-column h4 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: normal;
+}
+
+.category-link {
+  display: block;
+  color: var(--color-texto-footer2);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+
+.category-link:hover {
+  color: var(--color-texto-footer3);
+  text-decoration: underline;
+}
+
+/* linea */
+.footer-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--color-linea);
+  margin: 1rem 0;
+}
+
+/* red social+copyright */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  font-size: 0.8rem;
+  color: var(--color-texto-footer);
+  text-align: center;
+}
+
+.footer-links a {
+  color: var(--color-texto-footer2);
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.footer-links a:hover {
+  color: var(--color-texto-footer3);
+}
+
+/* 社交媒体 */
+.footer-social {
+  text-align: right;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.social-icons a img {
+  width: 24px;
+  height: 24px;
+  filter: grayscale(100%);
+  transition: filter 0.3s, transform 0.2s;
+}
+
+.social-icons a:hover img {
+  filter: grayscale(0%);
+  transform: scale(1.2);
+}
+

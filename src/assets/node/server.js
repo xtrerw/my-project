@@ -1,22 +1,24 @@
 import mongoose from 'mongoose';
 import { createHash } from 'crypto';
-
+import dotenv from 'dotenv';
+import path from 'path';
+// cargar el archivo .env con seguridad
+dotenv.config({ path: path.resolve('src/assets/node/.env') });
 const hashpwd = (pwd) => {
     return createHash('sha256').update(pwd).digest('hex');
 }
+console.log("用户名:", process.env.DB_USER);
+console.log("密码:", process.env.DB_PASSWORD);
 
-const user=encodeURIComponent('root');
+const user=encodeURIComponent(process.env.DB_USER);
 
-const password=encodeURIComponent('root');
+const password=encodeURIComponent(process.env.DB_PASSWORD);
 
-const nombreBD=encodeURIComponent('FreeLibro');
+const nombreBD=encodeURIComponent(process.env.DB_NAME);
 
 const url=`mongodb+srv://${user}:${password}@cluster0.3emmgzn.mongodb.net/${nombreBD}`;
 
-mongoose.connect(url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(()=>console.log('Conectado a MongoDB')).catch((err)=>console.log(err)).catch((err)=>console.log("Error al conectar a MongoDB: "+err));
+mongoose.connect(url).then(()=>console.log('Conectado a MongoDB')).catch((err)=>console.log(err)).catch((err)=>console.log("Error al conectar a MongoDB: "+err));
 //agregar documento
 const addDocument = async (modelo, docs, campoUnico = 'nombre') => {
     if (!Array.isArray(docs)) {
@@ -66,7 +68,13 @@ const SchemaAutor=new mongoose.Schema({
     usernombre:String,
     password:String,
     fechaNacimiento:Date,
-    tipo:String
+    direccion:String,
+    codigoPostal:String,
+    provincia:String,
+    pais:String,
+    nacionalidad:String,
+    sexo:String,
+    email:String,
 });
 
 const Autor=mongoose.model('Autor',SchemaAutor);
@@ -78,7 +86,13 @@ const nuevoAutor=[
         usernombre:"weak",
         password:hashpwd("1234"),
         fechaNacimiento:new Date("2025-01-07"),
-        tipo:"autor"
+        direccion:"Calle RTX4060 5 izquierda",
+        codigoPostal:"23000",
+        provincia:"Jaén",
+        pais:"España",
+        nacionalidad:"USA",
+        sexo:"Hombre",
+        email:"mike@tunkbooks.com",
     }
 ]
 //agregar autores de ejemplo

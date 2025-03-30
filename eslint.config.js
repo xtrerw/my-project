@@ -5,6 +5,26 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [
+  // 
+  {
+    // Define el entorno global del código para reconocer variables específicas
+    "env": {
+      "node": true,     // Habilita variables globales de Node.js (ej.: process, require, module)
+      "es2021": true    // Habilita características del estándar ECMAScript 2021
+    },
+  
+    // Extiende reglas recomendadas por ESLint
+    "extends": ["eslint:recommended"],
+  
+    // Opciones para que ESLint analice correctamente el código
+    "parserOptions": {
+      "ecmaVersion": 12,        // Permite usar sintaxis ECMAScript versión 12 (2021)
+      "sourceType": "module"    // Indica que el código utiliza módulos ES (import/export)
+    },
+  
+    // Aquí puedes añadir reglas personalizadas para ESLint
+    "rules": {}
+  },  
   { ignores: ['dist'] },
   {
     files: ['**/*.{js,jsx}'],

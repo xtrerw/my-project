@@ -1,13 +1,18 @@
 import { Routes, Route, Link } from "react-router-dom";
 import Reader from "./reader/Reader";
 import Author from "./autor/Author";
-import PaginaAuthor from "./autor/PaginaAuthor";
 import Contenido from "./reader/Contenido";
 import { useState,useEffect } from "react";
 import "./User.css";
 import Categoria from "./reader/Categoria";
 import tunkIcon from "../img/tunk-icon.jpg";
-
+import EscribirOnline from "./autor/EscribirOnline";
+import SubirLibro from "./autor/SubirLibro";
+import MisLibros from "./autor/MisLibros";
+import MisDatos from "./autor/MisDatos";
+import MisVentas from "./autor/MisVentas";
+import HistorialCompras from "./autor/HistorialCompras";
+import NotFound from "./NotFound";
  //categorias para readers
  const categorias = [
   {
@@ -27,6 +32,23 @@ import tunkIcon from "../img/tunk-icon.jpg";
     colleccion: ["Libros de ilustración", "Cómic de humor", "Historia y técnica", "Manga"]
   }
 ];
+// menu para autores
+const menuAutor = [
+  {nombre: "MisDatos",},
+  {nombre: "Mis Libros",},
+  {nombre: "Ventas",
+    subItems: [
+      { item: "Mis Ventas", },
+      { item: "Historial de Compras", },
+    ],
+  },
+  {nombre: "Modelo de Escribir",
+    subItems: [
+      { item: "Subir Mi Libro Completo", },
+      { item: "Escribir Online", },
+    ],
+  }
+]
 //componente principal
 const User = () => {
   // categoria activa para reader
@@ -34,15 +56,12 @@ const User = () => {
 
   //dividir las paginas de autores y lectores
   const [isAuthor, setIsAuthor] = useState(() => {
-    return localStorage.getItem("isAuthor") === "true"; //si es true es author
+    return sessionStorage.getItem("isAuthor") === "true"; //si es true es author
   });
-  //guardar el estado de isAuthor en local storage
+  //guardar el estado de isAuthor en session storage
   useEffect(() => {
-    localStorage.setItem("isAuthor", isAuthor);
+    sessionStorage.setItem("isAuthor", isAuthor);
   }, [isAuthor]);
-
-  // items del menu para author
-  // const arrayItemsMenuAuthor=["Registro","Mis Libros","Ventas","Modelo de Escribir"]
 
   return (
     <>
@@ -50,9 +69,40 @@ const User = () => {
       <header>
         {/* icon de home */}
         <Link to="/" onClick={()=>setIsAuthor(false)}>
-          <img src={tunkIcon} alt="" className="tunk-icon" />
+          <img src={tunkIcon} className="tunk-icon" />
         </Link> 
-        {isAuthor ? null : (
+        {isAuthor ? 
+        // menu de autor
+        ( <nav className="menu">
+          {menuAutor.map((item, index) => (
+            <div
+              key={index}
+              className="menu-item"
+              onMouseEnter={() => setActiveCategory(index)}
+              onMouseLeave={() => setActiveCategory(null)}
+            >
+              <Link to={`/Author/${item.nombre}`} className="menu-link">
+                {item.nombre}
+              </Link>
+    
+              {/* submenu */}
+              {item.subItems && activeCategory === index && (
+                <div className="dropdown">
+                  {item.subItems.map((subItem, subIndex) => (
+                    <Link
+                      key={subIndex}
+                      to={`/Author/${item.nombre}/${subItem.item}`}
+                      className="dropdown-item"
+                    >
+                      {subItem.item}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </nav>)
+        : (
           // menu de reader
           <nav className="menu">
             {categorias.map((categoria, index) => (
@@ -62,7 +112,8 @@ const User = () => {
                 onMouseEnter={() => setActiveCategory(index)}
                 onMouseLeave={() => setActiveCategory(null)}
               >
-                <Link to={`/${categoria.nombre}`}>{categoria.nombre}</Link>
+                {/* menu principal */}
+                <div to={`/${categoria.nombre}`}>{categoria.nombre}</div>
 
                 {/* menu desplada */}
                 {activeCategory === index && (
@@ -78,10 +129,10 @@ const User = () => {
             ))}
           </nav>
         )}
-        <button className="dancing-script" onClick={() => setIsAuthor(!isAuthor)}>
+        <button className="dancing-script">
           {isAuthor ? 
-          <Link to="/">Reader</Link> : 
-          <Link to="/Author">Author</Link>
+          <Link to="/" onClick={()=>setIsAuthor(false)}>Reader</Link> : 
+          <Link to="/Author" onClick={()=>setIsAuthor(true)}>Author</Link>
           }
         </button>
       </header>
@@ -92,26 +143,82 @@ const User = () => {
           
           <Route path="/Author" element={<Author />} /> 
           <Route path="/" element={<Reader />} />
-          {/* tipo de libros para author */}
-          <Route path="/Registro" element={<Author />} />
-          <Route path="/Author/:id" element={<PaginaAuthor />} />
-          <Route path="/Libros/:id" element={<Contenido />} />
+          {/* router para author */}
+          {/* 1 -（Mis Datos, Mis Libros, Ventas, Modelo de Escribir） */}
+          <Route path="/Author/MisDatos/*" element={<MisDatos />} />
+          <Route path="/Author/Mis Libros" element={<MisLibros />} />
 
+          {/* 2 - Ventas */}
+          
+          <Route path="/Author/Ventas/Mis Ventas" element={<MisVentas />} />
+          <Route path="/Author/Ventas/Historial de Compras" element={<HistorialCompras />} />
+
+          {/* 2 - Modelo de Escribir */}
+          
+          <Route path="/Author/Modelo de Escribir/Subir Mi Libro Completo" element={<SubirLibro />} />
+          <Route path="/Author/Modelo de Escribir/Escribir Online" element={<EscribirOnline />} />
+
+          {/* 404 not found */}
+          <Route path="*" element={<NotFound />} />
+          {/* router de libros */}
+          <Route path="/Libros/:id" element={<Contenido />} />
           {/* router de subitem */}
-          {/* {categorias.map((categoria, index) =>
-            categoria.colleccion.map((subitem, subIndex) => (
-              <Route key={`${index}-${subIndex}`} path={`/${categoria.nombre}/${subitem}`} element={<Categoria />} />
-            ))
-          )} */}
-           <Route path="/:categoriaId" element={<Categoria />} />
            <Route path="/:categoriaId/:subcategoriaId" element={<Categoria />} />
         </Routes>
       </main>
 
       {/* footer */}
       <footer>
-        <p>Share and discover amazing stories!</p>
-      </footer>
+      {/* categoría */}
+      <div className="footer-categories">
+        <div className="categories-grid">
+          {categorias.map((categoria, index) => (
+            <div key={index} className="category-column">
+              <h4>{categoria.nombre}</h4>
+              {categoria.colleccion.map((subitem, subIndex) => (
+                <Link key={subIndex} to={`/${categoria.nombre}/${subitem}`} className="category-link">
+                  {subitem}
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* linea devisoria */}
+      <div className="footer-divider"></div>
+
+      {/* imformación debaja */}
+      <div className="footer-bottom">
+        <p>COPYRIGHT © 2024 TunkBooks. Todos los derechos reservados.</p>
+
+        <div className="footer-links">
+          <Link to="/aviso-legal">Aviso Legal</Link> | 
+          <Link to="/politica-privacidad">Política de Privacidad</Link> | 
+          <Link to="/cookies">Cookies</Link>
+        </div>
+
+        {/* red social */}
+        <div className="footer-social">
+          <div className="social-icons">
+            <a href="https://instagram.com" target="_blank">
+              <img src="https://cdn-icons-png.flaticon.com/512/1384/1384063.png" alt="Instagram" />
+            </a>
+            <a href="https://twitter.com" target="_blank">
+              <img src="https://cdn-icons-png.flaticon.com/512/1384/1384065.png" alt="Twitter" />
+            </a>
+            <a href="https://linkedin.com" target="_blank">
+              <img src="https://cdn-icons-png.flaticon.com/512/1384/1384062.png" alt="LinkedIn" />
+            </a>
+            <a href="https://youtube.com" target="_blank">
+              <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="Youtube" />
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </footer>
+   
     </>
   );
 };

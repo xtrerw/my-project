@@ -20,7 +20,7 @@ const Categoria = () => {
   },[categoriaId])
 
   if (!categoria || !libros) return <p>Cargando...</p>;
-  
+
   return (
     <>
       <div>
@@ -30,7 +30,7 @@ const Categoria = () => {
         .map((libro, index) => (
           //acceder a contenido del libro
           <Link to={`/Libros/${libro._id}`} className='libro-categoria' key={index}>
-            <img src={`${libro.img}`} alt={libro.titulo} />
+            <img src={`http://localhost:5173/${libro.img}`} alt={libro.titulo} />
             <h2>{libro.titulo}</h2>
             <p>{libro.precio} €</p>
           </Link>
