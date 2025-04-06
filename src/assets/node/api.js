@@ -18,9 +18,11 @@ app.use(cors());
 
 //admin
 app.get('/admin',async (req,res)=>{
+  
   try {
+    console.log("admin")
     const admin=await ServerModel.Admin.find({})
-    res.status(200).json(admin.tipo)
+    res.status(200).json("connected")
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -119,4 +121,24 @@ app.get('/autor/:id', async (req, res) => {
   }
 });
 
+// Actualizar información del autor por ID
+app.put('/autor/:id', async (req, res) => {
+  // Obtener el ID del autor desde los parámetros de la solicitud
+  const { id } = req.params;
+  // Extraer los campos que deseas actualizar del cuerpo de la solicitud
+  const { nombre, apellido, fechaNacimiento, direccion, codigoPostal, provincia, pais, nacionalidad, sexo, email } = req.body;
+  // Validar que el ID es un ObjectId válido
+  try {
+      const autor = await ServerModel.Autor.findByIdAndUpdate(id, { nombre, apellido, fechaNacimiento, direccion, codigoPostal, provincia, pais, nacionalidad, sexo, email }, { new: true });
+      if (!autor) {
+          return res.status(404).json({ message: "Autor no encontrado" });
+      }
+      // Enviar la respuesta con el autor actualizado
+      res.status(200).json(autor);
+  } catch (error) {
+    console.error("PUT /autor/:id error", error.message, error.stack);
+    res.status(500).json({ message: "Error al asdasd autor", error: error.message });
+      //res.status(500).json({ message: "Error al actualizar autor", error });
+  }
+});
 app.listen(5001,()=>console.log('Servidor corriendo en el puerto 5001'));

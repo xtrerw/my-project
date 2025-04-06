@@ -67,7 +67,7 @@ const SchemaAutor=new mongoose.Schema({
     apellido:String,
     usernombre:String,
     password:String,
-    fechaNacimiento:Date,
+    fechaNacimiento: { type: Date },
     direccion:String,
     codigoPostal:String,
     provincia:String,
@@ -85,7 +85,7 @@ const nuevoAutor=[
         apellido:"Lork",
         usernombre:"weak",
         password:hashpwd("1234"),
-        fechaNacimiento:new Date("2025-01-07"),
+        fechaNacimiento: new Date("1990-01-01"), // fecha de nacimiento
         direccion:"Calle RTX4060 5 izquierda",
         codigoPostal:"23000",
         provincia:"Jaén",
