@@ -1,0 +1,19 @@
+.cambiar-password-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.cambiar-password {
+  width: 60%;
+}
+.cambiar-password-container .error-input{
+    border:1px solid var(--color-border-error);
+}
+.error-message {
+  color: var(--color-border-error);
+  font-size: 0.9rem;
+  margin-top: 5px;
+  text-align: center;
+}

@@ -29,9 +29,9 @@ app.get('/admin',async (req,res)=>{
 })
 // Register route
 app.post('/register', async(req, res) => {
-  const { nombre,apellido,fechaN,username, password } = req.body;
+  const { nombre,apellido,fechaNacimiento,username, password } = req.body;
   try {
-    const user = new ServerModel.Autor({ nombre:nombre, apellido:apellido ,fechaNacimiento:fechaN, usernombre:username, password:hashpwd(password),tipo:"autor" });
+    const user = new ServerModel.Autor({ nombre:nombre, apellido:apellido ,fechaNacimiento:fechaNacimiento, usernombre:username, password:hashpwd(password),tipo:"autor" });
     await user.save();
    res.status(200).json(user);
   } catch (error) {
@@ -139,6 +139,21 @@ app.put('/autor/:id', async (req, res) => {
     console.error("PUT /autor/:id error", error.message, error.stack);
     res.status(500).json({ message: "Error al asdasd autor", error: error.message });
       //res.status(500).json({ message: "Error al actualizar autor", error });
+  }
+});
+// Cambiar contraseña del autor por ID
+app.put('/autor/password/:id', async (req, res) => {
+  const { id } = req.params;
+  const { contrasena } = req.body;
+  try {
+      const autor = await ServerModel.Autor.findByIdAndUpdate(id, { password: hashpwd(contrasena) }, { new: true });
+      if (!autor) {
+          return res.status(404).json({ message: "Autor no encontrado" });
+      }
+      res.status(200).json(autor);
+  } catch (error) {
+    console.error("PUT /autor/password/:id error", error.message, error.stack);
+    res.status(500).json({ message: "Error al actualizar contraseña", error: error.message });
   }
 });
 app.listen(5001,()=>console.log('Servidor corriendo en el puerto 5001'));

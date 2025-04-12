@@ -92,43 +92,37 @@
   margin-bottom: 16px;
 }
 
-/* contenido de calendario */
-.custom-calendar {
-  background-color: var(--bg-color-default);
-  border: 1px solid var(--color-border-default);
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px var(--color-texto-footer2);
-}
-
-/* estilo de la fecha */
-.custom-day {
-  padding: 6px;
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  color: var(--bg-color-main);
-}
-
-/* Botón de flecha para cambiar mes */
-.arrow-buttons {
+/* Estilo del encabezado personalizado del selector de fecha */
+.custom-header {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
 }
-.arrow-button {
-  background-color: var(--bg-color-main);
-  color: var(--bg-color-default);
-  border: none;
-  border-radius: 5px;
-  padding: 0.1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+/* Estilo de los desplegables de año y mes */
+.custom-header select {
+  padding: 4px 8px;
+  font-size: 14px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 4px;
+  margin: 0 4px;
+  width: 60%; /* Ancho fijo para los selects */
 }
-.arrow-button:hover {
-  background-color: var(--bg-color-main2);
-  box-shadow: 0 2px 5px var(--bg-color-main6);
+
+/* Contenedor para mostrar el año y el mes en una misma fila */
+.custom-header .select-row {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Estilo para campos en error */
+.error-input {
+  border: 1px solid red;
+  background-color: #ffe6e6;
+  box-shadow: 0 0 4px red;
 }
 
 

@@ -29,6 +29,7 @@
     --bg-color-main3:#000000c4;
     --bg-color-main4:#000000;
     --bg-color-main6:#646cff8f;
+    --bg-color-main7:#216ba5;
     --text-color:rgba(255,215,0);
     --text-color2:rgb(101, 98, 0);
     --text-color3:rgb(0, 255, 94);
@@ -41,8 +42,9 @@
     --color-texto-footer3:#fff;
     
     --color-text-primary: #333;
-  --color-text-secondary: #555;
-  --color-border-default: #ccc;
+    --color-text-secondary: #555;
+    --color-border-default: #ccc;
+    --color-border-error: rgb(247, 28, 28);
   }
   
   h1,h2,h3,p{
