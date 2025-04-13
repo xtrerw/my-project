@@ -73,7 +73,7 @@ const MisDatos = () => {
                 </div>
                 <div className="info-item">
                   <span className="info-label">Género:</span>
-                  <span className="info-value">{userData.sexo || "No especificado"}</span>
+                  <span className="info-value">{userData.genero || "No especificado"}</span>
                 </div>
                 <div className="info-item">
                   <span className="info-label">La Fecha Nacimiento:</span>

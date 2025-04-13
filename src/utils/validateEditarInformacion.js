@@ -44,9 +44,9 @@ export const validateEditarInformacion = (formData) => {
     return { campo: "direccion", mensaje: "La dirección es obligatoria." };
   }
 
-  if (!/^\d{5}$/.test(formData.codigoPostal)) {
-    return { campo: "codigoPostal", mensaje: "El código postal debe contener exactamente 5 dígitos." };
-  }
+  // if (!/^\d{5}$/.test(formData.codigoPostal)) {
+  //   return { campo: "codigoPostal", mensaje: "El código postal debe contener exactamente 5 dígitos." };
+  // }
   if (!formData.codigoPostal.trim()) {
     return { campo: "codigoPostal", mensaje: "El código postal es obligatorio." };
   }

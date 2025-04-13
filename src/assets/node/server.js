@@ -73,7 +73,7 @@ const SchemaAutor=new mongoose.Schema({
     provincia:String,
     pais:String,
     nacionalidad:String,
-    sexo:String,
+    genero:String,
     email:String,
 });
 
@@ -91,7 +91,7 @@ const nuevoAutor=[
         provincia:"Jaén",
         pais:"España",
         nacionalidad:"USA",
-        sexo:"Hombre",
+        genero:"Hombre",
         email:"mike@tunkbooks.com",
     }
 ]

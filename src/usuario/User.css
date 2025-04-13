@@ -44,7 +44,12 @@
     --color-text-primary: #333;
     --color-text-secondary: #555;
     --color-border-default: #ccc;
-    --color-border-error: rgb(247, 28, 28);
+    /* input */
+    --color-text-input: rgb(69, 69, 69);
+    /* error */
+    --color-border-error: red;
+    --bg-color-error: #ffe6e6;
+    --color-error-text: #d8000c;
   }
   
   h1,h2,h3,p{
@@ -58,13 +63,13 @@
   }
 
   input {
-    width: 95%;
+    width: 100%;
     padding: 12px;
     margin: 12px 0;
     border: 2px solid var(--bg-color-main2);
     border-radius: 8px;
     background-color: var(--bg-color-default);
-    color: var(--text-color2);
+    color: var(--color-text-primary);
     font-size: 1em;
 }
 
@@ -72,7 +77,9 @@ input:focus {
     border-color: var(--bg-color-main);
     outline: none;
 }
-
+select{
+  width: 100%;
+}
 button {
   border: none;
   padding: 10px 20px;
@@ -365,3 +372,18 @@ footer {
   transform: scale(1.2);
 }
 
+
+
+/* Estilo para campos en error */
+.error-input {
+  border: 1px solid var(--color-border-error);
+  background-color: var(--bg-color-error);
+  box-shadow: 0 0 4px var(--color-border-error);
+}
+
+.error-message {
+  color: var(--color-error-text);
+  font-size: 0.9rem;
+  margin-top: 5px;
+  text-align: center;
+}

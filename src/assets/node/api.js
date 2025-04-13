@@ -46,7 +46,7 @@ app.post('/iniciar', async (req, res) => {
         if (user) {
             res.status(200).json(user);
         } else {
-            res.status(404).json({ message: 'User not found' });
+            res.status(404).json({ message: 'Usuario no disponible' });
         }
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -126,10 +126,10 @@ app.put('/autor/:id', async (req, res) => {
   // Obtener el ID del autor desde los parámetros de la solicitud
   const { id } = req.params;
   // Extraer los campos que deseas actualizar del cuerpo de la solicitud
-  const { nombre, apellido, fechaNacimiento, direccion, codigoPostal, provincia, pais, nacionalidad, sexo, email } = req.body;
+  const { nombre, apellido, fechaNacimiento, direccion, codigoPostal, provincia, pais, nacionalidad, genero, email } = req.body;
   // Validar que el ID es un ObjectId válido
   try {
-      const autor = await ServerModel.Autor.findByIdAndUpdate(id, { nombre, apellido, fechaNacimiento, direccion, codigoPostal, provincia, pais, nacionalidad, sexo, email }, { new: true });
+      const autor = await ServerModel.Autor.findByIdAndUpdate(id, { nombre, apellido, fechaNacimiento, direccion, codigoPostal, provincia, pais, nacionalidad, genero, email }, { new: true });
       if (!autor) {
           return res.status(404).json({ message: "Autor no encontrado" });
       }

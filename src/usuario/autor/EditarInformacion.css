@@ -48,7 +48,7 @@
   border-radius: 5px;
   font-size: 1rem;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  color: var(--color-texto-footer);
+  color: var(--color-text-primary);
   background: var(--bg-color-default);
   width: 100%; /* Asegura que todos tengan el mismo ancho */
   box-sizing: border-box;
@@ -80,7 +80,6 @@
   box-shadow: 0 2px 5px var(--bg-color-main6);
 }
 
-/* Estilo de la fecha nacimiento */
 /* input de la fecha nacimiento */
 .input-text {
   width: 100%;
@@ -91,41 +90,6 @@
   margin-top: 4px;
   margin-bottom: 16px;
 }
-
-/* Estilo del encabezado personalizado del selector de fecha */
-.custom-header {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-}
-
-/* Estilo de los desplegables de año y mes */
-.custom-header select {
-  padding: 4px 8px;
-  font-size: 14px;
-  border: 1px solid var(--color-border-default);
-  border-radius: 4px;
-  margin: 0 4px;
-  width: 60%; /* Ancho fijo para los selects */
-}
-
-/* Contenedor para mostrar el año y el mes en una misma fila */
-.custom-header .select-row {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-/* Estilo para campos en error */
-.error-input {
-  border: 1px solid red;
-  background-color: #ffe6e6;
-  box-shadow: 0 0 4px red;
-}
-
-
 
 /* Diseño responsive */
 @media (max-width: 768px) {

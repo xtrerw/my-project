@@ -1,9 +1,18 @@
 import { useState } from 'react';
 import "./Author.css";
+import "../../style/calendario.css"
 import { useNavigate } from "react-router-dom";
 import { useEffect } from 'react';
 import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import { validateAuthor } from '../../utils/validateAuthor';
+import { useFormValidation } from '../../utils/useFormValidation';
+import { paises } from '../../utils/paises';
+import { provincias } from '../../utils/provincias';
 function Author() {
+    //validar el formulario
+    const { errores, mensajeError, validar } = useFormValidation(validateAuthor);
+    
     //Importar useNavigate para navegar a la página de MisDatos
     const navigate = useNavigate();
     //Variables para registro de autor
@@ -14,6 +23,8 @@ function Author() {
     const [pwd, setPwd] = useState('');
     //Variable id para navegar al autor correspondiente
     const [id,setId]=useState()
+    //
+    const [errorIniciar, setErroresIniciar] = useState();
     //Función para iniciar sesión del autor
     const handleIniciar = async (e) => {
         e.preventDefault();
@@ -34,18 +45,25 @@ function Author() {
                 //guardar en local storage en caso de que se haya iniciado sesión correctamente
                 localStorage.setItem("loggedInUser", JSON.stringify(res));
                 localStorage.setItem("userId", res._id);
+            }else{
+                setErroresIniciar(res.message);
+                //si no se ha iniciado sesión, mostrar mensaje de error
             }
         } catch (error) {
-            console.error("Error iniciar Sesión " + error);
+            console.error('Error al iniciar sesión:', error);
+            setErroresIniciar("Error iniciar Sesión "+error.message);
         }
     };
-
+    //Función para manejar el registro del autor
+    //se usa para guardar la información del autor
     const [userInfo, setUserInfo] = useState({
         nombre: '',
         apellido: '',
         username: '',
         password: '',
-        fechaNacimiento: '',
+        fechaNacimiento: null,
+        genero: '', 
+        nacionalidad: '',
     });
 
     const handleInputChange = (e) => {
@@ -58,6 +76,11 @@ function Author() {
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        // Validar el formulario antes de enviar
+        const errorAutor=validar(userInfo)
+        //si hay error, mostrar mensaje de error
+        if(errorAutor) return;
+
         try {
             const response = await fetch('http://localhost:5001/register', {
                 method: 'POST',
@@ -90,9 +113,11 @@ function Author() {
                     <h2>Author Dashboard</h2>
                     {actionRegistro === "iniciar" ? (
                         //Formulario para iniciar sesión
-                        <form onSubmit={handleIniciar} method='POST'>
-                            <input type="text" name='username' placeholder='Username' onChange={(e) => setAutor(e.target.value)} required />
-                            <input type="password" name='password' placeholder='Contraseña' onChange={(e) => setPwd(e.target.value)} required />
+                        <form onSubmit={handleIniciar}>
+                            <input type="text" name='username' placeholder='Username' value={autor} onChange={(e) => setAutor(e.target.value)} required />
+                            <input type="password" name='password' placeholder='Contraseña' value={pwd} onChange={(e) => setPwd(e.target.value)} required />
+                            {/* Mensaje de error al iniciar sesión */}
+                            <div className="error-message">{errorIniciar}</div>
                             <div className='buttones'>
                                 <button type="submit">Iniciar Sesión</button>
                                 <button onClick={() => {setRegistro("registro");}}>Registrar</button>
@@ -100,27 +125,25 @@ function Author() {
                         </form>
                     ) : actionRegistro === "registro" ? (
                         //Formulario para registro
-                        <form onSubmit={handleRegister} method='POST'>
-                            <input type="text" name="username" placeholder="Username" value={userInfo.username} onChange={handleInputChange} required/>
-                            <input type="text" name="nombre" placeholder="Nombre" value={userInfo.nombre} onChange={handleInputChange} required/>
-                            <input type="text" name='apellido' placeholder='apellido' value={userInfo.apellido} onChange={handleInputChange} required/>
-                            <DatePicker
+                        <form onSubmit={handleRegister} className='form-registro'>
+                            <input type="text" name="username"  className={errores.username? "error-input" : ""} placeholder="Username" value={userInfo.username} onChange={handleInputChange} required/>
+                            {/* campo de la información de persona */}
+                            <div className='registro-info'>
+                                <input type="text" name="nombre"  className={errores.nombre? "error-input" : ""} placeholder="Nombre" value={userInfo.nombre} onChange={handleInputChange} required/>
+                                <input type="text"  className={errores.apellido? "error-input" : ""} name='apellido' placeholder='Apellido' value={userInfo.apellido} onChange={handleInputChange} required/>
+                               
+                            </div>
+                            
+                            <div className='registro-info'>
+                                {/* fecha nacimiento */}
+                                <DatePicker
                                     locale="es"
-                                    selected={
-                                      // muestra la fecha de nacimiento anteriormente guardada
-                                      // o null si no hay fecha guardada
-                                      userInfo.fechaNacimiento
-                                        ? new Date(userInfo.fechaNacimiento)
-                                        : null
-                                    }
+                                    selected={userInfo.fechaNacimiento}
                                     onChange={(date) => {
-                                      setFormData({
+                                    setUserInfo({
                                         ...userInfo,
-                                        // Convertir la fecha de nacimiento a formato ISO
-                                        fechaNacimiento: date
-                                          ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
-                                          : ""
-                                      });
+                                        fechaNacimiento: date,
+                                        });
                                     }}
                                     dateFormat="dd/MM/yyyy"
                                     placeholderText="Selecciona una fecha"
@@ -128,35 +151,64 @@ function Author() {
                                     showMonthDropdown
                                     dropdownMode="select"
                                     // Añadir clase de error condicional
-                                    className={`input-text ${errores.fechaNacimiento ? "error-input" : ""}`}
+                                    className={`registro-input-text ${errores.fechaNacimiento ? "error-input" : ""}`}
                                     calendarClassName="custom-calendar"
                                     dayClassName={() => "custom-day"}
                                     minDate={new Date(1900, 0, 1)}
                                     maxDate={new Date(2007, 11, 31)}
                                     renderCustomHeader={({ date, changeYear, changeMonth, decreaseMonth, increaseMonth }) => {
-                                      const years = Array.from({ length: 2007 - 1900 + 1 }, (_, i) => 1900 + i);
-                                      const months = [
+                                    const years = Array.from({ length: 2007 - 1900 + 1 }, (_, i) => 1900 + i);
+                                    const months = [
                                         "enero", "febrero", "marzo", "abril", "mayo", "junio",
                                         "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-                                      ];
-                                      return (
+                                    ];
+                                    return (
                                         <div className="custom-header">
-                                          {/* Año y mes seleccionables */}
-                                          <select value={date.getFullYear()} onChange={({ target: { value } }) => changeYear(parseInt(value))}>
+                                        {/* Año y mes seleccionables */}
+                                        <select value={date.getFullYear()} onChange={({ target: { value } }) => changeYear(parseInt(value))}>
                                             {years.map((year) => (
-                                              <option key={year} value={year}>{year}</option>
+                                            <option key={year} value={year}>{year}</option>
                                             ))}
-                                          </select>
-                                          <select value={date.getMonth()} onChange={({ target: { value } }) => changeMonth(parseInt(value))}>
+                                        </select>
+                                        <select value={date.getMonth()} onChange={({ target: { value } }) => changeMonth(parseInt(value))}>
                                             {months.map((month, index) => (
-                                              <option key={month} value={index}>{month}</option>
+                                            <option key={month} value={index}>{month}</option>
                                             ))}
-                                          </select>
+                                        </select>
                                         </div>
-                                      );
+                                    );
                                     }}
-                                  />
-                            <input type="password" name="password" placeholder="Password" value={userInfo.password} onChange={handleInputChange} required/>
+                                />
+                                {/* género */}
+                                <select
+                                name="genero"
+                                value={userInfo.genero}
+                                onChange={handleInputChange}
+                                className={errores.genero? "error-input" : ""}>
+                                    <option value="">-- Selecciona tu género --</option>
+                                    <option value="Hombre">Hombre</option>
+                                    <option value="Mujer">Mujer</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                                
+                            </div>
+
+                            {/* nacionalidad */}
+                            <select name="nacionalidad"
+                                value={userInfo.nacionalidad}
+                                onChange={handleInputChange}
+                                className={errores.nacionalidad? "error-input" : ""}>
+                                    <option value="">-- Selecciona tu nacionalidad --</option>
+                                    {paises.map((pais, index) => (
+                                        <option key={index} value={pais}>{pais}</option>
+                                    ))}
+                            </select>
+
+                            <input type="password" className={errores.password? "error-input" :""} name="password" placeholder="Password" value={userInfo.password} onChange={handleInputChange} required/>
+                            
+                            {/* Mensaje general de error */}
+                            <div className="error-message">{mensajeError}</div>
+
                             <div className='buttones'>
                                 <button type="submit">Register</button>
                                 <button onClick={() => setRegistro("iniciar")}>Iniciar Sesión</button>
