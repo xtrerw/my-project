@@ -266,6 +266,10 @@ const EditarInformacion = ({onSuccess}) => {
             Código Postal:
             {/* Campo de código postal con clase de error condicional */}
             <input
+              type="text"
+              inputMode="numeric"
+              pattern="\d{5}"
+              maxLength={5}
               name="codigoPostal"
               value={formData.codigoPostal}
               onChange={handleChange}

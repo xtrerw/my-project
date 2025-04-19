@@ -10,7 +10,7 @@ const Categoria = () => {
   const [libros,setLibros] = useState(null)
   //conseguir las categorias desde mango db
   useEffect(()=>{
-    fetch(`http://localhost:5001/categorias/${categoriaId}`)
+    fetch(`http://localhost:5001/libros/categorias/${categoriaId}`)
     .then(response=>response.json())
     .then(resulta=>{
         setCategorias(resulta.categoria); 

@@ -8,7 +8,7 @@ const Contenido = () => {
     const [contenidos,setContenidos]=useState([])
     //conseguir los contenidos de los libros
     useEffect(()=>{
-        fetch(`http://localhost:5001/libros/${id}`)
+        fetch(`http://localhost:5001/libros/libros/${id}`)
         .then(response=>response.json())
         .then(resulta=>{
             setContenidos(resulta)

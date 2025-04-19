@@ -8,7 +8,7 @@ function Reader() {
   const [libros, setLibros] = useState([]);
 
   useEffect(() => {
-   fetch('http://localhost:5001/libros')
+   fetch('http://localhost:5001/libros/libros')
     .then(response=>response.json())
     .then(libro=>{
       setLibros(libro)

@@ -63,8 +63,8 @@ export const validateEditarInformacion = (formData) => {
     return { campo: "nacionalidad", mensaje: "La nacionalidad es obligatoria." };
   }
 
-  if (!formData.sexo.trim() || formData.sexo === "-- Selecciona tu género --") {
-    return { campo: "sexo", mensaje: "El género es obligatorio." };
+  if (!formData.genero.trim() || formData.genero === "-- Selecciona tu género --") {
+    return { campo: "genero", mensaje: "El género es obligatorio." };
   }
 
   return null; // No hay errores

@@ -29,7 +29,7 @@ function Author() {
     const handleIniciar = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:5001/iniciar', {
+            const response = await fetch('http://localhost:5001/autor/iniciar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ function Author() {
         if(errorAutor) return;
 
         try {
-            const response = await fetch('http://localhost:5001/register', {
+            const response = await fetch('http://localhost:5001/autor/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

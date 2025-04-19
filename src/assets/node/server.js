@@ -90,7 +90,7 @@ const nuevoAutor=[
         codigoPostal:"23000",
         provincia:"Jaén",
         pais:"España",
-        nacionalidad:"USA",
+        nacionalidad:"China",
         genero:"Hombre",
         email:"mike@tunkbooks.com",
     }
