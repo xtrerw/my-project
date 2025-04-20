@@ -7,7 +7,8 @@ import librosRouter from './lector/librosApi.js';
 import autorRouter from './autor/autorApi.js';
 import misLibrosRouter from './autor/misLibrosApi.js';
 import adminRouter from './admin/adminApi.js';
-
+import comprasRouter from './lector/comprasApi.js';
+import usuarioRouter from './lector/usuario.js';
 
 const app = express();
 app.use(express.json());
@@ -19,6 +20,8 @@ app.use('/libros', librosRouter);
 app.use('/autor', autorRouter);
 app.use('/misLibros', misLibrosRouter);
 app.use('/admin', adminRouter);
+app.use('/compras', comprasRouter);
+app.use('/usuario', usuarioRouter);
 
 
 // Puerto de escucha de servidor único

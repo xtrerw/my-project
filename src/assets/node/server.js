@@ -7,8 +7,8 @@ dotenv.config({ path: path.resolve('src/assets/node/.env') });
 const hashpwd = (pwd) => {
     return createHash('sha256').update(pwd).digest('hex');
 }
-console.log("用户名:", process.env.DB_USER);
-console.log("密码:", process.env.DB_PASSWORD);
+console.log("usuario de mango:", process.env.DB_USER);
+console.log("contraseña de mango:", process.env.DB_PASSWORD);
 
 const user=encodeURIComponent(process.env.DB_USER);
 
@@ -56,11 +56,52 @@ const nuevoAdmin=[
 //Reader
 const SchemaUsuario=new mongoose.Schema({
     nombre:String,
+    apellido:String,
+    usernombre:String,
     password:String,
-    tipo:String,
+    fechaNacimiento: { type: Date },
+    direccion:String,
+    codigoPostal:String,
+    provincia:String,
+    pais:String,
+    genero:String,
+    email:String,
+    telefono:Number,
 });
 
 const Usuario=mongoose.model('Usuario',SchemaUsuario);
+
+const nuevoUsuario=[
+    {
+        nombre:"Sara",
+        apellido:"López",
+        usernombre:"sara",
+        password:hashpwd("1234"),
+        fechaNacimiento: new Date("2000-01-01"), // fecha de nacimiento
+        direccion:"Calle RTX5060 7 izquierda",
+        codigoPostal:"23000",
+        provincia:"Jaén",
+        pais:"España",
+        genero:"Mujer",
+        email:"xqe@gmail.com",
+        telefono:666666666,
+    },
+    {
+        nombre:"Juan",
+        apellido:"López",
+        usernombre:"juan",
+        password:hashpwd("1234"),
+        fechaNacimiento: new Date("1995-01-01"), // fecha de nacimiento
+        direccion:"Calle RTX4060 5 izquierda",
+        codigoPostal:"23000",
+        provincia:"Jaén",
+        pais:"España",
+        genero:"Hombre",
+        email:"juan@gmail.com",
+        telefono:680145361,
+    },
+  ]
+        
 //autor
 const SchemaAutor=new mongoose.Schema({
     nombre:String,
@@ -143,6 +184,7 @@ const Libro=mongoose.model('Libro',SchemaLibro);
 //CONTENIDO
 const SchemaContenido=new mongoose.Schema({
     libroID:{type:mongoose.Schema.Types.ObjectId,ref:'Libro'},
+    titulo:String,
     contenido:String,
 });
 
@@ -151,7 +193,7 @@ const Contenido=mongoose.model('Contenido',SchemaContenido);
 const nuevoLibros = [
     {
       img:"src/img/libro.jpg",
-      titulo:"ASAs",
+      titulo:"El Árbol de los Deseos",
       precio:15,
       // insertar los datos luego
       autorID:null,
@@ -160,6 +202,15 @@ const nuevoLibros = [
     }
   ];
   
+  // compras
+  const SchemaCompra=new mongoose.Schema({
+    libroID:{type:mongoose.Schema.Types.ObjectId,ref:'Libro'},
+    userID:{type:mongoose.Schema.Types.ObjectId,ref:'Usuario'},
+    cantidad:Number,
+  });
+  // crear el modelo de compra
+  const Compra=mongoose.model('Compra',SchemaCompra);
+  //agregar compras de ejemplo
   const insertarDatos = async () => {
     try {
       // comprobar los datos si están establecidos
@@ -175,23 +226,55 @@ const nuevoLibros = [
       nuevoLibros[0].cateID = categoriaExistente._id;
       nuevoLibros[0].colleccion = categoriaExistente.colleccion[0];
   
+
+
       // si existen los libros antes de insertar los datos
       const libroExistente = await Libro.findOne({ titulo: nuevoLibros[0].titulo });
+      let libroInsertar = []; // variable para almacenar los libros insertados
       if (!libroExistente) {
-        const libroInsertar = await Libro.insertMany(nuevoLibros);
+        libroInsertar = await Libro.insertMany(nuevoLibros);
         const libroID = libroInsertar.map(l => l.id);
-  
+
         const nuevoContenidos = [
           {
             libroID: libroID[0],
-            contenido: "Contenido del libro ASAs"
+            titulo: nuevoLibros[0].titulo,
+            // contenido de ejemplo
+            contenido: "Mateo pensó que su aventura había terminado, pero el Árbol de los Deseos tenía otros planes.\nEsa noche, mientras dormía junto al árbol, soñó con una puerta dorada que flotaba entre las nubes.\n\nAl despertar, encontró un pequeño brote a sus pies con un mensaje en sus hojas: “La verdadera felicidad no se guarda, se comparte”.\n\nIntrigado, Mateo decidió seguir el sendero que se abría mágicamente frente a él.\nMientras avanzaba, el bosque cambiaba: los colores eran más vivos, el aire más dulce, y las flores susurraban palabras de ánimo.\n\nEn su camino, conoció a una niña llamada Lila, que había perdido la memoria.\nMateo la acompañó y le contaba historias cada noche, esperando que algún recuerdo volviera a ella.\n\nUna tarde, al contarle sobre el Árbol de los Deseos, Lila rompió en llanto.\n“¡Yo también soñé con ese árbol! ¡Y tenía un hermano que me hablaba de él cuando éramos pequeños!”\n\nMateo la miró fijamente. Algo en su voz le resultaba familiar.\nCon el corazón latiendo con fuerza, sacó el mapa antiguo de su mochila y se lo mostró.\n\nLila lo reconoció al instante.\n“Ese mapa... ¡mi abuela también tenía uno igual!”\nAmbos entendieron entonces que sus caminos estaban unidos desde mucho antes.\n\nAl llegar a una colina iluminada por luciérnagas, encontraron la puerta dorada del sueño de Mateo.\nLa tocaron juntos, y en un destello de luz, fueron transportados a un lugar más allá del tiempo.\n\nAllí, se encontraron con las almas guardianas del bosque, quienes les explicaron:\n“Ustedes son los portadores de los deseos puros. Solo aquellos que desean para otros, reciben lo que realmente necesitan.”\n\nCon lágrimas en los ojos, Lila recordó todo: su familia, su hogar, su hermano... que era Mateo.\nAmbos se abrazaron bajo una lluvia de estrellas y supieron que la vida los había separado solo para volver a unirlos con más fuerza.\n\nEl bosque los nombró guardianes del Árbol de los Deseos, encargados de guiar a otros en sus propios viajes del corazón.\n\nDesde entonces, Mateo y Lila caminaron juntos, contando historias, sembrando esperanza y recordándole al mundo...\nQue la magia existe donde hay bondad, y que los deseos más poderosos nacen del amor compartido."
           }
         ];
+        // insertar el contenido en la base de datos
   
         await Contenido.insertMany(nuevoContenidos);
       } else {
         console.log("El libro ya existe, no se insertará nuevamente.");
+        libroInsertar=await Libro.find({titulo:nuevoLibros[0].titulo});
       }
+
+
+
+
+
+      // insertar compra ejemplo
+      const usuarioEjemplo = await Usuario.findOne({ usernombre: "sara" });
+
+      if (usuarioEjemplo && libroInsertar.length > 0) {
+        // crear un objeto de compra de ejemplo
+        const compraEjemplo = [
+          {
+            libroID: libroInsertar[0]._id,
+            userID: usuarioEjemplo._id,
+            cantidad: 1
+          }
+        ];
+        // insertar la compra en la base de datos
+        await Compra.insertMany(compraEjemplo);
+        console.log("Compra de ejemplo insertada");
+      } else {
+        console.log("No se pudo insertar la compra de ejemplo, usuario o libro no encontrado.");
+      }
+
+
     } catch (error) {
       console.error("Error al insertar datos:", error);
     }
@@ -202,7 +285,7 @@ const initDB = async () => {
     await addDocument(Admin, nuevoAdmin, 'username');
     await addDocument(Autor, nuevoAutor, 'usernombre');
     await addDocument(Categoria, nuevoCategorias, 'nombre');
-  
+    await addDocument(Usuario, nuevoUsuario, 'usernombre');
     for (const libro of nuevoLibros) {
       const libroExistente = await Libro.findOne({ titulo: libro.titulo });
       if (!libroExistente) {

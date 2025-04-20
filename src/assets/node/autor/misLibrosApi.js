@@ -5,7 +5,7 @@ const router = Router();
 
 
 //mis libros
-router.get('/mislibros/:id',async (req,res)=>{
+router.get('/:id',async (req,res)=>{
     const id = req.params.id;
     try {
         const libros = await ServerModel.Libro.find({autorID:id});
