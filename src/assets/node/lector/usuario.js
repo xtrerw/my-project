@@ -32,3 +32,5 @@ router.post("registrar", async (req, res) => {
         res.status(400).json({ message: error.message });// 400 Bad Request
     }
 });
+
+export default router;
