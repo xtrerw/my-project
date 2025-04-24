@@ -9,6 +9,7 @@ import { validateAuthor } from '../../utils/validateAuthor';
 import { useFormValidation } from '../../utils/useFormValidation';
 import { paises } from '../../utils/paises';
 import { provincias } from '../../utils/provincias';
+import { set } from 'mongoose';
 function Author() {
     //validar el formulario
     const { errores, mensajeError, validar } = useFormValidation(validateAuthor);
@@ -28,6 +29,8 @@ function Author() {
     //Función para iniciar sesión del autor
     const handleIniciar = async (e) => {
         e.preventDefault();
+        setErroresIniciar(null);
+        // Validar el formulario antes de enviar
         try {
             const response = await fetch('http://localhost:5001/autor/iniciar', {
                 method: 'POST',
@@ -78,6 +81,7 @@ function Author() {
         e.preventDefault();
         // Validar el formulario antes de enviar
         const errorAutor=validar(userInfo)
+        setErroresIniciar(null);
         //si hay error, mostrar mensaje de error
         if(errorAutor) return;
 
@@ -129,7 +133,7 @@ function Author() {
                     ) : actionRegistro === "registro" ? (
                         //Formulario para registro
                         <form onSubmit={handleRegister} className='form-registro'>
-                            <input type="text" name="username"  className={errores.username? "error-input" : ""} placeholder="Username" value={userInfo.username} onChange={handleInputChange} required/>
+                            <input type="text" name="username"  className={errores.username || errorIniciar ? "error-input" : ""} placeholder="Username" value={userInfo.username} onChange={handleInputChange} required/>
                             {/* campo de la información de persona */}
                             <div className='registro-info'>
                                 <input type="text" name="nombre"  className={errores.nombre? "error-input" : ""} placeholder="Nombre" value={userInfo.nombre} onChange={handleInputChange} required/>
