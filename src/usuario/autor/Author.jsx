@@ -52,7 +52,7 @@ function Author() {
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
             setErroresIniciar("Error iniciar Sesión "+error.message);
-        }
+      }
     };
     //Función para manejar el registro del autor
     //se usa para guardar la información del autor
@@ -90,13 +90,16 @@ function Author() {
                 body: JSON.stringify(userInfo),
             });
             const data = await response.json();
-            if (data) {
+            if (response.ok) {
+                //
                 setRegistro("iniciar");
-                console.log('User registered:', data);
-                //guardar en local storage en caso de que se haya registrado correctamente
+            }else{
+                setErroresIniciar(data.message);
+                //si no se ha registrado, mostrar mensaje de error
             }
         } catch (error) {
-            console.error('Error registering user:', error);
+            //si no se ha registrado, mostrar mensaje de error
+            setErroresIniciar("Error al registrar el usuario: " + error.message);
         }
     };
     // si el registro es exitoso, navegar a la página de registro
@@ -207,7 +210,7 @@ function Author() {
                             <input type="password" className={errores.password? "error-input" :""} name="password" placeholder="Password" value={userInfo.password} onChange={handleInputChange} required/>
                             
                             {/* Mensaje general de error */}
-                            <div className="error-message">{mensajeError}</div>
+                            <div className="error-message">{mensajeError}{errorIniciar}</div>
 
                             <div className='buttones'>
                                 <button type="submit">Register</button>

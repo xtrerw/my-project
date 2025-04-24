@@ -59,9 +59,13 @@ const SchemaUsuario=new mongoose.Schema({
     apellido:String,
     usernombre:{
       type:String,
-      unique:true, // el nombre de usuario debe ser único  
+      unique:[true, "el nombre de usuario debe ser único"],
+      required: [true," el nombre de usuario es obligatorio"],
     },
-    password:String,
+    password:{
+      type:String,
+      required: [true," el nombre de usuario es obligatorio"],
+    },
     fechaNacimiento: { type: Date },
     direccion:String,
     codigoPostal:String,
@@ -111,9 +115,13 @@ const SchemaAutor=new mongoose.Schema({
     apellido:String,
     usernombre:{
       type:String,
-      unique:true, // el nombre de usuario debe ser único
+      unique:[true, "el nombre de usuario debe ser único"],
+      required: [true," el nombre de usuario es obligatorio"],
     },
-    password:String,
+    password:{
+      type:String,
+      required: [true," el nombre de usuario es obligatorio"],
+    },
     fechaNacimiento: { type: Date },
     direccion:String,
     codigoPostal:String,
