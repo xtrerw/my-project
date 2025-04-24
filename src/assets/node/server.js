@@ -57,7 +57,10 @@ const nuevoAdmin=[
 const SchemaUsuario=new mongoose.Schema({
     nombre:String,
     apellido:String,
-    usernombre:String,
+    usernombre:{
+      type:String,
+      unique:true, // el nombre de usuario debe ser único  
+    },
     password:String,
     fechaNacimiento: { type: Date },
     direccion:String,
@@ -106,7 +109,10 @@ const nuevoUsuario=[
 const SchemaAutor=new mongoose.Schema({
     nombre:String,
     apellido:String,
-    usernombre:String,
+    usernombre:{
+      type:String,
+      unique:true, // el nombre de usuario debe ser único
+    },
     password:String,
     fechaNacimiento: { type: Date },
     direccion:String,
