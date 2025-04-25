@@ -4,7 +4,7 @@ import ServerModel from "../server.js";
 const router = Router();
 
 //admin login
-router.post('/admin/login',async (req,res)=>{
+router.post('/login',async (req,res)=>{
   try {
     //conseguir el usuario y la contraseña del administrador
     const { usuario, password } = req.body;
