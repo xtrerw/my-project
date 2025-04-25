@@ -9,7 +9,7 @@ router.post('/login',async (req,res)=>{
     //conseguir el usuario y la contraseña del administrador
     const { usuario, password } = req.body;
     //verificar si el usuario y la contraseña son correctos
-    const admin = await ServerModel.Admin.findOne({ usuario, password });
+    const admin = await ServerModel.Admin.findOne({ username:usuario, password:password });
     //si el usuario y la contraseña son correctos, devolver un mensaje de éxito
     if (!admin) {
       return res.status(401).json({ message: 'Invalid credentials' });
