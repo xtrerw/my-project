@@ -1,17 +1,64 @@
 import React from 'react'
+import { useState } from 'react'
 
 const Admin = () => {
+    // definimos el estado del error
+    const [error, setError] = useState()
+    // definimos el estado inicial del formulario
+    // el estado inicial es un objeto con las propiedades usuario y password, ambas vacías
+    const [form,setForm]=useState({
+        usuario: '',
+        password: ''
+    })
+    // manejamos el evento de cambio en los inputs del formulario
+    // actualizamos el estado del formulario con el valor del input correspondiente
+    const handleChange = (e) => {
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value
+        })
+    }
+    // manejamos el evento de envío del formulario
+    // evitamos el comportamiento por defecto del formulario (recargar la página)
+    const handleSubmit = async(e) => {
+        e.preventDefault()
 
+        try {
+            // hacemos una petición POST a la API de login del administrador
+            // enviamos el formulario como cuerpo de la petición en formato JSON
+            const response= await fetch('http://localhost:5001/admin/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(form)
+            })
+            const data = await response.json()
+            //
+            if (response.ok) {
+                // si inicia sesión correctamente, guardamos el id en el localStorage
+                localStorage.setItem("adminId",data._id)
+
+            }else {
+                // si la respuesta no es ok, actualizamos el estado del error con el mensaje de error
+                setError(data.message)
+            }
+        } catch (error) {
+            // si hay un error en la petición, actualizamos el estado del error con el mensaje de error
+            setError('Error en la petición',error)
+        }
+       
+    }
+
+  
   
   return (
     <div>
-      <form >
-        <input type="text"
-          placeholder='usuario'
+      <form onSubmit={handleSubmit} >
+        <input type="text" placeholder='usuario' name="usuario" value={form.usuario} onChange={handleChange}
         />
-        <input type="password" 
-        placeholder='contraseña'
-        name="" id="" />
+        <input type="password"  placeholder='contraseña' name="password" value={form.password} onChange={handleChange}/>
+        <p className='error-message'>{error}</p>
         <button type='submit'>Iniciar Sesión</button>
       </form>
     </div>
