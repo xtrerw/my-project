@@ -8,7 +8,7 @@ import autorRouter from './autor/autorApi.js';
 import misLibrosRouter from './autor/misLibrosApi.js';
 import adminRouter from './admin/adminApi.js';
 import comprasRouter from './lector/comprasApi.js';
-import usuarioRouter from './lector/usuario.js';
+import usuarioRouter from './lector/usuarioApi.js';
 
 const app = express();
 app.use(express.json());

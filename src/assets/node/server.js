@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { createHash } from 'crypto';
 import dotenv from 'dotenv';
 import path from 'path';
+import { type } from 'os';
 // cargar el archivo .env con seguridad
 dotenv.config({ path: path.resolve('src/assets/node/.env') });
 const hashpwd = (pwd) => {
@@ -41,15 +42,17 @@ const addDocument = async (modelo, docs, campoUnico = 'nombre') => {
 const SchemaAdmin=new mongoose.Schema({
     username:String,
     password:String,
-    tipo:String
+    tipo:{
+        type:String,
+        default:"admin",
+    }
 })
 const Admin=mongoose.model('Admin',SchemaAdmin)
 //eje de admin
 const nuevoAdmin=[
     {
         username:"root",
-        password:hashpwd("root"),
-        tipo:"admin"
+        password:hashpwd("root")
     }
 ]
 
@@ -74,6 +77,14 @@ const SchemaUsuario=new mongoose.Schema({
     genero:String,
     email:String,
     telefono:Number,
+    tipo:{
+      type:String,
+      default:"lector",
+    },
+    activo:{
+      type:Boolean,
+      default:true,
+    }
 });
 
 const Usuario=mongoose.model('Usuario',SchemaUsuario);
@@ -130,6 +141,14 @@ const SchemaAutor=new mongoose.Schema({
     nacionalidad:String,
     genero:String,
     email:String,
+    tipo:{
+      type:String,
+      default:"autor",
+    },
+    activo:{
+      type:Boolean,
+      default:true,
+    }
 });
 
 const Autor=mongoose.model('Autor',SchemaAutor);

@@ -8,11 +8,21 @@ const router = Router();
 const hashpwd = (pwd) => {
     return createHash('sha256').update(pwd).digest('hex');
 }
+// conseguir todos los autores
+router.get("/listado", async (req, res) => {
+    try {
+        // Obtener todos los autores de la base de datos
+        const autores = await ServerModel.Autor.find();
+        res.status(200).json(autores);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener los autores", error });
+    }
+});
 // Register route
 router.post('/register', async(req, res) => {
   const { nombre,apellido,fechaNacimiento,username, password } = req.body;
   try {
-    const user = new ServerModel.Autor({ nombre:nombre, apellido:apellido ,fechaNacimiento:fechaNacimiento, usernombre:username, password:hashpwd(password),tipo:"autor" });
+    const user = new ServerModel.Autor({ nombre:nombre, apellido:apellido ,fechaNacimiento:fechaNacimiento, usernombre:username, password:hashpwd(password),tipo:"autor",activo:true });
     await user.save();
    res.status(200).json(user);
   } catch (error) {
@@ -23,7 +33,13 @@ router.post('/register', async(req, res) => {
 router.post('/iniciar', async (req, res) => {
     const { username, password } = req.body;
     try {
-        const user = await ServerModel.Autor.findOne({ usernombre: username, password: hashpwd(password)});
+        const user = await ServerModel.Autor.findOne({ usernombre: username, password: hashpwd(password),activo:true });
+        
+        if(!user.activo){
+          // si el usuario sin activo, devolver un mensaje de error
+            res.status(401).json({ message: 'Usuario inactivo' });
+        }
+
         if (user) {
             res.status(200).json(user);
         } else {

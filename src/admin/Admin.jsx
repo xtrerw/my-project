@@ -1,7 +1,10 @@
 import React from 'react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Admin = () => {
+    // usamos el hook useNavigate para redirigir al usuario a otra página después de iniciar sesión
+    const navigate = useNavigate()
     // definimos el estado del error
     const [error, setError] = useState()
     // definimos el estado inicial del formulario
@@ -38,7 +41,9 @@ const Admin = () => {
             if (response.ok) {
                 // si inicia sesión correctamente, guardamos el id en el localStorage
                 localStorage.setItem("adminId",data._id)
-
+                console.log('Inicio de sesión exitoso')
+                // redirigimos al usuario a la página de administración
+                navigate('/paginaAdmin')
             }else {
                 // si la respuesta no es ok, actualizamos el estado del error con el mensaje de error
                 setError(data.message)
