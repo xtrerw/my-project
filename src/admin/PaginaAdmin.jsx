@@ -3,26 +3,52 @@ import { NavLink } from 'react-router-dom'
 import { Routes,Route } from 'react-router-dom'
 import GestionLector from './GestionLector'
 import GestionAutor from './GestionAutor'
+import './PaginaAdmin.css'
+import { useState } from 'react';
+import { useEffect } from 'react';
 const PaginaAdmin = () => {
+
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <>
+    <div className='pagina-admin'>
+      {/* parte de encabezado */}
       <header>
-        <nav>
-            <ul>
-                {/* link absoluto */}
-                <li><NavLink to="/paginaAdmin/usuarios">Gestion del Usuarios</NavLink></li>
-                <li><NavLink to="/paginaAdmin/autores">Gestion del Autor</NavLink></li>
-            </ul>
-        </nav>
+        <h1>Administrador de TunkBook</h1>
       </header>
-      <main>
+      {/* parte de administrador */}
+      <main className='main-admin'>
+
+      <nav className="nav-admin">
+        <ul className="menu-admin">
+          <li className="menu-item">
+            <div>
+              <div className={`menu-title ${isOpen ? 'open' : ''}`}
+              onClick={()=>setIsOpen(!isOpen)}
+              >Gestion de Cuentas</div>
+              <div>
+              <NavLink to={"/"} className={`menu-title`}>
+                  ver la página prinicipal
+                </NavLink>
+              </div>
+              
+            </div>
+           
+            <ul className={`submenu ${isOpen ? 'open' : ''}`}>
+              <li><NavLink to="/paginaAdmin/usuarios" className="menu-link">Gestion del Usuarios</NavLink></li>
+              <li><NavLink to="/paginaAdmin/autores" className="menu-link">Gestion del Autor</NavLink></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+
         <Routes>
             {/* el path es relativo */} 
           <Route path="usuarios" element={<GestionLector/>} />
           <Route path="autores" element={<GestionAutor/>} />
         </Routes>
       </main>
-    </>
+    </div>
   )
 }
 

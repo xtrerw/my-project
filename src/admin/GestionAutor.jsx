@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import './GestionCuenta.css'
 const GestionAutor = () => {
 
   //conseguir la lista de autores
@@ -52,12 +53,11 @@ const GestionAutor = () => {
 
 
   return (
-    <div>
+    <div className="contenedor-cards">
       {autores.map((autor) => (
-        <form key={autor._id} onSubmit={(e)=>handleSubmit(e,autor)} >
-          <h2>{autor.nombre}</h2>
-          <p>{autor.apellido}</p>
-          <p>{autor.usernombre}</p>
+        <form key={autor._id} onSubmit={(e)=>handleSubmit(e,autor)} className="card-usuario" >
+          <h2>{autor.nombre} {autor.apellido}</h2>
+          <p>usuario: {autor.usernombre}</p>
           <select name="activo" id="" 
           value={autor.activo}
           // 
@@ -71,6 +71,8 @@ const GestionAutor = () => {
             <option value="false">Inactivo</option>
           </select>
           <button type='submit'>Actualizar</button>
+          {/* eliminar cuenta */}
+          <button type='button' onClick={() => handleDelete(autor._id)} className='btn-eliminar'>Eliminar</button>
         </form>
       ))}
     </div>

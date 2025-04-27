@@ -1,0 +1,79 @@
+.pagina-admin,.pagina-admin select,.pagina-admin button{
+    text-transform: capitalize;
+}
+
+/* nav de admin + carta de usuarios */
+.main-admin {
+    display: flex;
+    min-height: 100vh;
+}
+/* nav de admin */
+.nav-admin {
+    padding: 20px 10px;
+    background-color: var(--bg-color-main4);
+}
+/* nav de admin > menu de admin */
+.menu-admin {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+  
+.menu-item {
+    display: flex;
+}
+.menu-item>div {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+.menu-title {
+    padding: 10px 20px;
+    background: var(--color-text-primary);
+    border-radius: 10px;
+    cursor: pointer;
+    max-height: min-content;
+}
+.menu-title:hover {
+    background: var(--bg-color-main);
+    color: var(--bg-color-default);
+}
+/* con caso de click */
+.open {
+    background: var(--bg-color-main5);
+    color: var(--bg-color-default);
+    
+}
+  .submenu {
+    /* position: absolute; */
+    display: none;
+    justify-content: center;
+    /* top: 0;
+    left: 100%; */
+    background: var(--bg-color-main4);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    min-width: 200px;
+    overflow: hidden;
+  }
+
+  .menu-item .open {
+    display: block;
+  }
+
+  .menu-link {
+    display: block;
+    color: var(--bg-color-default);
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin: 0 10px;
+  }
+  
+  .menu-link:hover {
+    background-color: var(--bg-color-main5);
+    color: var(--bg-color-default);
+  }

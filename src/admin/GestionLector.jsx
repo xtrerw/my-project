@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
+import './GestionCuenta.css'
 const GestionLector = () => {
   //conseguir la lista de usuarios
   const [usuarios, setUsuarios] = useState([])
@@ -47,12 +48,12 @@ const GestionLector = () => {
       });
   }
   return (
-    <div>
+    <div className="contenedor-cards">
+      {/* conseguir todos usuarios */}
       {usuarios.map((usuario) => (
-        <form key={usuario._id} onSubmit={(e)=>handleSubmit(e,usuario)} >
-          <h2>{usuario.nombre}</h2>
-          <p>{usuario.apellido}</p>
-          <p>{usuario.usernombre}</p>
+        <form key={usuario._id} onSubmit={(e)=>handleSubmit(e,usuario)} className='card-usuario' >
+          <h2>{usuario.nombre} {usuario.apellido}</h2>
+          <p>usuario: {usuario.usernombre}</p>
           <select name="activo" id="" 
           value={usuario.activo}
           // 
@@ -63,9 +64,11 @@ const GestionLector = () => {
             e.target.value=== "true"
             )}>
             <option value="true">activo</option>
-            <option value="false">desactivo</option>
+            <option value="false">inactivo</option>
           </select>
-          <button type="submit">Confirmar</button>
+          <button type="submit">actualizar</button>
+          {/* btn eliminar */}
+          <button className='btn-eliminar'>Eliminar</button>
         </form>
       ))}
     </div>

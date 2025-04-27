@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import './Admin.css'
 const Admin = () => {
     // usamos el hook useNavigate para redirigir al usuario a otra página después de iniciar sesión
     const navigate = useNavigate()
@@ -58,11 +58,18 @@ const Admin = () => {
   
   
   return (
-    <div>
-      <form onSubmit={handleSubmit} >
-        <input type="text" placeholder='usuario' name="usuario" value={form.usuario} onChange={handleChange}
+    <div className='contenedor-admin'>
+      <form onSubmit={handleSubmit} className='formulario-admin'>
+        <h1>Iniciar Sesión</h1>
+        <label htmlFor="">administrador
+            <input type="text" placeholder='usuario' name="usuario" value={form.usuario} onChange={handleChange}
         />
-        <input type="password"  placeholder='contraseña' name="password" value={form.password} onChange={handleChange}/>
+        </label>
+        <label htmlFor="">contraseña
+            <input type="password"  placeholder='contraseña' name="password" value={form.password} onChange={handleChange}/>
+        </label>
+        {/* el input de contraseña tiene un tipo password para ocultar el texto */}
+        
         <p className='error-message'>{error}</p>
         <button type='submit'>Iniciar Sesión</button>
       </form>
