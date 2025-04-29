@@ -21,22 +21,22 @@
     align-items: center;
 }
   
-.menu-item {
+.menu-admin-item {
     display: flex;
 }
-.menu-item>div {
+.menu-admin-item>div {
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
-.menu-title {
+.menu-admin-title {
     padding: 10px 20px;
     background: var(--color-text-primary);
     border-radius: 10px;
     cursor: pointer;
     max-height: min-content;
 }
-.menu-title:hover {
+.menu-admin-title:hover {
     background: var(--bg-color-main);
     color: var(--bg-color-default);
 }
@@ -60,11 +60,11 @@
     overflow: hidden;
   }
 
-  .menu-item .open {
+  .menu-admin-item .open {
     display: block;
   }
 
-  .menu-link {
+  .menu-admin-link {
     display: block;
     color: var(--bg-color-default);
     text-decoration: none;
@@ -73,7 +73,7 @@
     margin: 0 10px;
   }
   
-  .menu-link:hover {
+  .menu-admin-link:hover {
     background-color: var(--bg-color-main5);
     color: var(--bg-color-default);
   }

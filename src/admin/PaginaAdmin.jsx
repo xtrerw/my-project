@@ -21,9 +21,9 @@ const PaginaAdmin = () => {
 
       <nav className="nav-admin">
         <ul className="menu-admin">
-          <li className="menu-item">
+          <li className="menu-admin-item">
             <div>
-              <div className={`menu-title ${isOpen ? 'open' : ''}`}
+              <div className={`menu-admin-title ${isOpen ? 'open' : ''}`}
               onClick={()=>setIsOpen(!isOpen)}
               >Gestion de Cuentas</div>
               <div>
@@ -35,8 +35,8 @@ const PaginaAdmin = () => {
             </div>
            
             <ul className={`submenu ${isOpen ? 'open' : ''}`}>
-              <li><NavLink to="/paginaAdmin/usuarios" className="menu-link">Gestion del Usuarios</NavLink></li>
-              <li><NavLink to="/paginaAdmin/autores" className="menu-link">Gestion del Autor</NavLink></li>
+              <li><NavLink to="/paginaAdmin/usuarios" className="menu-admin-link">Gestion del Usuarios</NavLink></li>
+              <li><NavLink to="/paginaAdmin/autores" className="menu-admin-link">Gestion del Autor</NavLink></li>
             </ul>
           </li>
         </ul>
