@@ -2,7 +2,10 @@ import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Admin.css'
+import '../style/PasswordInput.css'
 const Admin = () => {
+    // muestra la contraseña en texto plano o encriptada
+    const [showPassword, setShowPassword] = useState(false)
     // usamos el hook useNavigate para redirigir al usuario a otra página después de iniciar sesión
     const navigate = useNavigate()
     // definimos el estado del error
@@ -61,12 +64,20 @@ const Admin = () => {
     <div className='contenedor-admin'>
       <form onSubmit={handleSubmit} className='formulario-admin'>
         <h1>Iniciar Sesión</h1>
-        <label htmlFor="">administrador
-            <input type="text" placeholder='usuario' name="usuario" value={form.usuario} onChange={handleChange}
+        <label htmlFor="usuario">
+            Administrador
+            <input type="text" placeholder='Administrador' name="usuario" value={form.usuario} onChange={handleChange}
         />
         </label>
-        <label htmlFor="">contraseña
-            <input type="password"  placeholder='contraseña' name="password" value={form.password} onChange={handleChange}/>
+        <label htmlFor="password" className='password-input-container'>
+            Contraseña
+            <input type={showPassword ? "text" : "password"} className='password-input' placeholder='Contraseña' name="password" value={form.password} onChange={handleChange}/>
+            <i 
+            // muestra la contraseña en texto plano o encriptada
+            // cambia el icono de ojo abierto a ojo cerrado y viceversa
+            className={`bx ${showPassword ? 'bx-show' : 'bx-hide'}`} 
+            onClick={()=>setShowPassword(!showPassword)}
+            ></i>
         </label>
         {/* el input de contraseña tiene un tipo password para ocultar el texto */}
         

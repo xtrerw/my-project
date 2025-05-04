@@ -51,18 +51,46 @@ router.post('/iniciar', async (req, res) => {
 });
 // Publish route
 router.post('/publish', async (req, res) => {
-  const { title, content ,id } = req.body;
+  // Obtener toda informacion del autor desde el cuerpo de la solicitud
+  const {  title, content,id,price,categoriaSeleccionada,coleccionSeleccionada} = req.body;
   try {
-    const libro = new ServerModel.Libro({ titulo:title,autorID:id});
+    // Crear un nuevo libro y guardarlo en la base de datos
+    const libro = new ServerModel.Libro({ 
+      titulo:title,
+      autorID:id,
+      contenido:content,
+      precio:price,
+      cateID:categoriaSeleccionada,
+      colleccion:[coleccionSeleccionada],
+    });
+    // Guardar el libro en la base de datos
     await libro.save();
-    res.status(200).json(libro);
+    
+    // Crear un nuevo contenido y guardarlo en la base de datos
     const contenido=new ServerModel.Contenido({ contenido:content,libroID:libro._id })
     await contenido.save()
-    res.status(200).json(contenido)
+    res.status(200).json({
+      message: "Libro y contenido guardados correctamente",
+      libro,
+      contenido
+    });
+    
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
+//obtener todos los colecciones de libros
+router.get('/categorias', async (req, res) => {
+    try {
+        // Obtener todas las categorías de la base de datos
+        const todasLasCategorias = await ServerModel.Categoria.find();
+        // Filtrar las categorías para excluir la primera (índice 0)
+        const categorias = todasLasCategorias.slice(1)
+        res.status(200).json(categorias);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+})
 //autores
 // Obtener información del autor por ID
 router.get('/:id', async (req, res) => {

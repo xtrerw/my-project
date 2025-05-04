@@ -18,7 +18,7 @@
   color: var(--bg-color-main);
   border-radius: 10px;
 }
-.formulario-admin>label{
+.formulario-admin label{
     max-width: 300px;
 }
 .formulario-admin>button{

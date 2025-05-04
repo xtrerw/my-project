@@ -5,7 +5,6 @@ import GestionLector from './GestionLector'
 import GestionAutor from './GestionAutor'
 import './PaginaAdmin.css'
 import { useState } from 'react';
-import { useEffect } from 'react';
 const PaginaAdmin = () => {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +26,7 @@ const PaginaAdmin = () => {
               onClick={()=>setIsOpen(!isOpen)}
               >Gestion de Cuentas</div>
               <div>
-              <NavLink to={"/"} className={`menu-title`}>
+              <NavLink to={"/"} className={`menu-admin-title`}>
                   ver la página prinicipal
                 </NavLink>
               </div>

@@ -12,8 +12,10 @@
 }
 .buttones{
     display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 10px;
-    margin-top: 10px;
+    /* margin-top: 10px; */
 }
 .form-iniciar>form{
     width: 500px;
@@ -21,6 +23,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+/* icon de esconder y mostrar en iniciar sesión */
+.form-iniciar label{
+    width: 100%;
+    margin-top: 5px;
+}
+.form-iniciar .password-input-container>.bx {
+    top: 55%;
 }
 .registro-info{
     display: flex;
@@ -46,4 +56,8 @@
     border-color: var(--bg-color-main);
     box-shadow: 0 0 5px var(--bg-color-main);
     outline: none;
+}
+/* icon de registro */
+.form-registro>.password-input-container>.bx {
+    top: 40%;
 }

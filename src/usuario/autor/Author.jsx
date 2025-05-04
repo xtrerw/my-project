@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import "./Author.css";
 import "../../style/calendario.css"
+// import "../../style/PasswordInput.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from 'react';
 import DatePicker from 'react-datepicker';
@@ -9,8 +10,10 @@ import { validateAuthor } from '../../utils/validateAuthor';
 import { useFormValidation } from '../../utils/useFormValidation';
 import { paises } from '../../utils/paises';
 import { provincias } from '../../utils/provincias';
-import { set } from 'mongoose';
 function Author() {
+    //muestra la contraseña en texto plano o encriptada
+    const [showPassword, setShowPassword] = useState(false);
+    const [showPassword2, setShowPassword2] = useState(false);
     //validar el formulario
     const { errores, mensajeError, validar } = useFormValidation(validateAuthor);
     
@@ -117,22 +120,48 @@ function Author() {
         <>
         {/* si inciciar sesión son éxito */}
                 <div className='form-iniciar'>
-                    <h2>Author Dashboard</h2>
+                    
                     {actionRegistro === "iniciar" ? (
                         //Formulario para iniciar sesión
                         <form onSubmit={handleIniciar}>
-                            <input type="text" name='username' placeholder='Username' value={autor} onChange={(e) => setAutor(e.target.value)} required />
-                            <input type="password" name='password' placeholder='Contraseña' value={pwd} onChange={(e) => setPwd(e.target.value)} required />
+                            <h2>Iniciar Sesión</h2>
+                            {/* campo de la información de autor */}
+                            <label htmlFor="username">
+                                Usuario
+                                <input type="text" name='username' placeholder='Username' value={autor} onChange={(e) => setAutor(e.target.value)} required />
+                            </label>
+                            
+                            {/* campo de la contraseña */}
+                            <label className='password-input-container'>
+                                Contraseña
+                                <input 
+                                type={showPassword ? "text" : "password"}
+                                name='password' placeholder='Contraseña' 
+                                value={pwd} 
+                                onChange={(e) => setPwd(e.target.value)} 
+                                required />
+                                <i
+                                // muestra la contraseña en texto plano o encriptada
+                                // cambia el icono de ojo abierto a ojo cerrado y viceversa
+                                className={`bx ${showPassword ? 'bx-show' : 'bx-hide'}`} 
+                                onClick={()=>setShowPassword(!showPassword)}
+                                ></i>
+                            </label>
+                            
                             {/* Mensaje de error al iniciar sesión */}
                             <div className="error-message">{errorIniciar}</div>
                             <div className='buttones'>
+                                <p style={{
+                                    cursor: "pointer",
+                                    textDecoration: "underline",
+                                }} onClick={() => {setRegistro("registro");}}>Crea una cuenta</p>
                                 <button type="submit">Iniciar Sesión</button>
-                                <button onClick={() => {setRegistro("registro");}}>Registrar</button>
                             </div>
                         </form>
                     ) : actionRegistro === "registro" ? (
                         //Formulario para registro
                         <form onSubmit={handleRegister} className='form-registro'>
+                            <h2>Registrar</h2>
                             <input type="text" name="username"  className={errores.username || errorIniciar ? "error-input" : ""} placeholder="Username" value={userInfo.username} onChange={handleInputChange} required/>
                             {/* campo de la información de persona */}
                             <div className='registro-info'>
@@ -210,15 +239,27 @@ function Author() {
                                         <option key={index} value={pais}>{pais}</option>
                                     ))}
                             </select>
-
-                            <input type="password" className={errores.password? "error-input" :""} name="password" placeholder="Password" value={userInfo.password} onChange={handleInputChange} required/>
+                            
+                            <label className='password-input-container'>
+                            <input type={showPassword2?`text`:`password`} className={errores.password? "error-input" :""} name="password" placeholder="Password" value={userInfo.password} onChange={handleInputChange} required/>
+                            <i
+                                // muestra la contraseña en texto plano o encriptada
+                                // cambia el icono de ojo abierto a ojo cerrado y viceversa
+                                className={`bx ${showPassword2 ? 'bx-show' : 'bx-hide'}`} 
+                                onClick={()=>setShowPassword2(!showPassword2)}
+                                ></i>  
+                            </label>
                             
                             {/* Mensaje general de error */}
                             <div className="error-message">{mensajeError}{errorIniciar}</div>
 
                             <div className='buttones'>
-                                <button type="submit">Register</button>
-                                <button onClick={() => setRegistro("iniciar")}>Iniciar Sesión</button>
+                                <p style={{
+                                    cursor: "pointer",
+                                    textDecoration: "underline",
+                                }} onClick={() => {setRegistro("iniciar");}}>¿ Ya tiene una cuenta ?</p>
+                                {/* botón de registro */}
+                                <button type="submit">Registrar</button>
                             </div>
                         </form>
                     ) : null}

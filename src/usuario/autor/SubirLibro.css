@@ -1,0 +1,33 @@
+.subir-libro-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 100vh;
+}
+.input-precio {
+    position: relative;
+}
+.currency-symbol {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+}
+.subir-libro-form>button{
+    background-color: var(--bg-color-main);
+    color: var(--text-color);
+}
+.select-categoria select{
+    padding: 12px;
+    margin: 12px 0;
+    border: 2px solid var(--bg-color-main2);
+    border-radius: 8px;
+    background-color: var(--bg-color-default);
+    color: var(--color-text-secondary);
+    font-size: 1em;
+}
+.select-categoria option{
+    color: var(--color-text-secondary);
+}
