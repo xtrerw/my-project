@@ -3,7 +3,10 @@ import mammoth from 'mammoth';
 import './SubirLibro.css'
 import { useEffect } from 'react';
 import subirImgDefault from '../../img/subir-img-default.png'
+import { useNavigate } from 'react-router-dom';
 const SubirLibro = () => {
+    //useNavigate para redirigir al usuario
+    const navigate = useNavigate();
     //conseguir el id del autor
     const id = localStorage.getItem("userId");
     const [title, setTitle] = useState('');
@@ -80,7 +83,12 @@ const SubirLibro = () => {
             });
             //conseguir los datos de la base de datos
             const data = await response.json();
-            console.log('los datos conseguido:', data);
+            if (response.ok) {
+                //si se sube correctamente, redirigir al usuario a la página de mis libros
+                navigate("/Author/Mis Libros")
+                console.log('los datos subidos:', data);
+            }
+            
         } catch (error) {
             console.error('Error publishing work:', error);
         }
