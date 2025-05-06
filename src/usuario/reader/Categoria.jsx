@@ -13,12 +13,53 @@ const Categoria = () => {
   const [cantidad, setCantidad] = useState(0);
   //id del usuario
   const [userId, setUserId] = useState();
+  //registro de usuario
+  const [isRegistrado, setIsRegistrado] = useState(false);
   //formulario de registro
-  // const [formData, setFormData] = useState({
-  //   nombre: "",
-  //   email: "",
-  //   password: "",
-  // });
+  const [formData, setFormData] = useState({
+    nombre: "",
+    apellido: "",
+    username: "",
+    password: "",
+    fechaNacimiento: "",
+    direccion: "",
+    codigoPostal: "",
+    provincia: "",
+    pais: "",
+    genero: "",
+    email: "",
+    telefono: "",
+  });
+  //
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  //
+  const handleRegister = (e) => {
+    e.preventDefault();
+    fetch("http://localhost:5001/usuario/registrar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Registro exitoso");
+          setIsRegistrado(true);
+        } else {
+          console.log("Error en el registro");
+        }
+      })
+      .catch((error) => {
+        console.error("Error en el registro:", error);
+      });
+  };
   //conseguir las categorias desde mango db
   useEffect(()=>{
     fetch(`http://localhost:5001/libros/categorias/${categoriaId}`)
@@ -92,11 +133,31 @@ const Categoria = () => {
         ))}
       </div>
       ):(
+        //si no hay id de usuario, mostrar el formulario de registro y login
+        isRegistrado ? (
+          <div>
+            <h2>Registro Exitoso</h2>
+            <p style={{cursor:"pointer"}} onClick={()=>setIsRegistrado(false)}>
+              ¿Ya tienes una cuenta? Inicia sesión aquí.
+            </p>
+          </div>
+        ) : (
         // pagina de registro y login
        <div>
-          <p>Form para registro</p>
+          <form>
+            <h2>Iniciar Sesión</h2>
+            <label htmlFor="usuario">Usuario:</label>
+            <input type="text" id="usuario" name="usuario" required />
+            <label htmlFor="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required />
+            <p style={{cursor:"pointer"}} onClick={()=>setIsRegistrado(true)}>
+              ¿No tienes una cuenta? Regístrate aquí.
+            </p>
+            <button type="submit">Iniciar Sesión</button>
+          </form>
        </div>
-      )}
+      )
+    )}
       
     </>
   )

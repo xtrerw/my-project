@@ -81,9 +81,15 @@ const User = () => {
               onMouseEnter={() => setActiveCategory(index)}
               onMouseLeave={() => setActiveCategory(null)}
             >
-              <Link to={`/Author/${item.nombre}`} className="menu-link">
-                {item.nombre}
-              </Link>
+              {/* menu principal */}
+              {/* para evitar saltar a otras páginas por item principal sin subitem */}
+              {item.subItems ? (
+                <div className="menu-link">{item.nombre}</div>
+              ) : (
+                <Link to={`/Author/${item.nombre}`} className="menu-link">
+                  {item.nombre}
+                </Link>
+              )}
     
               {/* submenu */}
               {item.subItems && activeCategory === index && (
@@ -119,7 +125,7 @@ const User = () => {
                 {activeCategory === index && (
                   <div className="dropdown">
                     {categoria.colleccion.map((subitem, subIndex) => (
-                      <Link key={subIndex} to={`/${categoria.nombre}/${subitem}`} className="dropdown-item">
+                      <Link key={subIndex} to={`/${categoria.nombre}/${subitem}`} className="dropdown-item" >
                         {subitem}
                       </Link>
                     ))}
@@ -176,7 +182,12 @@ const User = () => {
             <div key={index} className="category-column">
               <h4>{categoria.nombre}</h4>
               {categoria.colleccion.map((subitem, subIndex) => (
-                <Link key={subIndex} to={`/${categoria.nombre}/${subitem}`} className="category-link">
+                <Link 
+                key={subIndex} 
+                to={`/${categoria.nombre}/${subitem}`} 
+                className="category-link"
+                onClick={()=>setIsAuthor(false)}
+                >
                   {subitem}
                 </Link>
               ))}

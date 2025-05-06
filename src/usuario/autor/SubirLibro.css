@@ -5,7 +5,26 @@
     justify-content: center;
     gap: 10px;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    padding: 40px;
+}
+/* Estilos para label del formulario */
+.subir-libro-form label,.subir-libro-form div{
+    width: 500px;
+}
+/* img */
+.subir-libro-form .preview-container {
+    background: var(--bg-color-default);
+    width: max-content;
+    border-radius: 10px;
+    border: 3px solid var(--bg-color-main2);
+    padding: 10px;
+    cursor: pointer;
+}
+.preview-container>img {
+    width: 200px;
+    height: 200px;
+    opacity: 0.5;
 }
 .input-precio {
     position: relative;

@@ -11,8 +11,16 @@ import comprasRouter from './lector/comprasApi.js';
 import usuarioRouter from './lector/usuarioApi.js';
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.json({
+  // eliminar el límite de tamaño de imgenes
+  // para evitar errores al subir imágenes grandes
+  limit: 'inifinite'
+}));
+app.use(express.urlencoded({
+  extended:true,
+  // eliminar el límite de tamaño de imgenes
+  limit: 'inifinite'
+}));
 app.use(cors());
 
 //Entrada de ruta unificada

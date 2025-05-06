@@ -49,13 +49,16 @@ router.post('/iniciar', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-// Publish route
+// publicar libro
 router.post('/publish', async (req, res) => {
   // Obtener toda informacion del autor desde el cuerpo de la solicitud
-  const {  title, content,id,price,categoriaSeleccionada,coleccionSeleccionada} = req.body;
+  const { img,title, content,id,price,categoriaSeleccionada,coleccionSeleccionada} = req.body;
+  
+
   try {
     // Crear un nuevo libro y guardarlo en la base de datos
     const libro = new ServerModel.Libro({ 
+      img:img,
       titulo:title,
       autorID:id,
       contenido:content,

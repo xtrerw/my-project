@@ -202,13 +202,26 @@ const nuevoCategorias=[
 
 //libros
 const SchemaLibro=new mongoose.Schema({
-    img:String,
-    titulo:String,
+    img:{
+      type:String,
+      required:true,
+    },
+    titulo:{
+      type:String,
+      required:true,
+    },
     //relacion entre autor y libros
     autorID:{type:mongoose.Schema.Types.ObjectId,ref:'Autor'},
-    precio:Number,
+    precio:{
+      type:Number,
+      required:true,
+    },
     // relaciones entre categoría y libros
-    cateID:{type:mongoose.Schema.Types.ObjectId,ref:'Categoria'},
+    cateID:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:'Categoria',
+      required:true,
+    },
     colleccion:[{type:String}]
 });
 
@@ -225,7 +238,7 @@ const Contenido=mongoose.model('Contenido',SchemaContenido);
 //agregar libros y contenido de ejemplo
 const nuevoLibros = [
     {
-      img:"src/img/libro.jpg",
+      img:"http://localhost:5173/src/img/libro.jpg",
       titulo:"El Árbol de los Deseos",
       precio:15,
       // insertar los datos luego

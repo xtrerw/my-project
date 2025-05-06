@@ -43,7 +43,7 @@ const MisLibros = () => {
           {libros && libros.length > 0 ? (
             libros.map((libro, index) => (
               <Link to={`/Libros/${libro._id}`} key={index} className="libro-item">
-                <img src={`http://localhost:5173/${libro.img}`} alt={libro.titulo} />
+                <img src={`${libro.img}`} alt={libro.titulo} />
                 <h2>{libro.titulo}</h2>
                 <p>{libro.precio} €</p>
               </Link>
