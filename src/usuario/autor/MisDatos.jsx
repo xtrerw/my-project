@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Author from './Author';
+import Author from './Login';
 import './MisDatos.css';
 import CambiarContrasena from './CambiarContrasena';
 import EditarInformacion from './EditarInformacion';

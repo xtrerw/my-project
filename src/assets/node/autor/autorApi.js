@@ -20,9 +20,9 @@ router.get("/listado", async (req, res) => {
 });
 // Register route
 router.post('/register', async(req, res) => {
-  const { nombre,apellido,fechaNacimiento,username, password } = req.body;
+  const { nombre,apellido,fechaNacimiento,username, password,tipoRegistro } = req.body;
   try {
-    const user = new ServerModel.Autor({ nombre:nombre, apellido:apellido ,fechaNacimiento:fechaNacimiento, usernombre:username, password:hashpwd(password),tipo:"autor",activo:true });
+    const user = new ServerModel.Autor({ nombre:nombre, apellido:apellido ,fechaNacimiento:fechaNacimiento, usernombre:username, password:hashpwd(password), tipo:tipoRegistro ,activo:true });
     await user.save();
    res.status(200).json(user);
   } catch (error) {
@@ -31,20 +31,30 @@ router.post('/register', async(req, res) => {
 });
 //iniciar sesión
 router.post('/iniciar', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password,tipoUsuario } = req.body;
     try {
-        const user = await ServerModel.Autor.findOne({ usernombre: username, password: hashpwd(password),activo:true });
-        
-        if(!user.activo){
-          // si el usuario sin activo, devolver un mensaje de error
-            res.status(401).json({ message: 'Usuario inactivo' });
-        }
-
-        if (user) {
-            res.status(200).json(user);
-        } else {
-            res.status(404).json({ message: 'Usuario no disponible' });
-        }
+      const hashedPwd = hashpwd(password);
+      let usuario;
+      // Verificar el tipo de usuario y buscar en la colección correspondiente
+      // Si el tipo de usuario es "Autor", buscar en la colección de autores
+      // Si el tipo de usuario es "Lector", buscar en la colección de lectores
+      if (tipoUsuario === "autor") {
+        // conseguir en la colección de autores
+        usuario = await ServerModel.Autor.findOne({ usernombre: username, password: hashedPwd, tipo: tipoUsuario });
+      } else if (tipoUsuario === "lector") {
+        // conseguir en la colección de lectores
+        usuario = await ServerModel.Usuario.findOne({ usernombre: username, password: hashedPwd, tipo: tipoUsuario });
+      }
+      // Verificar si el usuario existe
+      if (!usuario) {
+        return res.status(404).json({ message: 'Usuario no disponible' });
+      }
+      // Verificar si el usuario está activo
+      if (!usuario.activo) {
+        return res.status(401).json({ message: 'Usuario inactivo' });
+      }
+    
+      res.status(200).json(usuario);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

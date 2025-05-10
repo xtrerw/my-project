@@ -4,6 +4,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    background-image: linear-gradient(to bottom right, var(--bg-color-gradient1), var(--bg-color-gradient2));
 }
 
 .form-iniciar button{
@@ -19,15 +21,27 @@
 }
 .form-iniciar>form{
     width: 500px;
-    min-height: 300px;
+    min-height: 600px;
+    padding: 50px 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px 2px var(--bg-color-main);
+
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-self: center;
+
+    background-color: var(--bg-color-default);
 }
 /* icon de esconder y mostrar en iniciar sesión */
 .form-iniciar label{
     width: 100%;
     margin-top: 5px;
+}
+.tipo-usuario{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 .form-iniciar .password-input-container>.bx {
     top: 55%;
@@ -40,23 +54,20 @@
     width: 100%;
 }
 .form-registro input,
-.form-registro select {
-  flex: 1;
+.form-registro select,
+.form-iniciar select {
+  /* flex: 1; */
   min-width: 0; 
   font-size: 1rem;
   padding: 12px;
   margin: 12px 0;
-  border: 2px solid var(--bg-color-main2);
+
+  border: 2px solid var(--color-border-default);
   border-radius: 8px;
   background-color: var(--bg-color-default);
   color: var(--color-text-primary);
 }
-.form-registro input:focus,
-.form-registro select:focus{
-    border-color: var(--bg-color-main);
-    box-shadow: 0 0 5px var(--bg-color-main);
-    outline: none;
-}
+
 /* icon de registro */
 .form-registro>.password-input-container>.bx {
     top: 40%;

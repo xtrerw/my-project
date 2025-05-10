@@ -80,6 +80,7 @@ const SchemaUsuario=new mongoose.Schema({
     tipo:{
       type:String,
       default:"lector",
+      required:true,
     },
     activo:{
       type:Boolean,

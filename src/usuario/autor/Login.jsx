@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import "./Author.css";
+import "./Login.css";
 import "../../style/calendario.css"
 // import "../../style/PasswordInput.css";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,10 @@ import { validateAuthor } from '../../utils/validateAuthor';
 import { useFormValidation } from '../../utils/useFormValidation';
 import { paises } from '../../utils/paises';
 import { provincias } from '../../utils/provincias';
+import { useUser } from '../../context/UserContext';
 function Author() {
+    //usar el contexto de usuario
+    const {user, setUser } = useUser();
     //muestra la contraseña en texto plano o encriptada
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
@@ -23,8 +26,10 @@ function Author() {
     const [actionRegistro, setRegistro] = useState("iniciar");
     //Variables para controlar el estado de registro y éxito
     const [isExito, setExisto] = useState(false);
+    //variables de inicio de sesión
     const [autor, setAutor] = useState('');
     const [pwd, setPwd] = useState('');
+    const [tipoUsuario, setTipoUsuario] = useState('autor');
     //Variable id para navegar al autor correspondiente
     const [id,setId]=useState()
     //
@@ -40,11 +45,13 @@ function Author() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username: autor, password: pwd }),
+                body: JSON.stringify({ username: autor, password: pwd, tipoUsuario: tipoUsuario }),
             });
             const res = await response.json();
             if (response.ok) {
                 console.log(res + " con éxito");
+                //si se ha iniciado sesión correctamente, guardar el usuario en el contexto
+                setUser(res);
                 //conseguir id con éxito
                 setId(res._id)
                 setExisto(true);
@@ -57,7 +64,7 @@ function Author() {
             }
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
-            setErroresIniciar("Error iniciar Sesión "+error.message);
+            setErroresIniciar("Error iniciar Sesión " + error.message);
       }
     };
     //Función para manejar el registro del autor
@@ -70,6 +77,7 @@ function Author() {
         fechaNacimiento: null,
         genero: '', 
         nacionalidad: '',
+        tipoRegistro: 'autor',
     });
 
     const handleInputChange = (e) => {
@@ -111,10 +119,14 @@ function Author() {
     };
     // si el registro es exitoso, navegar a la página de registro
     useEffect(() => {
-        if (isExito) {
-            navigate('/Author/MisDatos');
+        if (!user || !isExito) return;
+      
+        if (user.tipo === "autor") {
+          navigate('/Author/Mis Datos');
+        } else if (user.tipo === "lector") {
+          navigate('/');
         }
-    }, [isExito, navigate]);
+      }, [user, isExito, navigate]);
 
     return (
         <>
@@ -147,7 +159,14 @@ function Author() {
                                 onClick={()=>setShowPassword(!showPassword)}
                                 ></i>
                             </label>
-                            
+                            {/* campo de tipo de usuario */}
+                            <label htmlFor="tipoUsuario" className='tipo-usuario'>
+                                Tipo de Usuario
+                                <select name="tipoUsuario" id="" value={tipoUsuario} onChange={(e) => setTipoUsuario(e.target.value)}>
+                                    <option value="autor">Autor</option>
+                                    <option value="lector">Lector</option>
+                                </select>
+                            </label>
                             {/* Mensaje de error al iniciar sesión */}
                             <div className="error-message">{errorIniciar}</div>
                             <div className='buttones'>
@@ -182,7 +201,7 @@ function Author() {
                                         });
                                     }}
                                     dateFormat="dd/MM/yyyy"
-                                    placeholderText="Selecciona una fecha"
+                                    placeholderText="Nacimiento"
                                     showYearDropdown
                                     showMonthDropdown
                                     dropdownMode="select"
@@ -249,7 +268,13 @@ function Author() {
                                 onClick={()=>setShowPassword2(!showPassword2)}
                                 ></i>  
                             </label>
-                            
+
+                            <label htmlFor="tipoUsuario" className='tipo-usuario'>
+                                <select name="tipoRegistro" id="" value={userInfo.tipoRegistro} onChange={handleInputChange}>
+                                    <option value="autor">Autor</option>
+                                    <option value="lector">Lector</option>
+                                </select>
+                            </label>
                             {/* Mensaje general de error */}
                             <div className="error-message">{mensajeError}{errorIniciar}</div>
 

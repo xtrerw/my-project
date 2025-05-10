@@ -50,6 +50,9 @@
     --color-border-error: red;
     --bg-color-error: #ffe6e6;
     --color-error-text: #d8000c;
+    /* color gradient */
+    --bg-color-gradient1: var(--bg-color-main);
+    --bg-color-gradient2: var(--bg-color-main6);
   }
   
   h1,h2,h3,p{
@@ -69,23 +72,20 @@
     margin: 0;
   }
 
-  input {
+  input,select {
     width: 100%;
     padding: 12px;
     margin: 12px 0;
-    border: 2px solid var(--bg-color-main2);
+    border: 1px solid var(--color-border-default);
     border-radius: 8px;
     background-color: var(--bg-color-default);
     color: var(--color-text-primary);
     font-size: 1em;
 }
-
-input:focus {
-    border-color: var(--bg-color-main);
-    outline: none;
-}
-select{
-  width: 100%;
+input:focus,select:focus {
+  box-shadow:inset 0px -2px 1px 2px var(--bg-color-main2);
+  outline: none;
+  transition: all 0.2s ease-in-out;
 }
 button {
   border: none;
@@ -226,6 +226,15 @@ button {
     background-color: var(--bg-color-default);
     cursor: pointer;
     transition: border-color 0.25s;
+  }
+  /* btn-login */
+  .btn-login{
+    cursor: default;
+  }
+  .btn-login p{
+    font-size: 20px;
+    color: var(--bg-color-main2);
+    cursor: default;
   }
   /* menú */
   .menu{

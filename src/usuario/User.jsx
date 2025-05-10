@@ -1,6 +1,6 @@
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useLocation } from "react-router-dom";
 import Reader from "./reader/Reader";
-import Author from "./autor/Author";
+import Login from "./autor/Login";
 import Contenido from "./reader/Contenido";
 import { useState,useEffect } from "react";
 import "./User.css";
@@ -12,7 +12,10 @@ import MisLibros from "./autor/MisLibros";
 import MisDatos from "./autor/MisDatos";
 import MisVentas from "./autor/MisVentas";
 import HistorialCompras from "./autor/HistorialCompras";
+import PerfilReader from "./reader/PerfilReader";
 import NotFound from "./NotFound";
+import { useUser } from "../context/UserContext";
+
  //categorias para readers
  const categorias = [
   {
@@ -34,7 +37,7 @@ import NotFound from "./NotFound";
 ];
 // menu para autores
 const menuAutor = [
-  {nombre: "MisDatos",},
+  {nombre: "Mis Datos",},
   {nombre: "Mis Libros",},
   {nombre: "Ventas",
     subItems: [
@@ -51,17 +54,25 @@ const menuAutor = [
 ]
 //componente principal
 const User = () => {
+  //conseguir el estado de autenticación del usuario
+  const {user}=useUser();
   // categoria activa para reader
   const [activeCategory, setActiveCategory] = useState(null);
 
   //dividir las paginas de autores y lectores
-  const [isAuthor, setIsAuthor] = useState(() => {
-    return sessionStorage.getItem("isAuthor") === "true"; //si es true es author
-  });
-  //guardar el estado de isAuthor en session storage
+  const [isAuthor, setIsAuthor] = useState(false);
+  //pagina de inicio de sesión
+  const location=useLocation();
+  const isLoginPage = location.pathname === "/login";
+  //comprobar si el usuario es autor o lector
   useEffect(() => {
-    sessionStorage.setItem("isAuthor", isAuthor);
-  }, [isAuthor]);
+    if (user) {
+      setIsAuthor(user.tipo=== "autor");
+      console.log("tipo usuario"+user.tipo);
+    }
+  }, [user]);
+  
+
 
   return (
     <>
@@ -71,9 +82,9 @@ const User = () => {
         <Link to="/" onClick={()=>setIsAuthor(false)}>
           <img src={tunkIcon} className="tunk-icon" />
         </Link> 
-        {isAuthor ? 
-        // menu de autor
-        ( <nav className="menu">
+        {!isLoginPage && ( isAuthor ? 
+         // menu de autor
+         ( <nav className="menu">
           {menuAutor.map((item, index) => (
             <div
               key={index}
@@ -107,8 +118,7 @@ const User = () => {
               )}
             </div>
           ))}
-        </nav>)
-        : (
+        </nav>) : (
           // menu de reader
           <nav className="menu">
             {categorias.map((categoria, index) => (
@@ -134,12 +144,33 @@ const User = () => {
               </div>
             ))}
           </nav>
-        )}
-        <button className="dancing-script">
-          {isAuthor ? 
-          <Link to="/" onClick={()=>setIsAuthor(false)}>Reader</Link> : 
-          <Link to="/Author" onClick={()=>setIsAuthor(true)}>Author</Link>
-          }
+        ))}
+        <button className="dancing-script btn-login">
+        {
+          // si el usuario no está autenticado o está en la página de inicio de sesión
+          !user || isLoginPage ? (
+            <Link to="/login">Iniciar Sesión</Link>
+          ) : 
+          // si el usuario es autor
+          user.tipo === "autor" ? (
+            isAuthor ? (
+              <p>Bienvenido {user.usernombre}</p>
+            ) : (
+              <Link to="/login">Iniciar Sesión</Link>
+            )
+          ) : 
+          // si el usuario es lector
+          user.tipo === "lector" ? (
+            !isAuthor ? (
+              <Link to="/Perfil de lector">Bienvenido {user.usernombre}</Link>
+            ) : (
+              <Link to="/login">Iniciar Sesión</Link>
+            )
+          ) : (
+            <Link to="/login">Iniciar Sesión</Link>
+          )
+        }
+
         </button>
       </header>
       
@@ -147,11 +178,11 @@ const User = () => {
       <main>
         <Routes>
           
-          <Route path="/Author" element={<Author />} /> 
+          <Route path="/login" element={<Login />} /> 
           <Route path="/" element={<Reader />} />
           {/* router para author */}
           {/* 1 -（Mis Datos, Mis Libros, Ventas, Modelo de Escribir） */}
-          <Route path="/Author/MisDatos/*" element={<MisDatos />} />
+          <Route path="/Author/Mis Datos/*" element={<MisDatos />} />
           <Route path="/Author/Mis Libros" element={<MisLibros />} />
 
           {/* 2 - Ventas */}
@@ -164,12 +195,16 @@ const User = () => {
           <Route path="/Author/Modelo de Escribir/Subir Mi Libro Completo" element={<SubirLibro />} />
           <Route path="/Author/Modelo de Escribir/Escribir Online" element={<EscribirOnline />} />
 
-          {/* 404 not found */}
-          <Route path="*" element={<NotFound />} />
+          {/* Lector */}
           {/* router de libros */}
           <Route path="/Libros/:id" element={<Contenido />} />
           {/* router de subitem */}
            <Route path="/:categoriaId/:subcategoriaId" element={<Categoria />} />
+          {/* router de perfil de lector */}
+          <Route path="/Perfil de lector" element={<PerfilReader />} /> 
+
+          {/* 404 not found */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
 
