@@ -88,6 +88,7 @@ function Author() {
         });
     };
 
+    //registrar
     const handleRegister = async (e) => {
         e.preventDefault();
         // Validar el formulario antes de enviar
@@ -107,6 +108,16 @@ function Author() {
             const data = await response.json();
             if (response.ok) {
                 //
+                setUserInfo({
+                    nombre: '',
+                    apellido: '',
+                    username: '',
+                    password: '',
+                    fechaNacimiento: null,
+                    genero: '', 
+                    nacionalidad: '',
+                    tipoRegistro: 'autor',
+                });
                 setRegistro("iniciar");
             }else{
                 setErroresIniciar(data.message);
@@ -120,10 +131,12 @@ function Author() {
     // si el registro es exitoso, navegar a la página de registro
     useEffect(() => {
         if (!user || !isExito) return;
-      
+        //si iniciar sesion de autor con exito,navegar a la pagina de autor
         if (user.tipo === "autor") {
           navigate('/Author/Mis Datos');
-        } else if (user.tipo === "lector") {
+        } 
+        //si iniciar sesion de lector con exito,navegar a la pagina de lector
+        else if (user.tipo === "lector") {
           navigate('/');
         }
       }, [user, isExito, navigate]);
