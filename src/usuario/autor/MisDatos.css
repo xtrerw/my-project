@@ -39,7 +39,15 @@
     color: var(--bg-color-default);
     border-radius: 5px;
   }
-  
+  /* boton de log out */
+  .profile-sidebar .logout{
+    color: var(--color-error-text);
+  }
+  /* boton de log out hover */
+  .profile-sidebar .logout:hover {
+    background: var(--color-error-text);
+    color: var(--color-texto-footer3);
+  }
   /* información derecha */
   .profile-content {
     flex: 1;

@@ -186,7 +186,6 @@ function Author() {
                             <div className='registro-info'>
                                 <input type="text" name="nombre"  className={errores.nombre? "error-input" : ""} placeholder="Nombre" value={userInfo.nombre} onChange={handleInputChange} required/>
                                 <input type="text"  className={errores.apellido? "error-input" : ""} name='apellido' placeholder='Apellido' value={userInfo.apellido} onChange={handleInputChange} required/>
-                               
                             </div>
                             
                             <div className='registro-info'>

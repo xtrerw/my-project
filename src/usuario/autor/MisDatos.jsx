@@ -21,13 +21,14 @@ const MisDatos = () => {
   };
 
   // Cargar datos al inicio
+  const userId = localStorage.getItem("userId");
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
+    
     if (userId) {
       setIsRegistered(true);
       fetchUserData();
     }
-  }, []);
+  }, [userId]);
 
   return (
     <>
@@ -58,6 +59,15 @@ const MisDatos = () => {
               onClick={() => setSelectedTab("Cambiar Contraseña")}
             >
               Cambiar Contraseña
+            </h2>
+            <h2
+              className="logout"
+              onClick={() => {
+                localStorage.removeItem("userId");
+                setIsRegistered(false);
+              }}
+            >
+              Cerrar Sesión
             </h2>
           </aside>
 

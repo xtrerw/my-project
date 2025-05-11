@@ -50,6 +50,8 @@
     --color-border-error: red;
     --bg-color-error: #ffe6e6;
     --color-error-text: #d8000c;
+    /* exito */
+    --color-exito-text: #4caf50;
     /* color gradient */
     --bg-color-gradient1: var(--bg-color-main);
     --bg-color-gradient2: var(--bg-color-main6);
@@ -402,4 +404,7 @@ footer {
   font-size: 0.9rem;
   margin-top: 5px;
   text-align: center;
+}
+.exito{
+  color: var(--color-exito-text);
 }

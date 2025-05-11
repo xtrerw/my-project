@@ -140,7 +140,29 @@ router.put('/:id', async (req, res) => {
         //res.status(500).json({ message: "Error al actualizar autor", error });
     }
   });
-  
+//Verificar contraseña anterior por ID
+router.post('/password/:id', async (req, res) => {
+    const { id } = req.params;
+    const { contrasena } = req.body;
+    const hashedPwd = hashpwd(contrasena);
+    try {
+        // Buscar el autor por ID y verificar la contraseña
+        const autor = await ServerModel.Autor.findById(id);
+        //contraseña incorrecta
+        if (!autor) {
+            return res.status(401).json({ message: "Usuario no disponible" });
+        }
+        // Verificar si la contraseña coincide
+        if (hashedPwd !== autor.password) {
+            return res.status(401).json({ message: "Contraseña incorrecta" });
+        }
+        res.status(200).json({ message: "Contraseña correcta" });
+    } catch (error) {
+      console.error("verificar contraseña error", error.message, error.stack);
+      res.status(500).json({ message: "Error al verificar contraseña", error: error.message });
+    }
+  });
+
 // Cambiar contraseña del autor por ID
 router.put('/password/:id', async (req, res) => {
     const { id } = req.params;
