@@ -68,7 +68,6 @@ const User = () => {
   useEffect(() => {
     if (user) {
       setIsAuthor(user.tipo=== "autor");
-      console.log("tipo usuario"+user.tipo);
     }
   }, [user]);
   
@@ -175,7 +174,8 @@ const User = () => {
       </header>
       
       {/* main */}
-      <main>
+      <main className="main-content">
+        {/* rutas */}
         <Routes>
           
           <Route path="/login" element={<Login />} /> 

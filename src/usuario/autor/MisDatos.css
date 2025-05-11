@@ -8,6 +8,7 @@
     border-radius: 10px;
     overflow: hidden;
     text-transform: capitalize;
+    min-height: 80vh;
   }
   
   /* menu izquierda de mis datos */

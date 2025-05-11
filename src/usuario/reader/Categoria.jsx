@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import "./Categoria.css"
 import '../../style/libro.css' // Asegúrate de tener un archivo CSS para estilos
+import NotFound from '../NotFound'
+import Cargando from '../../utils/Cargando'
 const Categoria = () => {
   //conseguir las categorias de libros
   const { categoriaId, subcategoriaId } = useParams();
@@ -54,7 +56,7 @@ const Categoria = () => {
 
   //registro de usuario
   
-  if (!categoria || !libros) return <p>Cargando...</p>;
+  if (!categoria || !libros) return <Cargando />;
 
   return (
     <>

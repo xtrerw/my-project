@@ -4,6 +4,7 @@ import './SubirLibro.css'
 import { useEffect } from 'react';
 import subirImgDefault from '../../img/subir-img-default.png'
 import { useNavigate } from 'react-router-dom';
+import Author from './Login';
 const SubirLibro = () => {
     //useNavigate para redirigir al usuario
     const navigate = useNavigate();
@@ -115,7 +116,9 @@ const SubirLibro = () => {
     const categoriaObj = categorias.find(c => c._id === categoriaSeleccionada);
     
   return (
-    <form onSubmit={handlePublish} className="subir-libro-form">
+    <>
+    {id? (
+            <form onSubmit={handlePublish} className="subir-libro-form">
         <h2>Subir Libro</h2>
         <label htmlFor="img" className="preview-container">
             {/* muestra la imagen subida */}
@@ -200,6 +203,11 @@ const SubirLibro = () => {
         </div>
         <button type="submit">Subir</button>
     </form>
+    )
+    : (
+        <Author />
+    )}
+    </>
   )
 }
 

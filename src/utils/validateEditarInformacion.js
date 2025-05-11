@@ -67,5 +67,12 @@ export const validateEditarInformacion = (formData) => {
     return { campo: "genero", mensaje: "El género es obligatorio." };
   }
 
+  // Validar el teléfono (solo números y longitud de 9 dígitos)
+  if (!/^[69]\d{8}$/.test(formData.telefono)) {
+    return {
+      campo: "telefono",
+      mensaje: "Debe contener 9 dígitos y comenzar con 6 o 9."
+    };
+  }
   return null; // No hay errores
 };

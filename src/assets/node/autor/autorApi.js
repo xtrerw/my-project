@@ -20,11 +20,34 @@ router.get("/listado", async (req, res) => {
 });
 // Register route
 router.post('/register', async(req, res) => {
-  const { nombre,apellido,fechaNacimiento,username, password,tipoRegistro } = req.body;
+  const { nombre,apellido,fechaNacimiento,username, password,tipoRegistro,nacionalidad,genero } = req.body;
+  let user
   try {
-    const user = new ServerModel.Autor({ nombre:nombre, apellido:apellido ,fechaNacimiento:fechaNacimiento, usernombre:username, password:hashpwd(password), tipo:tipoRegistro ,activo:true });
+    //verificar si es lector o autor
+    if (tipoRegistro === "lector") {
+      // Verificar si el nombre de usuario ya existe en la colección de lectores
+      user = await ServerModel.Usuario.findOne({ usernombre: username });
+      if (user) {
+        return res.status(400).json({ message: "El nombre de usuario ya existe" });
+      }
+      // Crear un nuevo lector
+      user = new ServerModel.Usuario({ nombre:nombre, apellido:apellido ,fechaNacimiento:fechaNacimiento, usernombre:username, password:hashpwd(password), tipo:tipoRegistro ,activo:true, nacionalidad:nacionalidad,genero:genero });
+      await user.save();
+      res.status(200).json(user);
+      return;
+    } 
+    // verificar si es autor
+    else if (tipoRegistro === "autor") {
+    // Verificar si el nombre de usuario ya existe en la colección de autores
+    user = await ServerModel.Autor.findOne({ usernombre: username });
+    if (user) {
+      return res.status(400).json({ message: "El nombre de usuario ya existe" });
+    }
+    // Crear un nuevo autor
+    user = new ServerModel.Autor({ nombre:nombre, apellido:apellido ,fechaNacimiento:fechaNacimiento, usernombre:username, password:hashpwd(password), tipo:tipoRegistro ,activo:true, nacionalidad:nacionalidad,genero:genero });
     await user.save();
-   res.status(200).json(user);
+    return res.status(200).json(user);
+  }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -108,12 +131,20 @@ router.get('/categorias', async (req, res) => {
 // Obtener información del autor por ID
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
+    let usuario;
     try {
-        const autor = await ServerModel.Autor.findById(id);
-        if (!autor) {
-            return res.status(404).json({ message: "Autor no encontrado" });
+        // Buscar el autor por ID
+        usuario = await ServerModel.Autor.findById(id);
+        if (!usuario) {
+            // Si no se encuentra el autor, buscar en la colección de usuarios
+          usuario = await ServerModel.Usuario.findById(id);
+          // Si no se encuentra el usuario, devolver un error 404
+          if (!usuario) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+          }
         }
-        res.status(200).json(autor);
+        // Enviar la respuesta con el autor o usuario encontrado
+        res.status(200).json(usuario);
     } catch (error) {
         res.status(500).json({ message: "Error al obtener autor", error });
     }
@@ -125,18 +156,25 @@ router.put('/:id', async (req, res) => {
     // Obtener el ID del autor desde los parámetros de la solicitud
     const { id } = req.params;
     // Extraer los campos que deseas actualizar del cuerpo de la solicitud
-    const { nombre, apellido, fechaNacimiento, direccion, codigoPostal, provincia, pais, nacionalidad, genero, email } = req.body;
+    const { nombre, apellido, fechaNacimiento, direccion, codigoPostal, provincia, pais, nacionalidad, genero, email,telefono,tipo } = req.body;
+    let usuario
     // Validar que el ID es un ObjectId válido
     try {
-        const autor = await ServerModel.Autor.findByIdAndUpdate(id, { nombre, apellido, fechaNacimiento, direccion, codigoPostal, provincia, pais, nacionalidad, genero, email }, { new: true });
-        if (!autor) {
-            return res.status(404).json({ message: "Autor no encontrado" });
+        if (tipo==="lector") {
+          usuario=await ServerModel.Usuario.findByIdAndUpdate(id,{
+            nombre: nombre,apellido:apellido,fechaNacimiento:fechaNacimiento,direccion:direccion,nacionalidad:nacionalidad,codigoPostal:codigoPostal,provincia:provincia,pais:pais,telefono:telefono,genero:genero,email:email
+          },
+          {new: true})
+        } else if (tipo==="autor") {
+          usuario = await ServerModel.Autor.findByIdAndUpdate(id, { nombre, apellido, fechaNacimiento, direccion, codigoPostal, provincia, pais, nacionalidad, genero, email }, { new: true });
+        } else {
+            return res.status(404).json({ message: "Usuario no encontrado" });
         }
         // Enviar la respuesta con el autor actualizado
-        res.status(200).json(autor);
+        res.status(200).json(usuario);
     } catch (error) {
       console.error("PUT /autor/:id error", error.message, error.stack);
-      res.status(500).json({ message: "Error al asdasd autor", error: error.message });
+      res.status(500).json({ message: "Error al autor", error: error.message });
         //res.status(500).json({ message: "Error al actualizar autor", error });
     }
   });
@@ -145,12 +183,16 @@ router.post('/password/:id', async (req, res) => {
     const { id } = req.params;
     const { contrasena } = req.body;
     const hashedPwd = hashpwd(contrasena);
+    let autor;
     try {
         // Buscar el autor por ID y verificar la contraseña
-        const autor = await ServerModel.Autor.findById(id);
+        autor = await ServerModel.Autor.findById(id);
         //contraseña incorrecta
         if (!autor) {
-            return res.status(401).json({ message: "Usuario no disponible" });
+            autor = await ServerModel.Usuario.findById(id);
+            if (!autor) {
+                return res.status(404).json({ message: "Usuario no encontrado" });
+            }
         }
         // Verificar si la contraseña coincide
         if (hashedPwd !== autor.password) {

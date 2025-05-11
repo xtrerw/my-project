@@ -3,6 +3,7 @@ import Author from './Login';
 import './MisDatos.css';
 import CambiarContrasena from './CambiarContrasena';
 import EditarInformacion from './EditarInformacion';
+import { useUser } from '../../context/UserContext';
 
 const MisDatos = () => {
   const [isRegistered, setIsRegistered] = useState(false);
@@ -21,6 +22,7 @@ const MisDatos = () => {
   };
 
   // Cargar datos al inicio
+  const {id,setUser}=useUser();
   const userId = localStorage.getItem("userId");
   useEffect(() => {
     
@@ -65,6 +67,7 @@ const MisDatos = () => {
               onClick={() => {
                 localStorage.removeItem("userId");
                 setIsRegistered(false);
+                setUser(null);
               }}
             >
               Cerrar Sesión
@@ -72,7 +75,7 @@ const MisDatos = () => {
           </aside>
 
           {/* Parte derecha */}
-          <main className="profile-content">
+          <div className="profile-content">
 
             {selectedTab === "Mi Tunk" && (
               <section className="info-section">
@@ -130,7 +133,7 @@ const MisDatos = () => {
               }}
             />}
             {selectedTab === "Cambiar Contraseña" && <CambiarContrasena />}
-          </main>
+          </div>
         </div>
       ) : (
         <Author />

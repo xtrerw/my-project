@@ -26,7 +26,8 @@ const EditarInformacion = ({onSuccess}) => {
     pais: "",
     nacionalidad: "",
     genero: "",
-    email: ""
+    email: "",
+    tipo:"",
   });
 
   // Cargar datos del usuario desde la API cuando el componente se monta
@@ -47,10 +48,11 @@ const EditarInformacion = ({onSuccess}) => {
             direccion: data.direccion || "",
             codigoPostal: data.codigoPostal || "",
             provincia: data.provincia || "",
-            pais: data.pais || "",
+            pais: "España", // Asignar España como país por defecto
             nacionalidad: data.nacionalidad || "",
             genero: data.genero || "",
-            email: data.email || ""
+            email: data.email || "",
+            tipo: data.tipo || ""
           });
         })
         .catch(error => {
