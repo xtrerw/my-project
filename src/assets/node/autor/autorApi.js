@@ -160,12 +160,15 @@ router.put('/:id', async (req, res) => {
     let usuario
     // Validar que el ID es un ObjectId válido
     try {
+      //si es lector
         if (tipo==="lector") {
           usuario=await ServerModel.Usuario.findByIdAndUpdate(id,{
             nombre: nombre,apellido:apellido,fechaNacimiento:fechaNacimiento,direccion:direccion,nacionalidad:nacionalidad,codigoPostal:codigoPostal,provincia:provincia,pais:pais,telefono:telefono,genero:genero,email:email
           },
           {new: true})
-        } else if (tipo==="autor") {
+        } 
+        // si es autor
+        else if (tipo==="autor") {
           usuario = await ServerModel.Autor.findByIdAndUpdate(id, { nombre, apellido, fechaNacimiento, direccion, codigoPostal, provincia, pais, nacionalidad, genero, email }, { new: true });
         } else {
             return res.status(404).json({ message: "Usuario no encontrado" });
