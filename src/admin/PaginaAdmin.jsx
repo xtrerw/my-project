@@ -5,6 +5,7 @@ import GestionLector from './GestionLector'
 import GestionAutor from './GestionAutor'
 import './PaginaAdmin.css'
 import { useState } from 'react';
+import GestionCategoria from './GestionCategoria'
 const PaginaAdmin = () => {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -22,20 +23,31 @@ const PaginaAdmin = () => {
         <ul className="menu-admin">
           <li className="menu-admin-item">
             <div>
+              {/* gestion de cuenta ---> 1º usuario 2º autor */}
               <div className={`menu-admin-title ${isOpen ? 'open' : ''}`}
               onClick={()=>setIsOpen(!isOpen)}
-              >Gestion de Cuentas</div>
+              >Gestión de Cuentas</div>
+              {/* gestion de categoria */}
               <div>
-              <NavLink to={"/"} className={`menu-admin-title`}>
+                <NavLink to={"/paginaAdmin/categoria"} className={`menu-admin-title`} onClick={()=>setIsOpen(false)}>
+                  Gestión de Categoría
+                </NavLink>
+              </div>
+              {/* devolver la pagina principal */}
+              <div>
+                <NavLink to={"/"} className={`menu-admin-title`}>
                   ver la página prinicipal
                 </NavLink>
               </div>
               
             </div>
-           
+           {/* gestion de lector y autor */}
             <ul className={`submenu ${isOpen ? 'open' : ''}`}>
               <li><NavLink to="/paginaAdmin/usuarios" className="menu-admin-link">Gestion del Usuarios</NavLink></li>
               <li><NavLink to="/paginaAdmin/autores" className="menu-admin-link">Gestion del Autor</NavLink></li>
+            </ul>
+            <ul>
+
             </ul>
           </li>
         </ul>
@@ -45,6 +57,7 @@ const PaginaAdmin = () => {
             {/* el path es relativo */} 
           <Route path="usuarios" element={<GestionLector/>} />
           <Route path="autores" element={<GestionAutor/>} />
+          <Route path='categoria' element={<GestionCategoria/>}/>
         </Routes>
       </main>
     </div>

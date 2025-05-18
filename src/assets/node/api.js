@@ -9,6 +9,7 @@ import misLibrosRouter from './autor/misLibrosApi.js';
 import adminRouter from './admin/adminApi.js';
 import comprasRouter from './lector/comprasApi.js';
 import usuarioRouter from './lector/usuarioApi.js';
+import categoriaRouter from './admin/categoriaApi.js';
 
 const app = express();
 app.use(express.json({
@@ -24,12 +25,17 @@ app.use(express.urlencoded({
 app.use(cors());
 
 //Entrada de ruta unificada
-app.use('/libros', librosRouter);
+
+//autor
 app.use('/autor', autorRouter);
 app.use('/misLibros', misLibrosRouter);
-app.use('/admin', adminRouter);
+//lector
 app.use('/compras', comprasRouter);
 app.use('/usuario', usuarioRouter);
+app.use('/libros', librosRouter);
+// admin
+app.use('/admin', adminRouter);
+app.use('/adminCategoria',categoriaRouter)
 
 
 // Puerto de escucha de servidor único
