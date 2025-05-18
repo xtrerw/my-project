@@ -221,12 +221,17 @@ const SchemaLibro=new mongoose.Schema({
       required:true,
     },
     // relaciones entre categoría y libros
-    cateID:{
-      type:mongoose.Schema.Types.ObjectId,
-      ref:'Categoria',
-      required:true,
-    },
-    colleccion:[{type:String}]
+    //varias categorias
+    categoria:[
+      {
+        cateID:{
+          type:mongoose.Schema.Types.ObjectId,
+          ref:'Categoria',
+          required:true,
+        },
+        colleccion:[{type:String}]
+      },
+    ]
 });
 
 const Libro=mongoose.model('Libro',SchemaLibro);
@@ -247,8 +252,12 @@ const nuevoLibros = [
       precio:15,
       // insertar los datos luego
       autorID:null,
-      cateID:null,
-      colleccion:null
+      categoria:[
+        {
+        cateID:null,
+        colleccion:null
+        }
+      ]
     }
   ];
   
@@ -256,7 +265,6 @@ const nuevoLibros = [
   const SchemaCompra=new mongoose.Schema({
     libroID:{type:mongoose.Schema.Types.ObjectId,ref:'Libro'},
     userID:{type:mongoose.Schema.Types.ObjectId,ref:'Usuario'},
-    cantidad:Number,
   });
   // crear el modelo de compra
   const Compra=mongoose.model('Compra',SchemaCompra);
@@ -271,10 +279,17 @@ const nuevoLibros = [
         console.log("Autor o categoría no encontrados, asegúrate de haberlos insertado primero.");
         return;
       }
-  
+      
+      //insertar el autor
       nuevoLibros[0].autorID = autorExistente._id;
-      nuevoLibros[0].cateID = categoriaExistente._id;
-      nuevoLibros[0].colleccion = categoriaExistente.colleccion[0];
+      //insertar categorias del libros
+      nuevoLibros[0].categoria = [
+        {
+          cateID: categoriaExistente._id,
+          colleccion: [categoriaExistente.colleccion[1]]
+        }
+      ];
+
   
 
 
@@ -314,7 +329,6 @@ const nuevoLibros = [
           {
             libroID: libroInsertar[0]._id,
             userID: usuarioEjemplo._id,
-            cantidad: 1
           }
         ];
         // insertar la compra en la base de datos

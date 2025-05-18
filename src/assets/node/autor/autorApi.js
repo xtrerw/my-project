@@ -82,13 +82,18 @@ router.post('/iniciar', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-// publicar libro
+// subir los libros
 router.post('/publish', async (req, res) => {
   // Obtener toda informacion del autor desde el cuerpo de la solicitud
   const { img,title, content,id,price,categoriaSeleccionada,coleccionSeleccionada} = req.body;
   
 
   try {
+    // Buscar categoria defecto
+    const categoriaDefecto=await ServerModel.Categoria.findOne({nombre:"Imprescindibles"})
+    if (!categoriaDefecto) {
+      return res.status(400).json({ message: "Categoría por defecto no encontrada." });
+    }
     // Crear un nuevo libro y guardarlo en la base de datos
     const libro = new ServerModel.Libro({ 
       img:img,
@@ -96,8 +101,18 @@ router.post('/publish', async (req, res) => {
       autorID:id,
       contenido:content,
       precio:price,
-      cateID:categoriaSeleccionada,
-      colleccion:[coleccionSeleccionada],
+      categoria:[
+        {
+          cateID:categoriaSeleccionada,
+          colleccion:coleccionSeleccionada
+        },
+        //categoria defecto como todos los libros
+        {
+          cateID:categoriaDefecto,
+          colleccion:"Todos los libros"
+        }
+      ]
+
     });
     // Guardar el libro en la base de datos
     await libro.save();

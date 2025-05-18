@@ -4,10 +4,13 @@ import ServerModel from '../server.js';
 const router = Router();
 
 //libros que presentan en front-end
-router.get('/libros', async (req, res) => {
-    const works = await ServerModel.Libro.find({});
-    res.status(200).json(works);
+  router.get('/libros', async (req, res) => {
+      //conseguir los libros y su autor
+      const libros = await ServerModel.Libro.find({}).populate('autorID');
+      
+      res.status(200).json(libros);
   });
+  //contenido
   router.get('/libros/:id', async (req, res) => {
     const { id } = req.params; // conseguir id
   
@@ -34,8 +37,8 @@ router.get('/libros', async (req, res) => {
         if (!categorias) {
             return res.status(404).json({ error: "Categoría no encontrada" });
         }
-  
-        const libros = await ServerModel.Libro.find({ cateID: categorias._id });
+        //según categoria conseguir los libros y su autor
+        const libros = await ServerModel.Libro.find({ 'categoria.cateID': categorias._id }).populate("autorID");
   
         res.status(200).json({ categoria: categorias, libros: libros }); // Solo una respuesta
     } catch (error) {
