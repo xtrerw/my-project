@@ -154,7 +154,7 @@ const SubirLibro = () => {
             <input
             id="archivo"
             type="file"
-            accept=".docx"
+            accept=".docx,.pdf,.epub,.mobi"
             onChange={handleFileUpload}
             required
             />

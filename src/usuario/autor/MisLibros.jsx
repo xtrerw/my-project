@@ -3,11 +3,16 @@ import Author from './Login';
 // import './MisLibros.css'; // Asegúrate de tener un archivo CSS para estilos
 import '../../style/libro.css'; // Asegúrate de tener un archivo CSS para estilos
 import { Link } from 'react-router-dom';
+import EditarLibros from './EditarLibros';
 const MisLibros = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState(null);
   // libros
   const [libros, setLibros] = useState(null);
+  //editar libros
+  const [editLibroId, setEditLibroId] = useState(null);
+
+
   useEffect(() => {
     // comprobar si el usuario está autenticado
     const id = localStorage.getItem("userId");
@@ -15,6 +20,7 @@ const MisLibros = () => {
     if (id) {
       setIsLoggedIn(true);
       setUserId(id);
+      cargarLibros(id);
     }
 
     if(id){
@@ -33,20 +39,57 @@ const MisLibros = () => {
 
   }, []);
 
+  //recargar libros
+  const cargarLibros = (id) => {
+  fetch(`http://localhost:5001/misLibros/${id}`)
+    .then(res => res.json())
+    .then(setLibros)
+    .catch(console.error);
+};
+  //borrar los libros
+  const handleEliminar = async (libroId) => {
+    const confirm = window.confirm("¿Estás seguro de que deseas eliminar este libro?");
+    if (!confirm) return;
+
+    await fetch(`http://localhost:5001/misLibros/libro/${libroId}`, {
+      method: 'DELETE',
+    });
+
+    // Recargar libros
+    cargarLibros(userId);
+  };
+
 
 
   return (
     <>
-      {isLoggedIn ? (
-        <div className="mis-libros-container">
+      {isLoggedIn ? 
+        editLibroId ? (
+          <EditarLibros
+            libroId={editLibroId}
+            onCancel={() => setEditLibroId(null)}
+            onSuccess={() => {
+              setEditLibroId(null);
+              cargarLibros(userId); // actualizar lista
+            }}
+          />
+        ):
+        (<div className="mis-libros-container">
           {/* Aquí puedes mostrar los libros del autor */}
           {libros && libros.length > 0 ? (
             libros.map((libro, index) => (
-              <Link to={`/Libros/${libro._id}`} key={index} className="libro-item">
-                <img src={`${libro.img}`} alt={libro.titulo} />
+              <div className="libro-item" key={index}>
+              <Link to={`/Libros/${libro._id}`}>
+                <img src={libro.img} alt={libro.titulo} />
                 <h2>{libro.titulo}</h2>
                 <p>{libro.precio} €</p>
               </Link>
+              <div className="libro-controles">
+                <button onClick={() => handleEliminar(libro._id)}>Eliminar</button>
+                <button onClick={() => setEditLibroId(libro._id)}>Editar</button>
+              </div>
+            </div>
+
             ))
           ) : (
             <p>No tienes libros disponibles.</p>
