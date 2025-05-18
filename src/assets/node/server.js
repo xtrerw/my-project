@@ -231,7 +231,13 @@ const SchemaLibro=new mongoose.Schema({
         },
         colleccion:[{type:String}]
       },
-    ]
+    ],
+    estrella:{
+      type:Number,
+      default:0,
+      min:0,
+      max:5
+    }
 });
 
 const Libro=mongoose.model('Libro',SchemaLibro);
@@ -257,7 +263,8 @@ const nuevoLibros = [
         cateID:null,
         colleccion:null
         }
-      ]
+      ],
+      estrella:4
     }
   ];
   
@@ -289,7 +296,6 @@ const nuevoLibros = [
           colleccion: [categoriaExistente.colleccion[1]]
         }
       ];
-
   
 
 

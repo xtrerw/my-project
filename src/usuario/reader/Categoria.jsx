@@ -25,6 +25,19 @@ const Categoria = () => {
   const {user}=useUser();
   //buscador
   const [searchTerm, setSearchTerm] = useState("");
+  //fitro por estrellas
+  const [selectedRatings, setSelectedRatings] = useState([]);
+  // Estado: guardar las etiquetas seleccionadas de precios
+  const [selectedPrices, setSelectedPrices] = useState([]);
+
+  // Lista de rangos de precio
+  const priceRanges = [
+    { label: '0€ - 8€', min: 0, max: 8 },
+    { label: '8€ - 14€', min: 8, max: 14 },
+    { label: '14€ - 19€', min: 14, max: 19 },
+    { label: '19€ - 25€', min: 19, max: 25 },
+    { label: '25€ - 50€', min: 25, max: 50 },
+  ];
 
 
   //conseguir las categorias desde mango db
@@ -106,7 +119,7 @@ useGSAP(() => {
   ScrollTrigger.create({
     trigger:tituloRef.current,
     markers:true,
-    scrub:1,
+    scrub:2,
     start:"0% top",
     end:"60% top",
     animation:gsap.timeline()
@@ -131,7 +144,7 @@ useGSAP(() => {
       stagger:0.2
     },"<")
   })
-}, { dependencies: [libros, subcategoriaId]  });
+}, { dependencies: [libros, subcategoriaId]});
 
 
   //registro de usuario
@@ -178,7 +191,17 @@ useGSAP(() => {
               <ul>
                 {[5, 4, 3, 2, 1].map((stars) => (
                   <li key={stars}>
-                    <input type="checkbox" id={`rating-${stars}`} />
+                    <input type="checkbox" id={`rating-${stars}`} 
+                    //fitro libros segun los estrellas elegido
+                    checked={selectedRatings.includes(stars)}
+                    onChange={(e) => {
+                      const isChecked = e.target.checked;
+                      setSelectedRatings(prev =>
+                        isChecked ? [...prev, stars] : prev.filter(r => r !== stars)
+                      );
+                    }}
+                    
+                    />
                     <label htmlFor={`rating-${stars}`}>
                       {[...Array(stars)].map((_, i) => (
                         <Star key={i} size={25} style={{ color: '#facc15', marginRight: '2px' }} />
@@ -199,10 +222,23 @@ useGSAP(() => {
 
             {showPrice && (
               <ul>
-                {['0€ - 8€', '8€ - 14€', '14€ - 19€', '19€ - 25€', '25€ - 50€'].map((range, i) => (
+                {priceRanges.map((range, i) => (
                   <li key={i}>
-                    <input type="checkbox" id={`price-${i}`} />
-                    <label htmlFor={`price-${i}`}>{range}</label>
+                    <input
+                      type="checkbox"
+                      id={`price-${i}`}
+                      checked={selectedPrices.includes(range.label)} // Ver si está seleccionado
+                      onChange={(e) => {
+                        const isChecked = e.target.checked;
+                        // Agregar o quitar el rango seleccionado
+                        setSelectedPrices((prev) =>
+                          isChecked
+                            ? [...prev, range.label]
+                            : prev.filter((label) => label !== range.label)
+                        );
+                      }}
+                    />
+                    <label htmlFor={`price-${i}`}>{range.label}</label>
                   </li>
                 ))}
                 
@@ -221,7 +257,18 @@ useGSAP(() => {
               const coincideSubcategoria = !subcategoriaId || libro.categoria.some(cat => cat.colleccion.includes(subcategoriaId));
               //verificar los texto insertados si esta coincide al nombre de libros,"" es para evitar fallback de undefine
               const coincideBusqueda = libro.titulo.toLowerCase().includes(searchTerm) || "";
-              return coincideSubcategoria && coincideBusqueda;
+              //verificar las estrellas de fitro si está coincide a la cantidad de estrellas de libros
+              const coincideRating =
+                selectedRatings.length === 0 || selectedRatings.some(rating => libro.estrella >= rating && libro.estrella < rating+1);
+              //verificar los precios si está coincide a los precios de libros
+              const coincidePrecio = selectedPrices.length === 0 ||
+              priceRanges.some((range) =>
+                selectedPrices.includes(range.label) &&
+                libro.precio >= range.min &&
+                libro.precio <= range.max
+              );
+
+              return coincideSubcategoria && coincideBusqueda && coincideRating && coincidePrecio;
             }
           )
         .map((libro, index) => (
@@ -229,11 +276,21 @@ useGSAP(() => {
               <Link to={`/Libros/${libro._id}`} className='libro-item'>
                 <img src={`${libro.img}`} alt={libro.titulo} />
                 <h2>{libro.titulo}</h2>
+                <p>
+                  {[...Array(5)].map((_, i) => (
+                    <i
+                      key={i}
+                      className={i < libro.estrella ? "bx bxs-star" : "bx bx-star"}
+                      style={{ color: "#facc15" }}
+                    />
+                  ))}
+                </p>
                 <h3>{libro.autorID?.nombre} {libro.autorID?.apellido}</h3>
                 <p>{libro.precio} €</p>
+                
               </Link>
               <div className='categoria-libro-cantidad'>
-                <div onClick={() => handleComprar(libro)}>Comprar</div>
+                <div className='categoria-btn-compra' onClick={() => handleComprar(libro)}>Comprar</div>
               </div>
             </div>
         ))}

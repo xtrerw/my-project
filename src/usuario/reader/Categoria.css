@@ -23,7 +23,7 @@
 /* libros */
 .categoria-libros {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 
   width: 100%;
   margin: 0 auto;
@@ -91,13 +91,19 @@ aside h2 {
   height: 16px;
   cursor: pointer;
   accent-color: var(--bg-color-default);
+  outline: none;
+}
+.filtro-bloque input[type="checkbox"]:checked::before {
+  background: var(--bg-color-main);
 }
 .filtro-bloque input[type="checkbox"]:focus {
   box-shadow: none;
+  accent-color: var(--bg-color-main);
+  color: var(--bg-color-main);
 }
 .filtro-bloque label {
   cursor: pointer;
-  font-size: 14px;
+  font-size: 25px;
 }
 /* libros */
 .categoria-libros>div {
@@ -110,7 +116,7 @@ aside h2 {
 .categoria-libro{
     box-shadow: 0 0 8px 1px var(--bg-color-default3);
     border-radius: 5px;
-    height: 550px;
+    height: fit-content;
     margin: 0 10px 20px;
 
     display: flex;
@@ -124,10 +130,18 @@ aside h2 {
     justify-content: center;
     text-align: center;
 }
-.categoria-libro-cantidad div{
+.categoria-btn-compra{
     color: var(--bg-color-default4);
-    font-size: 30px;
+    font-size: 25px;
     padding: 0;
-    margin: 10px;
     cursor: pointer;
+    margin-bottom: 20px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    transition: 0.3s ease-in-out;
+}
+.categoria-btn-compra:hover{
+    background-image: linear-gradient(to left,var(--bg-color-main),var( --bg-color-main2));
+    color: var(--bg-color-default);
+
 }
