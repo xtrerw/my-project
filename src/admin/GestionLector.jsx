@@ -47,6 +47,21 @@ const GestionLector = () => {
         console.error("Error updating data:", error);
       });
   }
+  //eliminar lector
+  const handleDelete = (id) => {
+    fetch(`http://localhost:5001/admin/eliminarLector/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        // Actualizar la lista de usuarios después de eliminar
+        setUsuarios((prevUsers) => prevUsers.filter((user) => user._id !== id));
+      })
+      .catch((error) => {
+        console.error("Error deleting data:", error);
+      });
+  }
   return (
     <div className="contenedor-cards">
       {/* conseguir todos usuarios */}
@@ -68,7 +83,7 @@ const GestionLector = () => {
           </select>
           <button type="submit">actualizar</button>
           {/* btn eliminar */}
-          <button className='btn-eliminar'>Eliminar</button>
+          <button className='btn-eliminar' onClick={()=>handleDelete(usuario._id)}>Eliminar</button>
         </form>
       ))}
     </div>

@@ -48,7 +48,21 @@ const GestionAutor = () => {
         console.error("Error updating data:", error);
       });
   }
-
+  //eliminar autor
+  const handleDelete = (id) => {
+    fetch(`http://localhost:5001/admin/eliminarAutor/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        // Actualizar la lista de autores después de eliminar
+        setAutores((prevAutores) => prevAutores.filter((autor) => autor._id !== id));
+      })
+      .catch((error) => {
+        console.error("Error deleting data:", error);
+      });
+  }
     
 
 

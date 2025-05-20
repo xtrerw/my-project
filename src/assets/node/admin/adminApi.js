@@ -40,6 +40,20 @@ router.put("/actualizarLector/:id", async (req, res) => {
         res.status(500).json({ message: "Error al actualizar el usuario", error });
     }
 });
+//eliminar un lector
+router.delete("/eliminarLector/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        // Eliminar el lector de la base de datos
+        const usuario = await ServerModel.Usuario.findByIdAndDelete(id);
+        if (!usuario) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+        res.status(200).json({ message: "Usuario eliminado" });
+    } catch (error) {
+        res.status(500).json({ message: "Error al eliminar el usuario", error });
+    }
+});
 //actualizar el estado de un autor
 router.put("/actualizarAutor/:id", async (req, res) => {
     const { id } = req.params;
@@ -53,6 +67,20 @@ router.put("/actualizarAutor/:id", async (req, res) => {
         res.status(200).json(usuario);
     } catch (error) {
         res.status(500).json({ message: "Error al actualizar el usuario", error });
+    }
+});
+//Eliminar un autor
+router.delete("/eliminarAutor/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        // Eliminar el autor de la base de datos
+        const usuario = await ServerModel.Autor.findByIdAndDelete(id);
+        if (!usuario) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+        res.status(200).json({ message: "Usuario eliminado" });
+    } catch (error) {
+        res.status(500).json({ message: "Error al eliminar el usuario", error });
     }
 });
 export default router;
