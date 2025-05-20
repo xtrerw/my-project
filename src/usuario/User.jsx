@@ -16,25 +16,7 @@ import PerfilReader from "./reader/PerfilReader";
 import NotFound from "./NotFound";
 import { useUser } from "../context/UserContext";
 
- //categorias para readers
- const categorias = [
-  {
-    nombre: "Imprescindibles",
-    colleccion: ["Más vendidos", "Todos los libros", "Recomendados"]
-  },
-  {
-    nombre: "Ficción",
-    colleccion: ["Romántica y erótica", "Negra", "Histórica", "Fantástica", "Ciencia ficción", "Terror", "Humor", "Viajes"]
-  },
-  {
-    nombre: "No Ficción",
-    colleccion: ["Ciencias y tecnología", "Humanidades", "Arte", "Filología", "Historia"]
-  },
-  {
-    nombre: "Cómic y Manga",
-    colleccion: ["Libros de ilustración", "Cómic de humor", "Historia y técnica", "Manga"]
-  }
-];
+
 // menu para autores
 const menuAutor = [
   {nombre: "Mis Datos",},
@@ -54,6 +36,19 @@ const menuAutor = [
 ]
 //componente principal
 const User = () => {
+  //estado de categorias
+  const [categorias, setCategorias] = useState([]);
+  //conseguir categoría activa
+  useEffect(() => {
+    fetch("http://localhost:5001/usuario/categorias")
+      .then((response) => response.json())
+      .then((data) => {
+        setCategorias(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
   //conseguir el estado de autenticación del usuario
   const {user}=useUser();
   // categoria activa para reader

@@ -53,4 +53,16 @@ router.post("registrar", async (req, res) => {
     }
 });
 
+//Obtener categorias por defecto
+router.get("/categorias", async (req, res) => {
+    try {
+        // Obtener todas las categorías de la base de datos
+        const categorias = await ServerModel.Categoria.find();
+        res.status(200).json(categorias);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener las categorías", error });
+    }
+});
+
+
 export default router;
