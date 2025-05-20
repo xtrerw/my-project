@@ -12,6 +12,10 @@ import { paises } from '../../utils/paises';
 import { provincias } from '../../utils/provincias';
 import { useUser } from '../../context/UserContext';
 function Author() {
+    //error para iniciar sesión y registro
+    const [loginError, setLoginError] = useState(null);
+    const [registerError, setRegisterError] = useState(null);
+
     //usar el contexto de usuario
     const {user, setUser } = useUser();
     //muestra la contraseña en texto plano o encriptada
@@ -33,11 +37,10 @@ function Author() {
     //Variable id para navegar al autor correspondiente
     const [id,setId]=useState()
     //
-    const [errorIniciar, setErroresIniciar] = useState();
     //Función para iniciar sesión del autor
     const handleIniciar = async (e) => {
         e.preventDefault();
-        setErroresIniciar(null);
+        setLoginError(null);
         // Validar el formulario antes de enviar
         try {
             const response = await fetch('http://localhost:5001/autor/iniciar', {
@@ -59,12 +62,12 @@ function Author() {
                 localStorage.setItem("loggedInUser", JSON.stringify(res));
                 localStorage.setItem("userId", res._id);
             }else{
-                setErroresIniciar(res.message);
+                setLoginError(res.message);
                 //si no se ha iniciado sesión, mostrar mensaje de error
             }
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
-            setErroresIniciar("Error iniciar Sesión " + error.message);
+            setLoginError("Error iniciar Sesión " + error.message);
       }
     };
     //Función para manejar el registro del autor
@@ -79,6 +82,32 @@ function Author() {
         nacionalidad: '',
         tipoRegistro: 'autor',
     });
+    //vaciar el formulario de registro
+    const switchToRegistro = () => {
+        //cambio de iniciar sesión a registro
+        setRegistro("registro");
+        setLoginError(null);
+        setRegisterError(null);
+        setUserInfo({
+            nombre: '',
+            apellido: '',
+            username: '',
+            password: '',
+            fechaNacimiento: null,
+            genero: '', 
+            nacionalidad: '',
+            tipoRegistro: 'autor',
+        });
+    };
+    // vaciar el formulario de iniciar sesión
+    const switchToIniciar = () => {
+        //cambio de iniciar sesión a registro
+        setRegistro("iniciar");
+        setLoginError(null);
+        setRegisterError(null);
+        setAutor('');
+        setPwd('');
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -93,7 +122,7 @@ function Author() {
         e.preventDefault();
         // Validar el formulario antes de enviar
         const errorAutor=validar(userInfo)
-        setErroresIniciar(null);
+        setLoginError(null);
         //si hay error, mostrar mensaje de error
         if(errorAutor) return;
 
@@ -120,12 +149,12 @@ function Author() {
                 });
                 setRegistro("iniciar");
             }else{
-                setErroresIniciar(data.message);
+                setRegisterError(data.message);
                 //si no se ha registrado, mostrar mensaje de error
             }
         } catch (error) {
             //si no se ha registrado, mostrar mensaje de error
-            setErroresIniciar("Error al registrar el usuario: " + error.message);
+            setRegisterError("Error al registrar el usuario: " + error.message);
         }
     };
     // si el registro es exitoso, navegar a la página de registro
@@ -181,12 +210,12 @@ function Author() {
                                 </select>
                             </label>
                             {/* Mensaje de error al iniciar sesión */}
-                            <div className="error-message">{errorIniciar}</div>
+                            <div className="error-message">{loginError}</div>
                             <div className='buttones'>
                                 <p style={{
                                     cursor: "pointer",
                                     textDecoration: "underline",
-                                }} onClick={() => {setRegistro("registro");}}>Crea una cuenta</p>
+                                }} onClick={() => {switchToRegistro()}}>Crea una cuenta</p>
                                 <button type="submit">Iniciar Sesión</button>
                             </div>
                         </form>
@@ -194,7 +223,7 @@ function Author() {
                         //Formulario para registro
                         <form onSubmit={handleRegister} className='form-registro'>
                             <h2>Registrar</h2>
-                            <input type="text" name="username"  className={errores.username || errorIniciar ? "error-input" : ""} placeholder="Username" value={userInfo.username} onChange={handleInputChange} required/>
+                            <input type="text" name="username"  className={errores.username ? "error-input" : ""}placeholder="Username" value={userInfo.username} onChange={handleInputChange} required/>
                             {/* campo de la información de persona */}
                             <div className='registro-info'>
                                 <input type="text" name="nombre"  className={errores.nombre? "error-input" : ""} placeholder="Nombre" value={userInfo.nombre} onChange={handleInputChange} required/>
@@ -288,13 +317,13 @@ function Author() {
                                 </select>
                             </label>
                             {/* Mensaje general de error */}
-                            <div className="error-message">{mensajeError}{errorIniciar}</div>
+                            <div className="error-message">{mensajeError || registerError}</div>
 
                             <div className='buttones'>
                                 <p style={{
                                     cursor: "pointer",
                                     textDecoration: "underline",
-                                }} onClick={() => {setRegistro("iniciar");}}>¿ Ya tiene una cuenta ?</p>
+                                }} onClick={() => {switchToIniciar()}}>¿ Ya tiene una cuenta ?</p>
                                 {/* botón de registro */}
                                 <button type="submit">Registrar</button>
                             </div>
