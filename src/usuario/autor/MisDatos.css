@@ -1,14 +1,14 @@
 /* mis datos contenido */
 .profile-container {
     display: flex;
-    max-width: 1000px;
-    margin: 40px auto;
+    max-width: 1200px;
     background: var(--bg-color-default);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 40px auto 0 auto ;
     border-radius: 10px;
     overflow: hidden;
     text-transform: capitalize;
-    min-height: 80vh;
+    max-height: 80vh;
+    
   }
   
   /* menu izquierda de mis datos */
@@ -55,6 +55,10 @@
     padding: 30px;
     text-align: center;
     color: var(--bg-color-main);
+    width: max-content;
+    /* scroll */
+    overflow-y: scroll;
+    scrollbar-width: none;
   }
   
   /* parte información */

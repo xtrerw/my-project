@@ -252,7 +252,7 @@ const SchemaContenido=new mongoose.Schema({
 const Contenido=mongoose.model('Contenido',SchemaContenido);
 
 //favorita lista
-const SchemaFavorita = new mongoose.Schema({
+const SchemaFavorito = new mongoose.Schema({
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Usuario',
@@ -273,7 +273,7 @@ const SchemaFavorita = new mongoose.Schema({
   ]
 });
 
-const Favorita = mongoose.model('Favorita', SchemaFavorita);
+const Favorito = mongoose.model('Favorita', SchemaFavorito);
 
   // compras
   const SchemaCompra=new mongoose.Schema({
@@ -363,10 +363,10 @@ const Favorita = mongoose.model('Favorita', SchemaFavorita);
     for (const usuario of usuarios) {
       const favoritos = librosInsertados
         .sort(() => 0.5 - Math.random())
-        .slice(0, 5)
+        .slice(0, 15) // Seleccionar 15 libros aleatorios
         .map((libro) => ({ libroID: libro._id }));
 
-      await Favorita.updateOne(
+      await Favorito.updateOne(
         { userID: usuario._id },
         { $set: { libros: favoritos } },
         { upsert: true }
@@ -395,4 +395,4 @@ const initDB = async () => {
   initDB();
 
 //exportar todos los modelos a api.js
-export default {Usuario,Autor,Libro,Contenido,Admin,Categoria,Favorita,addDocument};
+export default {Usuario,Autor,Libro,Contenido,Admin,Categoria,Favorito,addDocument};

@@ -5,6 +5,7 @@ import NotFound from '../NotFound';
 import { useNavigate } from 'react-router-dom';
 import CambiarContrasena from '../autor/CambiarContrasena';
 import EditarInformacionLector from './EditarInformacionLector';
+import MisFavoritos from './MisFavoritos';
 const PerfilReader = () => {
   //funcion de navegacion
   const navigate = useNavigate();
@@ -42,6 +43,12 @@ const PerfilReader = () => {
               onClick={() => setSelectedTab("Dirección")}
             >
               Dirección
+            </h2>
+            <h2
+              className={selectedTab === "Mis Favoritos" ? "active-tab" : ""}
+              onClick={() => setSelectedTab("Mis Favoritos")}
+            >
+              Mis Favoritos
             </h2>
             <h2 
               className={selectedTab === "Editar Información" ? "active-tab" : ""}
@@ -128,6 +135,7 @@ const PerfilReader = () => {
                 setSelectedTab("Mi Tunk");//pasar a la pestaña de "Mi Tunk"
               }}
             />}
+            {selectedTab === "Mis Favoritos" && <MisFavoritos/>}
             {selectedTab === "Cambiar Contraseña" && <CambiarContrasena />}
           </div>
         </div>

@@ -1,0 +1,46 @@
+
+.favoritos-lista {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    justify-content: center;
+
+    list-style: none;
+    padding: 0;
+    margin-top: 2rem;
+}
+
+.favoritos-lista div {
+  background-color: #ffffff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  padding: 1rem;
+  width: 250px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.favoritos-lista div:hover {
+  transform: scale(1.02);
+}
+
+.favoritos-lista img {
+  margin-top: 0.5rem;
+  border-radius: 8px;
+}
+
+.favoritos-lista button {
+  background-color: crimson;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin-top: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.favoritos-lista button:hover {
+  background-color: darkred;
+}
