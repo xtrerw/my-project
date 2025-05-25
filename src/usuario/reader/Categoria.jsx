@@ -10,7 +10,7 @@ import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import { ChevronUp, ChevronDown, Star } from 'lucide-react';
 import { useUser } from '../../context/UserContext'
-
+import { useNavigate } from 'react-router-dom'
 const Categoria = () => {
   //conseguir las categorias de libros
   const { categoriaId, subcategoriaId } = useParams();
@@ -29,6 +29,8 @@ const Categoria = () => {
   const [selectedRatings, setSelectedRatings] = useState([]);
   // Estado: guardar las etiquetas seleccionadas de precios
   const [selectedPrices, setSelectedPrices] = useState([]);
+  //navegacion
+  const navigate = useNavigate();
 
   // Lista de rangos de precio
   const priceRanges = [
@@ -45,11 +47,16 @@ const Categoria = () => {
     fetch(`http://localhost:5001/libros/categorias/${categoriaId}`)
     .then(response=>response.json())
     .then(resulta=>{
-      console.log(" Resultado de backend:", resulta.categoria);
+      if (!resulta.categoria || resulta.categoria.length === 0) {
+        navigate("/404"); // Redirigir si no hay categoría válida
+      } else {
         setCategorias(resulta.categoria); 
         setLibros(resulta.libros);
+  }
     })
-    .catch(error => console.error("Error al obtener categorias:", error));
+    .catch(error => {
+      navigate("/NotFound");
+    });
   },[categoriaId])
 
   // Reiniciar filtros al cambiar subcategoría
@@ -85,7 +92,7 @@ const Categoria = () => {
   };
 
 
-  
+
   //funcion para agregar libros a favoritos
   const handleAgregarFavorito = (libro) => {
   fetch(`http://localhost:5001/favoritos/${user._id}`, {

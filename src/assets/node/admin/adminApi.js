@@ -73,14 +73,26 @@ router.put("/actualizarAutor/:id", async (req, res) => {
 router.delete("/eliminarAutor/:id", async (req, res) => {
     const { id } = req.params;
     try {
-        // Eliminar el autor de la base de datos
-        const usuario = await ServerModel.Autor.findByIdAndDelete(id);
-        if (!usuario) {
-            return res.status(404).json({ message: "Usuario no encontrado" });
-        }
-        res.status(200).json({ message: "Usuario eliminado" });
+         // 1. Buscar libros del autor
+    const librosDelAutor = await ServerModel.Libro.find({ autorID: id });
+    const libroIDs = librosDelAutor.map(libro => libro._id);
+
+    // 2. Eliminar contenidos de esos libros
+    await ServerModel.Contenido.deleteMany({ libroID: { $in: libroIDs } });
+
+    // 3. Eliminar libros
+    await ServerModel.Libro.deleteMany({ _id: { $in: libroIDs } });
+
+    // 4. Eliminar el autor
+    const autorEliminado = await ServerModel.Autor.findByIdAndDelete(id);
+    if (!autorEliminado) {
+      return res.status(404).json({ message: "Autor no encontrado" });
+    }
+
+    res.status(200).json({ message: "Autor, libros y contenidos eliminados." });
     } catch (error) {
-        res.status(500).json({ message: "Error al eliminar el usuario", error });
+        // Manejo de errores en el proceso de eliminación
+        res.status(500).json({ message: "Error al eliminar autor o sus datos", error });
     }
 });
 export default router;

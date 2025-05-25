@@ -4,5 +4,5 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  color: var(--color-texto-footer);
+  color: var(--text-color);
 }

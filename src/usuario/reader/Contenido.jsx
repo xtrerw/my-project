@@ -4,19 +4,25 @@ import '../../style/contenido.css' // Asegúrate de tener un archivo CSS para es
 import gsap from 'gsap'
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from 'gsap/all';
+import { useNavigate } from 'react-router-dom';
 const Contenido = () => {
     const {id}=useParams()
     
     const [contenidos,setContenidos]=useState([])
+      //navegacion
+    const navigate = useNavigate();
     //conseguir los contenidos de los libros
     useEffect(()=>{
         fetch(`http://localhost:5001/libros/libros/${id}`)
         .then(response=>response.json())
         .then(resulta=>{
-            setContenidos(resulta)
-            console.log(resulta);
+            if (!Array.isArray(resulta)) {
+            navigate("/not-found"); // estructura inesperada
+            return;
+          }
+        setContenidos(resulta);
         })
-        .catch(error => console.error("Error al obtener contenido:", error)); 
+        .catch(error => {navigate("/not-found")}); 
     },[id])
 
 

@@ -92,36 +92,81 @@ const SchemaUsuario=new mongoose.Schema({
 const Usuario=mongoose.model('Usuario',SchemaUsuario);
 
 const nuevoUsuario=[
-    {
-        nombre:"Sara",
-        apellido:"López",
-        usernombre:"sara",
-        password:hashpwd("1234"),
-        fechaNacimiento: new Date("2000-01-01"), // fecha de nacimiento
-        direccion:"Calle RTX5060 7 izquierda",
-        codigoPostal:"23000",
-        provincia:"Jaén",
-        pais:"España",
-        nacionalidad:"China",
-        genero:"Mujer",
-        email:"xqe@gmail.com",
-        telefono:666666666,
+      {
+      nombre: "Sara",
+      apellido: "López",
+      usernombre: "sara",
+      password: hashpwd("1234"),
+      fechaNacimiento: new Date("2000-01-01"),
+      direccion: "Calle RTX5060 7 izquierda",
+      codigoPostal: "23000",
+      provincia: "Jaén",
+      pais: "España",
+      nacionalidad: "China",
+      genero: "Mujer",
+      email: "xqe@gmail.com",
+      telefono: 666666666,
     },
     {
-        nombre:"Juan",
-        apellido:"López",
-        usernombre:"juan",
-        password:hashpwd("1234"),
-        fechaNacimiento: new Date("1995-01-01"), // fecha de nacimiento
-        direccion:"Calle RTX4060 5 izquierda",
-        codigoPostal:"23000",
-        provincia:"Jaén",
-        pais:"España",
-        nacionalidad:"Estado Unido",
-        genero:"Hombre",
-        email:"juan@gmail.com",
-        telefono:680145361,
+      nombre: "Juan",
+      apellido: "López",
+      usernombre: "juan",
+      password: hashpwd("1234"),
+      fechaNacimiento: new Date("1995-01-01"),
+      direccion: "Calle RTX4060 5 izquierda",
+      codigoPostal: "23000",
+      provincia: "Jaén",
+      pais: "España",
+      nacionalidad: "Estado Unido",
+      genero: "Hombre",
+      email: "juan@gmail.com",
+      telefono: 680145361,
     },
+    {
+      nombre: "Ana",
+      apellido: "García",
+      usernombre: "ana",
+      password: hashpwd("1234"),
+      fechaNacimiento: new Date("1999-06-12"),
+      direccion: "Calle Madrid 10",
+      codigoPostal: "28001",
+      provincia: "Madrid",
+      pais: "España",
+      nacionalidad: "Española",
+      genero: "Mujer",
+      email: "ana@gmail.com",
+      telefono: 612345678,
+    },
+    {
+      nombre: "Pedro",
+      apellido: "Martínez",
+      usernombre: "pedro",
+      password: hashpwd("1234"),
+      fechaNacimiento: new Date("1990-04-20"),
+      direccion: "Calle Sevilla 5",
+      codigoPostal: "41001",
+      provincia: "Sevilla",
+      pais: "España",
+      nacionalidad: "Española",
+      genero: "Hombre",
+      email: "pedro@gmail.com",
+      telefono: 622334455,
+    },
+    {
+      nombre: "Lucía",
+      apellido: "Sánchez",
+      usernombre: "lucia",
+      password: hashpwd("1234"),
+      fechaNacimiento: new Date("1998-09-10"),
+      direccion: "Calle Valencia 3",
+      codigoPostal: "46001",
+      provincia: "Valencia",
+      pais: "España",
+      nacionalidad: "Española",
+      genero: "Mujer",
+      email: "lucia@gmail.com",
+      telefono: 633445566,
+    }
   ]
         
 //autor
@@ -158,20 +203,66 @@ const SchemaAutor=new mongoose.Schema({
 const Autor=mongoose.model('Autor',SchemaAutor);
 //define los atributos de autor
 const nuevoAutor=[
-    {
-        nombre:"Mike",
-        apellido:"Lork",
-        usernombre:"weak",
-        password:hashpwd("1234"),
-        fechaNacimiento: new Date("1990-01-01"), // fecha de nacimiento
-        direccion:"Calle RTX4060 5 izquierda",
-        codigoPostal:"23000",
-        provincia:"Jaén",
-        pais:"España",
-        nacionalidad:"China",
-        genero:"Hombre",
-        email:"mike@tunkbooks.com",
-    }
+  {
+    nombre: "Juan",
+    apellido: "López",
+    usernombre: "juan",
+    password: hashpwd("1234"),
+    fechaNacimiento: new Date("1995-01-01"),
+    direccion: "Calle RTX4060 5 izquierda",
+    codigoPostal: "23000",
+    provincia: "Jaén",
+    pais: "España",
+    nacionalidad: "Estado Unido",
+    genero: "Hombre",
+    email: "juan@gmail.com",
+    telefono: 680145361,
+  },
+  {
+    nombre: "Ana",
+    apellido: "García",
+    usernombre: "ana",
+    password: hashpwd("1234"),
+    fechaNacimiento: new Date("1999-06-12"),
+    direccion: "Calle Madrid 10",
+    codigoPostal: "28001",
+    provincia: "Madrid",
+    pais: "España",
+    nacionalidad: "Española",
+    genero: "Mujer",
+    email: "ana@gmail.com",
+    telefono: 612345678,
+  },
+  {
+    nombre: "Pedro",
+    apellido: "Martínez",
+    usernombre: "pedro",
+    password: hashpwd("1234"),
+    fechaNacimiento: new Date("1990-04-20"),
+    direccion: "Calle Sevilla 5",
+    codigoPostal: "41001",
+    provincia: "Sevilla",
+    pais: "España",
+    nacionalidad: "Española",
+    genero: "Hombre",
+    email: "pedro@gmail.com",
+    telefono: 622334455,
+  },
+  {
+    nombre: "Lucía",
+    apellido: "Sánchez",
+    usernombre: "lucia",
+    password: hashpwd("1234"),
+    fechaNacimiento: new Date("1998-09-10"),
+    direccion: "Calle Valencia 3",
+    codigoPostal: "46001",
+    provincia: "Valencia",
+    pais: "España",
+    nacionalidad: "Española",
+    genero: "Mujer",
+    email: "lucia@gmail.com",
+    telefono: 633445566,
+  }
 ]
 //agregar autores de ejemplo
 
@@ -299,10 +390,10 @@ const Favorito = mongoose.model('Favorita', SchemaFavorito);
       try {
     // Buscar datos base: categorías, autor, usuario
     const categorias = await Categoria.find();
-    const autor = await Autor.findOne({ usernombre: "weak" });
+    const autores = await Autor.find();
     const usuarios = await Usuario.find();
     const categoriaTodos = await Categoria.findOne({ nombre: "Imprescindibles" });
-    if (!categorias.length || !autor || !usuarios || !categoriaTodos) {
+    if (!categorias.length || !autores || !usuarios || !categoriaTodos) {
       console.error("Faltan datos base: categorías, autor o usuario.");
       return;
     }
@@ -319,7 +410,7 @@ const Favorito = mongoose.model('Favorita', SchemaFavorito);
           const nuevoLibro = new Libro({
             img: "http://localhost:5173/src/img/libro.jpg",
             titulo,
-            autorID: autor._id,
+            autorID: autores[Math.floor(Math.random() * autores.length)]._id,
             precio: precioAleatorio(),
             categoria: [
               {
