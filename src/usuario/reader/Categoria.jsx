@@ -33,7 +33,8 @@ const Categoria = () => {
   const navigate = useNavigate();
   //favorito libros agregados
   const [favoritos, setFavoritos] = useState([]);
-
+  //si usuario no iniciar
+  const [faltaUser,setFaltaUser]=useState(false)
 
   // Lista de rangos de precio
   const priceRanges = [
@@ -98,15 +99,18 @@ const Categoria = () => {
 
   //funcion para agregar libros a favoritos
   const handleAgregarFavorito = (libro) => {
-  fetch(`http://localhost:5001/favoritos/${user._id}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      libroID: libro._id
+    if (!user || !user._id) {
+      return setFaltaUser(true)
+    }
+    fetch(`http://localhost:5001/favoritos/${user._id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        libroID: libro._id
+      })
     })
-  })
     .then((res) => {
      if (res.ok) {
         setFavoritos((prev) => [...prev, libro._id]); // Añadir localmente
@@ -352,8 +356,10 @@ useGSAP(() => {
                   onClick={() => handleAgregarFavorito(libro)}
                 ></div>
               </div>
+              <p className={`${faltaUser? "error":"sinError"}`}>Debes iniciar sesión para añadir favoritos</p>
             </div>
         ))}
+        
       </div>
     </div> 
       

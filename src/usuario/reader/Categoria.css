@@ -168,3 +168,9 @@ aside h2 {
 .favorito-activo{
   color: var(--color-error-text);
 }
+.error{
+  color: var(--color-error-text);
+}
+.sinError{
+  visibility: hidden;
+}
