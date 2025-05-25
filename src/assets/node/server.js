@@ -187,7 +187,7 @@ const Categoria=mongoose.model('Categoria',SchemaCategoria)
 const nuevoCategorias=[
     {
         nombre:"Imprescindibles",
-        colleccion:["Más vendidos","Todos los libros","Recomendados"]
+        colleccion:["Todos los libros"]
     },
     {
         nombre:"Ficción",
@@ -250,24 +250,31 @@ const SchemaContenido=new mongoose.Schema({
 });
 
 const Contenido=mongoose.model('Contenido',SchemaContenido);
-//agregar libros y contenido de ejemplo
-const nuevoLibros = [
+
+//favorita lista
+const SchemaFavorita = new mongoose.Schema({
+  userID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Usuario',
+    required: true
+  },
+  libros: [
     {
-      img:"http://localhost:5173/src/img/libro.jpg",
-      titulo:"El Árbol de los Deseos",
-      precio:15,
-      // insertar los datos luego
-      autorID:null,
-      categoria:[
-        {
-        cateID:null,
-        colleccion:null
-        }
-      ],
-      estrella:4
+      libroID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Libro',
+        required: true
+      },
+      fechaAgregado: {
+        type: Date,
+        default: Date.now
+      }
     }
-  ];
-  
+  ]
+});
+
+const Favorita = mongoose.model('Favorita', SchemaFavorita);
+
   // compras
   const SchemaCompra=new mongoose.Schema({
     libroID:{type:mongoose.Schema.Types.ObjectId,ref:'Libro'},
@@ -276,78 +283,100 @@ const nuevoLibros = [
   // crear el modelo de compra
   const Compra=mongoose.model('Compra',SchemaCompra);
   //agregar compras de ejemplo
+
+
+  // Función para generar un precio aleatorio entre 1 y 49 euros
+  const precioAleatorio = () => Math.floor(Math.random() * 30) + 1;
+  // Función para generar títulos aleatorios con palabras comunes
+  const generarTituloAleatorio = () => {
+    const palabras1 = ["Sombras", "Susurros", "Destinos", "Secretos", "Luces", "Amanecer", "Caminos", "Espíritus", "Voces", "Horizontes"];
+    const palabras2 = ["del pasado", "en la niebla", "del corazón", "perdidos", "invisibles", "eternos", "del silencio", "de cristal", "errantes", "del bosque"];
+    const palabra1 = palabras1[Math.floor(Math.random() * palabras1.length)];
+    const palabra2 = palabras2[Math.floor(Math.random() * palabras2.length)];
+    return `${palabra1} ${palabra2}`;
+  };
   const insertarDatos = async () => {
-    try {
-      // comprobar los datos si están establecidos
-      const autorExistente = await Autor.findOne({ usernombre: nuevoAutor[0].usernombre });
-      const categoriaExistente = await Categoria.findOne({ nombre: nuevoCategorias[0].nombre });
-  
-      if (!autorExistente || !categoriaExistente) {
-        console.log("Autor o categoría no encontrados, asegúrate de haberlos insertado primero.");
-        return;
-      }
-      
-      //insertar el autor
-      nuevoLibros[0].autorID = autorExistente._id;
-      //insertar categorias del libros
-      nuevoLibros[0].categoria = [
-        {
-          cateID: categoriaExistente._id,
-          colleccion: [categoriaExistente.colleccion[1]]
-        }
-      ];
-  
-
-
-      // si existen los libros antes de insertar los datos
-      const libroExistente = await Libro.findOne({ titulo: nuevoLibros[0].titulo });
-      let libroInsertar = []; // variable para almacenar los libros insertados
-      if (!libroExistente) {
-        libroInsertar = await Libro.insertMany(nuevoLibros);
-        const libroID = libroInsertar.map(l => l.id);
-
-        const nuevoContenidos = [
-          {
-            libroID: libroID[0],
-            titulo: nuevoLibros[0].titulo,
-            // contenido de ejemplo
-            contenido: "Mateo pensó que su aventura había terminado, pero el Árbol de los Deseos tenía otros planes.\nEsa noche, mientras dormía junto al árbol, soñó con una puerta dorada que flotaba entre las nubes.\n\nAl despertar, encontró un pequeño brote a sus pies con un mensaje en sus hojas: “La verdadera felicidad no se guarda, se comparte”.\n\nIntrigado, Mateo decidió seguir el sendero que se abría mágicamente frente a él.\nMientras avanzaba, el bosque cambiaba: los colores eran más vivos, el aire más dulce, y las flores susurraban palabras de ánimo.\n\nEn su camino, conoció a una niña llamada Lila, que había perdido la memoria.\nMateo la acompañó y le contaba historias cada noche, esperando que algún recuerdo volviera a ella.\n\nUna tarde, al contarle sobre el Árbol de los Deseos, Lila rompió en llanto.\n“¡Yo también soñé con ese árbol! ¡Y tenía un hermano que me hablaba de él cuando éramos pequeños!”\n\nMateo la miró fijamente. Algo en su voz le resultaba familiar.\nCon el corazón latiendo con fuerza, sacó el mapa antiguo de su mochila y se lo mostró.\n\nLila lo reconoció al instante.\n“Ese mapa... ¡mi abuela también tenía uno igual!”\nAmbos entendieron entonces que sus caminos estaban unidos desde mucho antes.\n\nAl llegar a una colina iluminada por luciérnagas, encontraron la puerta dorada del sueño de Mateo.\nLa tocaron juntos, y en un destello de luz, fueron transportados a un lugar más allá del tiempo.\n\nAllí, se encontraron con las almas guardianas del bosque, quienes les explicaron:\n“Ustedes son los portadores de los deseos puros. Solo aquellos que desean para otros, reciben lo que realmente necesitan.”\n\nCon lágrimas en los ojos, Lila recordó todo: su familia, su hogar, su hermano... que era Mateo.\nAmbos se abrazaron bajo una lluvia de estrellas y supieron que la vida los había separado solo para volver a unirlos con más fuerza.\n\nEl bosque los nombró guardianes del Árbol de los Deseos, encargados de guiar a otros en sus propios viajes del corazón.\n\nDesde entonces, Mateo y Lila caminaron juntos, contando historias, sembrando esperanza y recordándole al mundo...\nQue la magia existe donde hay bondad, y que los deseos más poderosos nacen del amor compartido."
-          }
-        ];
-        // insertar el contenido en la base de datos
-  
-        await Contenido.insertMany(nuevoContenidos);
-      } else {
-        console.log("El libro ya existe, no se insertará nuevamente.");
-        libroInsertar=await Libro.find({titulo:nuevoLibros[0].titulo});
-      }
-
-
-
-
-
-      // insertar compra ejemplo
-      const usuarioEjemplo = await Usuario.findOne({ usernombre: "sara" });
-
-      if (usuarioEjemplo && libroInsertar.length > 0) {
-        // crear un objeto de compra de ejemplo
-        const compraEjemplo = [
-          {
-            libroID: libroInsertar[0]._id,
-            userID: usuarioEjemplo._id,
-          }
-        ];
-        // insertar la compra en la base de datos
-        await Compra.insertMany(compraEjemplo);
-        console.log("Compra de ejemplo insertada");
-      } else {
-        console.log("No se pudo insertar la compra de ejemplo, usuario o libro no encontrado.");
-      }
-
-
-    } catch (error) {
-      console.error("Error al insertar datos:", error);
+      try {
+    // Buscar datos base: categorías, autor, usuario
+    const categorias = await Categoria.find();
+    const autor = await Autor.findOne({ usernombre: "weak" });
+    const usuarios = await Usuario.find();
+    const categoriaTodos = await Categoria.findOne({ nombre: "Imprescindibles" });
+    if (!categorias.length || !autor || !usuarios || !categoriaTodos) {
+      console.error("Faltan datos base: categorías, autor o usuario.");
+      return;
     }
+
+    const libros = [], contenidos = [], compras = [];
+
+    // Recorrer cada categoría y su collección para insertar 5 libros por cada colección
+    for (let i = 1; i < categorias.length; i++) {
+      const categoria=categorias[i]
+      for (const coleccion of categoria.colleccion) {
+        for (let i = 1; i <= 5; i++) {
+          const titulo =  generarTituloAleatorio();
+
+          const nuevoLibro = new Libro({
+            img: "http://localhost:5173/src/img/libro.jpg",
+            titulo,
+            autorID: autor._id,
+            precio: precioAleatorio(),
+            categoria: [
+              {
+                cateID: categoria._id,
+                colleccion: [coleccion],
+              },
+              {
+                cateID:categoriaTodos._id,
+                colleccion:["Todos los libros"]
+              }
+            ],
+            estrella: Math.floor(Math.random() * 5) + 1,
+          });
+
+          libros.push(nuevoLibro);
+        }
+      }
+    }
+
+    // Insertar libros a la base de datos
+    const librosInsertados = await Libro.insertMany(libros);
+
+    // Crear contenido y compras para cada libro insertado
+    for (const libro of librosInsertados) {
+      contenidos.push({
+        libroID: libro._id,
+        titulo: libro.titulo,
+        contenido: `Este es el contenido de ejemplo para "${libro.titulo}". Una historia increíble con aventuras y emoción.`
+      });
+
+       for (const usuario of usuarios) {
+        compras.push({ libroID: libro._id, userID: usuario._id });
+      }
+    }
+
+    // Insertar contenidos y compras a la base de datos
+    await Contenido.insertMany(contenidos);
+    await Compra.insertMany(compras);
+
+     // Asignar favoritos aleatorios por usuario
+    for (const usuario of usuarios) {
+      const favoritos = librosInsertados
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 5)
+        .map((libro) => ({ libroID: libro._id }));
+
+      await Favorita.updateOne(
+        { userID: usuario._id },
+        { $set: { libros: favoritos } },
+        { upsert: true }
+      );
+    }
+
+    console.log("Libros, contenidos y compras insertados con éxito.");
+  } catch (err) {
+    console.error("Error al insertar datos:", err);
+  }
   };
   
   
@@ -356,16 +385,14 @@ const initDB = async () => {
     await addDocument(Autor, nuevoAutor, 'usernombre');
     await addDocument(Categoria, nuevoCategorias, 'nombre');
     await addDocument(Usuario, nuevoUsuario, 'usernombre');
-    for (const libro of nuevoLibros) {
-      const libroExistente = await Libro.findOne({ titulo: libro.titulo });
-      if (!libroExistente) {
-        await insertarDatos(); // realizar sin existir los libros
-        break; // parar bucle depués de insertar los datos
-      }
+    
+    const libroExistente = await Libro.findOne();
+    if (!libroExistente) {
+      await insertarDatos(); // realizar sin existir los libros
     }
   };
   
   initDB();
 
 //exportar todos los modelos a api.js
-export default {Usuario,Autor,Libro,Contenido,Admin,Categoria,addDocument};
+export default {Usuario,Autor,Libro,Contenido,Admin,Categoria,Favorita,addDocument};
