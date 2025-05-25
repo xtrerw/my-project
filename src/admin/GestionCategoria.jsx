@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './GestionCategoria.css'; 
 import { validateCategoria } from '../utils/validateCategoria';//introduce archivo para validar
 import { useFormValidation } from '../utils/useFormValidation';
+import Cargando from '../utils/Cargando';
 const GestionCategoria = () => {
+  const [loading, setLoading] = useState(false);
   //reiniciar funciones de validar
   const { errores, mensajeError, validar } = useFormValidation(validateCategoria);
  
@@ -20,15 +22,18 @@ const GestionCategoria = () => {
 
   // Obtener las categorías al cargar
   useEffect(() => {
+    setLoading(true);
     fetchCategorias();
   }, []);
 
   // Función para obtener todas las categorías
   const fetchCategorias = () => {
+    setLoading(true);
     fetch("http://localhost:5001/adminCategoria/categoria")
       .then(res => res.json())
       .then(data => setCategorias(data))
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
   };
 
   // Crear o actualizar categoría
@@ -67,8 +72,22 @@ const GestionCategoria = () => {
   const handleDelete = async (id) => {
     const confirmar = window.confirm("¿Estás seguro de que deseas eliminar esta categoria?");
     if (!confirmar) return; // Si el usuario cancela, no hacer nada
-    await fetch(`http://localhost:5001/adminCategoria/categoria/${id}`, { method: 'DELETE' });
-    fetchCategorias();
+    setLoading(true);
+     try {
+      const res = await fetch(`http://localhost:5001/adminCategoria/categoria/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) {
+        throw new Error("No se pudo eliminar la categoría.");
+      }
+
+      fetchCategorias(); // actualizar la lista
+    } catch (error) {
+      console.error("Error al eliminar categoría:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Cargar datos para editar

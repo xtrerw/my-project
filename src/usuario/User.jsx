@@ -16,7 +16,6 @@ import PerfilReader from "./reader/PerfilReader";
 import NotFound from "./NotFound";
 import { useUser } from "../context/UserContext";
 
-
 // menu para autores
 const menuAutor = [
   {nombre: "Mis Datos",},
