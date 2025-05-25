@@ -49,6 +49,8 @@ const GestionLector = () => {
   }
   //eliminar lector
   const handleDelete = (id) => {
+    const confirmar = window.confirm("¿Estás seguro de que deseas eliminar este lector?");
+    if (!confirmar) return; // Si el usuario cancela, no hacer nada
     fetch(`http://localhost:5001/admin/eliminarLector/${id}`, {
       method: "DELETE",
     })

@@ -50,6 +50,8 @@ const GestionAutor = () => {
   }
   //eliminar autor
   const handleDelete = (id) => {
+    const confirmar = window.confirm("¿Estás seguro de que deseas eliminar este autor?");
+    if (!confirmar) return; // Si el usuario cancela, no hacer nada
     fetch(`http://localhost:5001/admin/eliminarAutor/${id}`, {
       method: "DELETE",
     })

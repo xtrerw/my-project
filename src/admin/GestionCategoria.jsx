@@ -65,6 +65,8 @@ const GestionCategoria = () => {
 
   // Eliminar categoría
   const handleDelete = async (id) => {
+    const confirmar = window.confirm("¿Estás seguro de que deseas eliminar esta categoria?");
+    if (!confirmar) return; // Si el usuario cancela, no hacer nada
     await fetch(`http://localhost:5001/adminCategoria/categoria/${id}`, { method: 'DELETE' });
     fetchCategorias();
   };
