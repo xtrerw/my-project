@@ -52,6 +52,12 @@ const Categoria = () => {
     .catch(error => console.error("Error al obtener categorias:", error));
   },[categoriaId])
 
+  // Reiniciar filtros al cambiar subcategoría
+  useEffect(() => {
+    setSearchTerm("");
+    setSelectedRatings([]);
+    setSelectedPrices([]);
+  }, [subcategoriaId]);
   //funcion para comprar libros
   const handleComprar = (libro) => {
 
@@ -78,6 +84,33 @@ const Categoria = () => {
     });
   };
 
+
+  
+  //funcion para agregar libros a favoritos
+  const handleAgregarFavorito = (libro) => {
+  fetch(`http://localhost:5001/favoritos/${user._id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      libroID: libro._id
+    })
+  })
+    .then((res) => {
+      if (res.ok) {
+        console.log("Libro añadido a favoritos");
+      } else {
+        console.error("No se pudo añadir el favorito");
+      }
+    })
+    .catch((err) => {
+      console.error("Error al añadir favorito:", err);
+    });
+};
+
+
+//referencia de titulo y libros  
 const tituloRef = useRef();
 const librosRef = useRef();
 const libroRefs=useRef([])
@@ -290,7 +323,13 @@ useGSAP(() => {
                 
               </Link>
               <div className='categoria-libro-cantidad'>
+                {/* btn comprar */}
                 <div className='categoria-btn-compra' onClick={() => handleComprar(libro)}>Comprar</div>
+                {/* btn favorita */}
+                <div className='categoria-btn-compra' onClick={() => handleAgregarFavorito(libro)}>
+                  Favorito
+                </div>
+
               </div>
             </div>
         ))}

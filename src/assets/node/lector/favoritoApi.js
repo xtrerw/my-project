@@ -25,6 +25,40 @@ router.get("/:userId", async (req, res) => {
     }
 });
 
+// Añadir un favorito
+// Ruta para añadir un libro a la lista de favoritos del usuario
+router.post("/:userId", async (req, res) => {
+  const { userId } = req.params; // ID del usuario
+  const { libroID } = req.body; // ID del libro que se quiere añadir
+
+  try {
+    // Verificar si el libro ya está en la lista de favoritos del usuario
+    const existente = await ServerModel.Favorito.findOne({
+      userID: userId,
+      "libros.libroID": libroID
+    });
+
+    if (existente) {
+      // Si ya existe, devolver error de conflicto
+      return res.status(409).json({ message: "Ya está en favoritos" });
+    }
+
+    // Si no está, agregar el libro a la lista con $addToSet (evita duplicados por seguridad)
+    const favorito = await ServerModel.Favorito.findOneAndUpdate(
+      { userID: userId },
+      { $addToSet: { libros: { libroID } } },
+      { upsert: true, new: true }
+    );
+
+    // Devolver éxito
+    res.status(200).json({ message: "Favorito añadido con éxito", favorito });
+  } catch (error) {
+    // Capturar errores del servidor
+    res.status(500).json({ message: "Error al añadir favorito", error });
+  }
+});
+
+
 //eliminar un favorito
 router.delete("/:userId/:libroId", async (req, res) => {
     const { userId, libroId } = req.params; // Obtener el ID del usuario y del libro de los parámetros de la solicitud

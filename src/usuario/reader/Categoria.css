@@ -111,6 +111,10 @@ aside h2 {
   display: flex;
   /* ajuste linea */
   flex-wrap: wrap;
+  max-height: 150vh;
+  /* scroll */
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .categoria-libro{
