@@ -127,6 +127,8 @@ aside h2 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    position: relative;
 }
 .categoria-libro-cantidad{
     display: flex;
@@ -148,4 +150,21 @@ aside h2 {
     background-image: linear-gradient(to left,var(--bg-color-main),var( --bg-color-main2));
     color: var(--bg-color-default);
 
+}
+/* icono favorito */
+.bx-heart-circle{
+  position: absolute;
+  right: 40px;
+  bottom: 100px;
+
+  font-size: 50px;
+  color: var(--bg-color-default3);
+  cursor: pointer;
+}
+/* hover */
+.bx-heart-circle:hover{
+  color: var(--color-error-text);
+}
+.favorito-activo{
+  color: var(--color-error-text);
 }

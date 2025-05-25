@@ -31,6 +31,9 @@ const Categoria = () => {
   const [selectedPrices, setSelectedPrices] = useState([]);
   //navegacion
   const navigate = useNavigate();
+  //favorito libros agregados
+  const [favoritos, setFavoritos] = useState([]);
+
 
   // Lista de rangos de precio
   const priceRanges = [
@@ -66,30 +69,30 @@ const Categoria = () => {
     setSelectedPrices([]);
   }, [subcategoriaId]);
   //funcion para comprar libros
-  const handleComprar = (libro) => {
+  // const handleComprar = (libro) => {
 
-    fetch("http://localhost:5001/comprar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        libroId: libro._id,
-        userId: user._id,
-      }),
-    })
+  //   fetch("http://localhost:5001/comprar", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       libroId: libro._id,
+  //       userId: user._id,
+  //     }),
+  //   })
 
-    .then((response) => {
-      if (response.ok) {
-        console.log("Compra realizada con éxito");
-      } else {
-        console.log("Error al realizar la compra");
-      }
-    })
-    .catch((error) => {
-      console.error("Error al realizar la compra:", error);
-    });
-  };
+  //   .then((response) => {
+  //     if (response.ok) {
+  //       console.log("Compra realizada con éxito");
+  //     } else {
+  //       console.log("Error al realizar la compra");
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error al realizar la compra:", error);
+  //   });
+  // };
 
 
 
@@ -105,16 +108,28 @@ const Categoria = () => {
     })
   })
     .then((res) => {
-      if (res.ok) {
-        console.log("Libro añadido a favoritos");
-      } else {
-        console.error("No se pudo añadir el favorito");
+     if (res.ok) {
+        setFavoritos((prev) => [...prev, libro._id]); // Añadir localmente
       }
     })
     .catch((err) => {
       console.error("Error al añadir favorito:", err);
     });
 };
+//conseguir los favoritos
+useEffect(() => {
+  if (user?._id) {
+    fetch(`http://localhost:5001/favoritos/${user._id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data.libros)) {
+          const ids = data.libros.map((item) => item._id || item.libroID); // asegúrate del formato
+          setFavoritos(ids);
+        }
+      })
+      .catch((err) => console.error("Error al obtener favoritos:", err));
+  }
+}, [user]);
 
 
 //referencia de titulo y libros  
@@ -327,16 +342,15 @@ useGSAP(() => {
                 </p>
                 <h3>{libro.autorID?.nombre} {libro.autorID?.apellido}</h3>
                 <p>{libro.precio} €</p>
-                
               </Link>
               <div className='categoria-libro-cantidad'>
                 {/* btn comprar */}
-                <div className='categoria-btn-compra' onClick={() => handleComprar(libro)}>Comprar</div>
+                {/* <div className='categoria-btn-compra' onClick={() => handleComprar(libro)}>Comprar</div> */}
                 {/* btn favorita */}
-                <div className='categoria-btn-compra' onClick={() => handleAgregarFavorito(libro)}>
-                  Favorito
-                </div>
-
+                <div
+                  className={`bx bx-heart-circle ${favoritos.includes(libro._id) ? "favorito-activo" : ""}`}
+                  onClick={() => handleAgregarFavorito(libro)}
+                ></div>
               </div>
             </div>
         ))}
