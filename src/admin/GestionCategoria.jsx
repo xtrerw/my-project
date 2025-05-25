@@ -97,6 +97,8 @@ const GestionCategoria = () => {
     setEditId(cat._id);
   };
 
+  if(loading) return <Cargando/>
+  
   return (
     <div className="gestion-categoria-container">
       <h2>Gestión de Categorías</h2>

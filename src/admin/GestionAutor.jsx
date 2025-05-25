@@ -2,12 +2,14 @@ import React from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import './GestionCuenta.css'
+import Cargando from '../utils/Cargando'; // Importar el componente de carga
 const GestionAutor = () => {
-
+  const [loading, setLoading] = useState(false);
   //conseguir la lista de autores
   const [autores, setAutores] = useState([])
   //conseguir la lista de autores
   useEffect(() => {
+    setLoading(true);
     fetch("http://localhost:5001/autor/listado")
       .then((response) => response.json())
       .then((data) => {
@@ -17,6 +19,9 @@ const GestionAutor = () => {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+      })
+      .finally(() => {
+        setLoading(false); // Desactivar el indicador de carga después de obtener los datos
       });
   }, []);
   //actualizar el estado de un autor
@@ -32,6 +37,7 @@ const GestionAutor = () => {
   }
   //activar o desactivar autor
   const handleSubmit = (e,autor) => {
+    setLoading(true);
     e.preventDefault()
     fetch(`http://localhost:5001/admin/actualizarAutor/${autor._id}`, {
       method: "PUT",
@@ -46,12 +52,16 @@ const GestionAutor = () => {
       })
       .catch((error) => {
         console.error("Error updating data:", error);
+      })
+      .finally(() => {
+        setLoading(false); // Desactivar el indicador de carga después de la actualización
       });
   }
   //eliminar autor
   const handleDelete = (id) => {
     const confirmar = window.confirm("¿Estás seguro de que deseas eliminar este autor?");
     if (!confirmar) return; // Si el usuario cancela, no hacer nada
+    setLoading(true);
     fetch(`http://localhost:5001/admin/eliminarAutor/${id}`, {
       method: "DELETE",
     })
@@ -63,10 +73,13 @@ const GestionAutor = () => {
       })
       .catch((error) => {
         console.error("Error deleting data:", error);
+      })
+      .finally(() => {
+        setLoading(false); // Desactivar el indicador de carga después de la eliminación
       });
   }
     
-
+  if (loading) return <Cargando/>; // Indicador mientras carga
 
   return (
     <div className="contenedor-cards">
