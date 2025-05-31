@@ -3,9 +3,11 @@ import { NavLink } from 'react-router-dom'
 import { Routes,Route } from 'react-router-dom'
 import GestionLector from './GestionLector'
 import GestionAutor from './GestionAutor'
+import GestionCategoria from './GestionCategoria'
+import OcultarLibros from './OcultarLibros'
 import './PaginaAdmin.css'
 import { useState } from 'react';
-import GestionCategoria from './GestionCategoria'
+
 const PaginaAdmin = () => {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -58,6 +60,8 @@ const PaginaAdmin = () => {
           <Route path="usuarios" element={<GestionLector/>} />
           <Route path="autores" element={<GestionAutor/>} />
           <Route path='categoria' element={<GestionCategoria/>}/>
+          {/* el path para ocultar libros */}
+          <Route path='autores/ocultar-libros/:id' element={<OcultarLibros/>} />
         </Routes>
       </main>
     </div>

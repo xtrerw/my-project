@@ -11,7 +11,7 @@ import comprasRouter from './lector/comprasApi.js';
 import usuarioRouter from './lector/usuarioApi.js';
 import categoriaRouter from './admin/categoriaApi.js';
 import favoritoRouter from './lector/favoritoApi.js';
-
+import ocultarLibrosRouter from './admin/ocultarLibrosApi.js';
 const app = express();
 app.use(express.json({
   // eliminar el límite de tamaño de imgenes
@@ -38,6 +38,7 @@ app.use('/favoritos', favoritoRouter);
 // admin
 app.use('/admin', adminRouter);
 app.use('/adminCategoria',categoriaRouter)
+app.use('/ocultarLibros', ocultarLibrosRouter);
 
 
 // Puerto de escucha de servidor único
