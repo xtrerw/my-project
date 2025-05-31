@@ -326,6 +326,11 @@ useGSAP(() => {
                 libro.precio >= range.min &&
                 libro.precio <= range.max
               );
+              //verificar si esta libro oculto
+              const libroOculto = libro.oculto
+              // Devolver el libro si coincide con todos los filtros y no está oculto 
+              if (libroOculto) return false; // Si el libro está oculto, no lo mostramos
+              
 
               return coincideSubcategoria && coincideBusqueda && coincideRating && coincidePrecio;
             }
