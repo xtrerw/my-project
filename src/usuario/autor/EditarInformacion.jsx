@@ -9,7 +9,7 @@ import { paises } from '../../utils/paises';
 import { provincias } from '../../utils/provincias'; // Importa la lista de provincias
 import { validateEditarInformacion } from '../../utils/validateEditarInformacion'; // Importa la función de validación
 import { useFormValidation } from '../../utils/useFormValidation';
-
+//Wei123@
 registerLocale("es", es); // Registra el locale español
 const EditarInformacion = ({onSuccess}) => {
     //Si hay error      
@@ -23,7 +23,7 @@ const EditarInformacion = ({onSuccess}) => {
     direccion: "",
     codigoPostal: "",
     provincia: "",
-    pais: "",
+    pais: "España",
     nacionalidad: "",
     genero: "",
     email: "",
