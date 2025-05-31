@@ -24,7 +24,7 @@ const OcultarLibros = () => {
             });
     }, [id]);
 
-    
+
 
     // Si está cargando, mostrar un mensaje de carga
     if (loading) return <Cargando />;
@@ -38,6 +38,8 @@ const OcultarLibros = () => {
               <img src={libro.img || "https://via.placeholder.com/300x300"} alt={libro.titulo} />
               <h2>{libro.titulo}</h2>
               <h3>Autor: {libro.autorID ? `${libro.autorID.nombre} ${libro.autorID.apellido}` : "Desconocido"}</h3>
+              <button type='button'>Ocultar su libro</button>
+              <button type='button'>Muestrar su libro</button>
             </div>
           ))}
         </div>
