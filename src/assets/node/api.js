@@ -16,12 +16,12 @@ const app = express();
 app.use(express.json({
   // eliminar el límite de tamaño de imgenes
   // para evitar errores al subir imágenes grandes
-  limit: 'inifinite'
+  limit: '20mb'
 }));
 app.use(express.urlencoded({
   extended:true,
   // eliminar el límite de tamaño de imgenes
-  limit: 'inifinite'
+  limit: '20mb'
 }));
 app.use(cors());
 
