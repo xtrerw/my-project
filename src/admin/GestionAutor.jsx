@@ -105,7 +105,7 @@ const GestionAutor = () => {
           <button type='button' onClick={() => handleDelete(autor._id)} className='btn-eliminar'>Eliminar</button>
           {/* ocultar los libros de autores */}
           <Link to={`/paginaAdmin/autores/ocultar-libros/${autor._id}`}>
-            <button type="button">Ocultar libros</button>
+            <button type="button" className='btn-ocultar'>Ocultar libros</button>
           </Link>
           
         </form>

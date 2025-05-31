@@ -54,6 +54,7 @@
     --color-error-text: #d8000c;
     /* exito */
     --color-exito-text: #4caf50;
+    --color-exito-text2:#54c356;
     /* color gradient */
     --bg-color-gradient1: var(--bg-color-main);
     --bg-color-gradient2: var(--bg-color-main6);

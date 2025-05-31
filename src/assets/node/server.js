@@ -329,7 +329,7 @@ const SchemaLibro=new mongoose.Schema({
       min:0,
       max:5
     },
-    oculta:{
+    oculto:{
       type:Boolean,
       default:false,
     }

@@ -40,6 +40,9 @@
     border: 1px solid var(--bg-color-default3);
     border-radius: 5px;
   }
+  .card-usuario a{
+    width: 100%;
+  }
   .card-usuario select{
     font-family: "Anton", serif;
   }
@@ -58,5 +61,14 @@
 }
 .card-usuario .btn-eliminar:hover {
     background: var(--color-border-error);
+    color: var(--bg-color-default);
+}
+/* btn ocultar libros */
+.card-usuario .btn-ocultar {
+    background: var(--color-exito-text);
+    color: var(--bg-color-default);
+}
+.card-usuario .btn-ocultar:hover{
+    background: var(--color-exito-text2);
     color: var(--bg-color-default);
 }

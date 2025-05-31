@@ -18,9 +18,7 @@
 
     perspective: 800px;
   }
-  
 
-  
   .libro-item img {
     width: 100%;
     height: 300px;
@@ -49,4 +47,32 @@
   .libro-item p {
     font-size: 2rem;
     color: var(--color-error-text);
+  }
+  /* libro oculto */
+  .libro-oculto>img,.libro-oculto>h2,.libro-oculto>h3,.libro-oculto>p{
+    opacity: 0.5;
+    filter: grayscale(100%);
+  }
+  .libro-item .ocultar, .libro-item .mostrar{
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    color: var(--bg-color-default);
+    border: 1px solid var(--bg-color-default3);
+    border-radius: 5px;
+  }
+  /* btn ocultar */
+  .libro-item .ocultar {
+    background: var(--color-error-text);
+  }
+  .libro-item .ocultar:hover {
+    background: var(--color-border-error);
+  }
+  /* btn mostrar */
+  .libro-item .mostrar {
+    background: var(--bg-color-main);
+  }
+  .libro-item .mostrar:hover {
+    background: var(--bg-color-main2);
   }
