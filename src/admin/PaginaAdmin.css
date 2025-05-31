@@ -9,6 +9,7 @@
 }
 /* nav de admin */
 .nav-admin {
+  flex-shrink: 0;
     padding: 20px 10px;
     background-color: var(--bg-color-main4);
 }
