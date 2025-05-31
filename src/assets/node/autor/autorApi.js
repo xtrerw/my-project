@@ -70,7 +70,7 @@ router.post('/iniciar', async (req, res) => {
       }
       // Verificar si el usuario existe
       if (!usuario) {
-        return res.status(404).json({ message: 'Usuario no disponible' });
+        return res.status(404).json({ message: 'Usuario o contraseña incorrecto' });
       }
       // Verificar si el usuario está activo
       if (!usuario.activo) {
