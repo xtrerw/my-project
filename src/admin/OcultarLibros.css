@@ -21,3 +21,10 @@
     right: 330px;
     font-size: 20px;
 }
+/* motivo de ocultacion */
+.motivo-ocultacion{
+    color: var(--color-error-text);
+    text-transform: uppercase;
+    font-weight: lighter;
+    margin-top: 10px;
+}

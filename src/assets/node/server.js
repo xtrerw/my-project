@@ -332,6 +332,10 @@ const SchemaLibro=new mongoose.Schema({
     oculto:{
       type:Boolean,
       default:false,
+    },
+    motivo:{
+      type:String,
+      default:""
     }
 });
 

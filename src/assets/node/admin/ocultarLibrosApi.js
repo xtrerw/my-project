@@ -24,13 +24,16 @@ router.get('/ocultarLibros/:id', async (req, res) => {
 // Ocultar o mostrar un libro
 router.put('/ocultar/:libroID', async (req, res) => {
     const { libroID } = req.params; // ID del libro a ocultar o mostrar
-    const { oculto } = req.body; // Estado de oculto (true o false)
+    const { oculto,motivo } = req.body; // Estado de oculto (true o false)
 
     try {
         // Actualizar el estado de oculto del libro
         const libroActualizado = await ServerModel.Libro.findByIdAndUpdate(
             libroID,
-            { oculto: oculto },
+            { 
+                oculto: oculto,
+                motivo: motivo
+},
             { new: true }
         );
         // Verificar si el libro fue encontrado y actualizado

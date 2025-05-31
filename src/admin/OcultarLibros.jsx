@@ -34,19 +34,19 @@ const OcultarLibros = () => {
     //Ocultar libros
     // Función para ocultar o mostrar un libro
     const toggleOcultarLibro = (libroID, ocultar) => {
-    // Mostrar mensaje de confirmación
-    const confirmar = window.confirm(
-        ocultar ? "¿Está seguro de que desea ocultar este libro?" : "¿Desea mostrar este libro?"
-    );
-    if (!confirmar) return; // Si el usuario cancela, salir
-
+    let motivo = ""; // Variable para almacenar el motivo de ocultación
+    if (ocultar) {
+        // Preguntar por el motivo si se va a ocultar
+        motivo = prompt("¿Por qué desea ocultar este libro?");
+        if (!motivo) return; // Cancelado o vacío
+    }
     // Hacer la solicitud al servidor para cambiar el estado de 'oculto'
     fetch(`http://localhost:5001/ocultarLibros/ocultar/${libroID}`, {
         method: "PUT", // Método HTTP PUT para actualizar
         headers: {
         "Content-Type": "application/json", // Indicamos que el cuerpo es JSON
         },
-        body: JSON.stringify({ oculto: ocultar }), // Enviamos el nuevo estado: true o false
+        body: JSON.stringify({ oculto: ocultar,motivo }), // Enviamos el nuevo estado: true o false
     })
         .then((res) => {
         // Verificar si la respuesta es exitosa
@@ -94,13 +94,15 @@ const OcultarLibros = () => {
           })
           .map(libro => (
             <div className={libro.oculto? "libro-item libro-oculto" :"libro-item"} key={libro._id}>
-              <img src={libro.img || "https://via.placeholder.com/300x300"} alt={libro.titulo} />
-              <h2>{libro.titulo}</h2>
-              <h3>Autor: {libro.autorID ? `${libro.autorID.nombre} ${libro.autorID.apellido}` : "Desconocido"}</h3>
-              <p>{libro.precio} €</p>
-              {libro.oculto?
-                (<button type='button' onClick={()=>toggleOcultarLibro(libro._id, false)} className='mostrar'>Muestrar su libro</button>):
-                (<button type='button' onClick={()=>toggleOcultarLibro(libro._id, true)} className='ocultar'>Ocultar su libro</button>)}
+                <img src={libro.img || "https://via.placeholder.com/300x300"} alt={libro.titulo} />
+                <h2>{libro.titulo}</h2>
+                <h3>Autor: {libro.autorID ? `${libro.autorID.nombre} ${libro.autorID.apellido}` : "Desconocido"}</h3>
+                <p>{libro.precio} €</p>
+                {libro.oculto?
+                    (<button type='button' onClick={()=>toggleOcultarLibro(libro._id, false)} className='mostrar'>Muestrar su libro</button>):
+                    (<button type='button' onClick={()=>toggleOcultarLibro(libro._id, true)} className='ocultar'>Ocultar su libro</button>)}
+                {/* motivo de ocultación */}
+                {libro.oculto && <h4 className='motivo-ocultacion'>Motivo de ocultación: {libro.motivo}</h4>}
             </div>
           ))}
         </div>
