@@ -4,6 +4,7 @@ import Author from './Login';
 import '../../style/libro.css'; // Asegúrate de tener un archivo CSS para estilos
 import { Link } from 'react-router-dom';
 import EditarLibros from './EditarLibros';
+import './MisLibros.css'; // Asegúrate de tener un archivo CSS para estilos
 const MisLibros = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setUserId] = useState(null);
@@ -78,16 +79,21 @@ const MisLibros = () => {
           {/* Aquí puedes mostrar los libros del autor */}
           {libros && libros.length > 0 ? (
             libros.map((libro, index) => (
-              <div className="libro-item" key={index}>
-              <Link to={`/Libros/${libro._id}`}>
+            <div className="libro-item" key={index}>
+              <Link 
+              className={libro.oculto ? "libro-oculto" : ""}
+              to={`/Libros/${libro._id}`}>
                 <img src={libro.img} alt={libro.titulo} />
                 <h2>{libro.titulo}</h2>
                 <p>{libro.precio} €</p>
               </Link>
               <div className="libro-controles">
-                <button onClick={() => handleEliminar(libro._id)}>Eliminar</button>
-                <button onClick={() => setEditLibroId(libro._id)}>Editar</button>
+                <button onClick={() => handleEliminar(libro._id)} className={libro.oculto? 'btn-disabled':'btn-eliminar'}>Eliminar</button>
+                <button onClick={() => setEditLibroId(libro._id)} className={libro.oculto? 'btn-disabled':'btn-editar'}>Editar</button>
               </div>
+              {libro.motivo && (
+                <h4 className="motivo-ocultacion">Motivo de ocultación: {libro.motivo}</h4>
+              )}
             </div>
 
             ))
