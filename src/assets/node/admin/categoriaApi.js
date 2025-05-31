@@ -48,6 +48,15 @@ router.delete('/categoria/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
+    //eliminar todos los libros que pertenecen a esta categoría
+    await ServerModel.Libro.updateMany({ "categoria.cateID": id },{
+      $unset: {
+         categoria: {
+          cateID:id
+         } 
+      }
+    });
+    //eliminar la categoría
     await ServerModel.Categoria.findByIdAndDelete(id);
     res.json({ mensaje: 'Categoría eliminada correctamente' });
   } catch (error) {
