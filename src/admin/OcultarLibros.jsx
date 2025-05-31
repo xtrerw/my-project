@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 import Cargando from '../utils/Cargando';
+import './OcultarLibros.css'; // Asegúrate de tener un archivo CSS para los estilos
 const OcultarLibros = () => {
     //conseguir id de autor
     const {id}= useParams();
@@ -8,6 +9,8 @@ const OcultarLibros = () => {
     const [libros, setLibros] = useState([]);
     //cargando
     const [loading, setLoading] = useState(true);
+    //Buscador de libros
+    const [searchTerm, setSearchTerm] = useState("");
 
 
     // Realizar la petición a la API para obtener los libros del autor
@@ -64,11 +67,32 @@ const OcultarLibros = () => {
     if (loading) return <Cargando />;
 
   return (
-    <div>
-        <h1>Libros del Autor</h1>
+    <div className='ocultar-libros-container'>
+        <h1>Ocultar Libros</h1>
+        {/* buscador */}
+        <div className='buscador-ocultar'>
+            <input type="text" 
+            value={searchTerm}
+            onChange={(e)=>setSearchTerm(e.target.value.toLowerCase())}
+            placeholder='Buscar por título o autor'
+            className="buscador-ocultar-input"
+            />
+            <i className="bx bx-search" id='icon-buscador'/>
+        </div>
+        {/* libros */}
          {libros.length > 0 ? (
         <div className="mis-libros-container">
-          {libros.map(libro => (
+          {libros
+          .filter(libro =>
+          {
+            // Filtrar los libros que coinciden con el término de búsqueda
+            const coincideBusqueda = libro.titulo.toLowerCase().includes(searchTerm) || ""
+
+            //devolver el libro si coincide con el término de búsqueda
+            //o si el autor coincide con el término de búsqueda
+            return coincideBusqueda;
+          })
+          .map(libro => (
             <div className={libro.oculto? "libro-item libro-oculto" :"libro-item"} key={libro._id}>
               <img src={libro.img || "https://via.placeholder.com/300x300"} alt={libro.titulo} />
               <h2>{libro.titulo}</h2>

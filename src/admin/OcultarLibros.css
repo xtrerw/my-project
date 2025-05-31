@@ -1,0 +1,23 @@
+.ocultar-libros-container{
+    width: 100%;
+}
+/* buscador */
+.buscador-ocultar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.buscador-ocultar input {
+    width: 50%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--bg-color-default3);
+    font-size: 16px;
+    
+}
+.buscador-ocultar .bx-search {
+    position: absolute;
+    right: 330px;
+    font-size: 20px;
+}
