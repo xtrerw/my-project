@@ -3,6 +3,7 @@ import { useUser } from '../../context/UserContext';
 import Cargando from '../../utils/Cargando'
 import { useEffect, useState } from 'react';
 import './MisFavoritos.css';
+import NotFound from "../NotFound";
 const MisFavoritos = () => {
     //conseguir usuario
     const {user}=useUser()
@@ -58,16 +59,23 @@ const MisFavoritos = () => {
     return (
     <div>
         <h2>Mis Libros Favoritos</h2>
-        <div className='favoritos-lista'>
-        {favoritos.map((item) => (
-            item ? (
+        <div className={favoritos.length > 0 ? 'favoritos-lista' : 'no-favoritos'}>
+        {
+            favoritos.length==0? (
+                <div>
+                    <h2>No tienes libros favoritos</h2>
+                    <i className='bx  bx-book-heart'  ></i> 
+                </div>
+            ):
+        favoritos.map((item) => (
+            item? (
             <div key={item._id}>
                 <h4>{item.titulo}</h4>
                 <img src={item.img} alt={item.titulo} width={100} />
                 <p>{item.precio} €</p>
                 <button onClick={() => eliminarFavorito(item._id)}>Eliminar</button>
             </div>
-            ) : null // si no hay libroID, no renderizar
+            ) : (<NotFound/>)
         ))}
         </div>
     </div>

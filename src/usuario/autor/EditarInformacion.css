@@ -1,6 +1,5 @@
 /* Contenedor principal del formulario */
 .editar-informacion {
-  max-width: 800px;
   background-color: var(--bg-color-default);
   border-radius: 10px;
 }

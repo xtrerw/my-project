@@ -56,6 +56,7 @@
     text-align: center;
     color: var(--bg-color-main);
     width: max-content;
+    min-height: 500px;
     /* scroll */
     overflow-y: scroll;
     scrollbar-width: none;
