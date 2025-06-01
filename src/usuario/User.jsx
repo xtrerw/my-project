@@ -4,6 +4,7 @@ import Login from "./autor/Login";
 import Contenido from "./reader/Contenido";
 import { useState,useEffect } from "react";
 import "./User.css";
+import "../style/responsive.css"
 import Categoria from "./reader/Categoria";
 import tunkIcon from "../img/tunk-icon.jpg";
 import EscribirOnline from "./autor/EscribirOnline";
