@@ -415,3 +415,7 @@ footer {
 .exito{
   color: var(--color-exito-text);
 }
+/* responsive */
+@media screen and (max-width:768px) {
+  
+}

@@ -29,7 +29,6 @@ const menuAutor = [
   {nombre: "Modelo de Escribir",
     subItems: [
       { item: "Subir Mi Libro Completo", },
-      { item: "Escribir Online", },
     ],
   }
 ]
