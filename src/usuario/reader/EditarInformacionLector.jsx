@@ -106,6 +106,32 @@ const EditarInformacionLector = ({onSuccess}) => {
           });
       }
     };
+
+  //convertirse en autor
+  const handleConvertirse = () => {
+    // Obtener el user id
+    const userId=user._id
+
+    if (!userId) {
+      console.error("No se encontró el userId en localStorage");
+      return;
+    }
+
+    fetch("http://localhost:5001/usuario/convertirse", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("¡Te has registrado como autor con éxito!");
+        console.log(data);
+        
+      })
+      .catch(err => {
+        console.error("Error al crear lector:", err);
+      });
+  };
     return (
       <div className="editar-informacion">
         <h1>Editar Información</h1>
@@ -321,9 +347,13 @@ const EditarInformacionLector = ({onSuccess}) => {
             <div className="error-message">{mensajeError}</div>
           )}
   
-  
-          {/* Botón para enviar el formulario */}
-          <button type="submit" className="guardar-btn">Guardar Cambios</button>
+          <div className='btns-editar'>
+            {/* boton para convertirse */}
+            <button type="button" className='convertir-btn' onClick={handleConvertirse}>Convertirse en autor</button>
+            {/* Botón para enviar el formulario */}
+            <button type="submit" className="guardar-btn">Guardar Cambios</button>
+          </div>
+          
         </form>
       </div>
     );

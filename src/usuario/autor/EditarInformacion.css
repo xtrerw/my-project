@@ -61,19 +61,34 @@
   box-shadow: 0 0 5px var(--bg-color-main6);
   outline: none;
 }
-
-/* Botón de guardar cambios alineado a la derecha */
-.guardar-btn {
-  align-self: flex-end; /* botón alineado a la derecha */
+/* botones */
+.btns-editar{
+  display: flex;
+  justify-content: right;
+  gap: 20px;
+}
+/* Botones */
+.guardar-btn,.convertir-btn {
   padding: 0.7rem 1.5rem;
-  background-color: var(--bg-color-main);
-  color: var(--bg-color-default);
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
-
+/* Bóton de convertirse */
+.convertir-btn {
+  background-color: var(--color-exito-text);
+  color: var(--bg-color-default);
+}
+.convertir-btn:hover {
+  background-color: var(--color-exito-text2);
+  box-shadow: 0 2px 5px var(--bg-color-main6);
+}
+/* Botón de guardar cambios alineado a la derecha */
+.guardar-btn{
+  background-color: var(--bg-color-main);
+  color: var(--bg-color-default);
+}
 .guardar-btn:hover {
   background-color: var(--bg-color-main2);
   box-shadow: 0 2px 5px var(--bg-color-main6);

@@ -52,6 +52,53 @@ router.post("registrar", async (req, res) => {
         res.status(400).json({ message: error.message });// 400 Bad Request
     }
 });
+//convertir un usuario en escritor
+router.post("/convertirse", async (req, res) => {
+  const { userId } = req.body;
+
+  try {
+    // Buscar el usuario original
+    const usuario = await ServerModel.Usuario.findById(userId);
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Verificar si ya es autor
+    const autorExistente = await ServerModel.Autor.findOne({ email: usuario.email });
+    if (autorExistente) {
+      return res.status(400).json({ message: "Este usuario ya es autor" });
+    }
+
+    // Crear nuevo autor con datos del usuario
+    const nuevoAutor = new ServerModel.Autor({
+        usernombre: usuario.usernombre,
+        nombre: usuario.nombre,
+        apellido: usuario.apellido,
+        email: usuario.email,
+        password: usuario.password,
+        fechaNacimiento: usuario.fechaNacimiento,
+        direccion: usuario.direccion,
+        codigoPostal: usuario.codigoPostal,
+        provincia: usuario.provincia,
+        pais: usuario.pais,
+        nacionalidad: usuario.nacionalidad,
+        genero: usuario.genero,
+        tipo: "autor",
+        activo: true,
+    });
+
+    await nuevoAutor.save();
+
+    // (Opcional) Actualizar tipo en la colección original
+    usuario.tipo = "autor";
+    await usuario.save();
+
+    res.status(201).json({ message: "Usuario convertido a autor", autor: nuevoAutor });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error al convertir el usuario", error: error.message });
+  }
+});
 
 //Obtener categorias por defecto
 router.get("/categorias", async (req, res) => {

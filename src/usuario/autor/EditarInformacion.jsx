@@ -27,13 +27,11 @@ const EditarInformacion = ({onSuccess}) => {
     nacionalidad: "",
     genero: "",
     email: "",
-    tipo:"",
   });
 
   // Cargar datos del usuario desde la API cuando el componente se monta
   useEffect(() => {
     const userId = localStorage.getItem("userId");
-    console.log("userId", userId);
   
     // Si hay un userId en el localStorage, realiza la solicitud a la API
     
@@ -52,7 +50,6 @@ const EditarInformacion = ({onSuccess}) => {
             nacionalidad: data.nacionalidad || "",
             genero: data.genero || "",
             email: data.email || "",
-            tipo: data.tipo || ""
           });
         })
         .catch(error => {
@@ -74,7 +71,6 @@ const EditarInformacion = ({onSuccess}) => {
     e.preventDefault(); // Evitar el comportamiento por defecto del formulario
 
     const userId = localStorage.getItem("userId");
-    console.log("userId", userId);
       
     // Validar el formulario antes de enviar
     const hayError = validar(formData); // Ejecuta la validación al cargar el componente
@@ -102,6 +98,30 @@ const EditarInformacion = ({onSuccess}) => {
           console.error("Error al actualizar datos:", error);
         });
     }
+  };
+  //convertirse en lector
+  const handleConvertirse = () => {
+
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      console.error("No se encontró el userId en localStorage");
+      return;
+    }
+
+    fetch("http://localhost:5001/autor/convertirse", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId })
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("¡Te has registrado como lector con éxito!");
+        console.log(data);
+        
+      })
+      .catch(err => {
+        console.error("Error al crear lector:", err);
+      });
   };
   return (
     <div className="editar-informacion">
@@ -298,10 +318,13 @@ const EditarInformacion = ({onSuccess}) => {
         {mensajeError && (
           <div className="error-message">{mensajeError}</div>
         )}
-
-
-        {/* Botón para enviar el formulario */}
-        <button type="submit" className="guardar-btn">Guardar Cambios</button>
+        {/* btns */}
+        <div className='btns-editar'>
+          {/* Bóton convertirse */}
+          <button type="button" className='convertir-btn' onClick={handleConvertirse}>Convertirse en lector</button>
+          {/* Botón para enviar el formulario */}
+          <button type="submit" className="guardar-btn">Guardar Cambios</button>
+        </div>
       </form>
     </div>
   );

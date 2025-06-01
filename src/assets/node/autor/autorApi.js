@@ -52,6 +52,53 @@ router.post('/register', async(req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+//convertirse en lector
+router.post('/convertirse', async (req, res) => {
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ mensaje: "Falta el ID de usuario." });
+  }
+
+  try {
+    // 1. Buscar el autor por ID
+    const autor = await ServerModel.Autor.findById(userId);
+    if (!autor) {
+      return res.status(404).json({ mensaje: "Autor no encontrado." });
+    }
+
+    // 2. Verificar si ya existe un lector con el mismo correo
+    const existe = await ServerModel.Usuario.findOne({ email: autor.email });
+    if (existe) {
+      return res.status(400).json({ mensaje: "Ya existe un lector con este correo." });
+    }
+
+    // 3. Crear un nuevo usuario tipo lector
+    const lector = new ServerModel.Usuario({
+      usernombre: autor.usernombre,
+      nombre: autor.nombre,
+      apellido: autor.apellido,
+      fechaNacimiento: autor.fechaNacimiento,
+      direccion: autor.direccion,
+      codigoPostal: autor.codigoPostal,
+      provincia: autor.provincia,
+      pais: autor.pais,
+      nacionalidad: autor.nacionalidad,
+      genero: autor.genero,
+      email: autor.email,
+      password: autor.password,
+      tipo: "lector",
+      activo: true
+    });
+
+    await lector.save();
+    res.status(201).json({ mensaje: "Lector registrado con éxito.", lector });
+  } catch (error) {
+    console.error("Error al convertir en lector:", error);
+    res.status(500).json({ mensaje: "Error del servidor.", error: error.message });
+  }
+});
+
 //iniciar sesión
 router.post('/iniciar', async (req, res) => {
     const { username, password,tipoUsuario } = req.body;
