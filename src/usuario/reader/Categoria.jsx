@@ -315,7 +315,10 @@ useGSAP(() => {
               //verificar la categoria seleccionado si esta coincide a la categoria de los libros
               const coincideSubcategoria = !subcategoriaId || libro.categoria.some(cat => cat.colleccion.includes(subcategoriaId));
               //verificar los texto insertados si esta coincide al nombre de libros,"" es para evitar fallback de undefine
-              const coincideBusqueda = libro.titulo.toLowerCase().includes(searchTerm) || "";
+              const coincideBusqueda = 
+              libro.titulo.toLowerCase().includes(searchTerm) || 
+              libro.autorID?.nombre.toLowerCase().includes(searchTerm) || 
+              libro.autorID?.apellido.toLowerCase().includes(searchTerm)
               //verificar las estrellas de fitro si está coincide a la cantidad de estrellas de libros
               const coincideRating =
                 selectedRatings.length === 0 || selectedRatings.some(rating => libro.estrella >= rating && libro.estrella < rating+1);
