@@ -37,7 +37,8 @@
     position: relative;
     color: var(--bg-color-default);
 
-    display: grid;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;

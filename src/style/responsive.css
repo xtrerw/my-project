@@ -1,5 +1,46 @@
 @media screen and (max-width:1748px) {
+   /* home */
+   /* titulo 1 */
    .parte-titulo{
-        font-size: 25px;
+      font-size: 25px;
+   }
+   /* titulo 2 */
+   .parte-segundo-titulos{
+      width: 80%;
+   }
+   .parte-segundo-titulo{
+      font-size: 100px;
+   } 
+   /* carousel del libro */
+   .carousel-track {
+      gap: 0px;
+   }
+   /* libros */
+   .libro-item{
+      width: 200px;
+      height: 300px;
+      padding: 15px 10px;
+   }
+   /* imagen de libro */
+   .libro-item img{
+      width: 150px;
+      height: 200px;
+   }
+   /* titulo de libro */
+   .libro-item h2{
+      font-size: 16px;
+   }
+   /* autor de libro */
+   .libro-item h3{
+      font-size: 12px;
+   }
+   /* precio de libro */
+   .libro-item p{
+      font-size: 20px;
+   }
+   /* categorias */
+   /* categoria titulo */
+   .categoria-titulo>h1 {
+      font-size: 50px;
    }
 }

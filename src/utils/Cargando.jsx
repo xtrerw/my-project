@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/all';
 import './Cargando.css';
+import "../style/responsive.css"
 
 const Cargando = () => {
 
