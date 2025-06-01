@@ -308,7 +308,11 @@ useGSAP(() => {
 
       {/* libros */}
       <div>
-        {libros
+        {
+        libros.length===0?(
+          <NotFound message="No hay libros disponibles en esta categoría." />
+        ):
+        (libros
         //filtrar todos los libros que cumple con las condiciones
          .filter(libro =>
             {
@@ -356,18 +360,13 @@ useGSAP(() => {
                 <p>{libro.precio} €</p>
               </Link>
               <div className='categoria-libro-cantidad'>
-                {/* btn comprar */}
-                {/* <div className='categoria-btn-compra' onClick={() => handleComprar(libro)}>Comprar</div> */}
-                {/* btn favorita */}
                 <div
                   className={`bx bx-heart-circle ${favoritos.includes(libro._id) ? "favorito-activo" : ""}`}
                   onClick={() => handleAgregarFavorito(libro)}
                 ></div>
               </div>
               <p className={`${faltaUser? "error":"sinError"}`}>Debes iniciar sesión para añadir favoritos</p>
-            </div>
-        ))}
-        
+            </div>)))}
       </div>
     </div> 
       

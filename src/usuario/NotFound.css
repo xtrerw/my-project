@@ -1,8 +1,9 @@
 .not-found {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  color: var(--text-color);
+}
+.not-found h1 {
+  font-weight: lighter;
+  color: var(--color-texto-footer2);
 }
