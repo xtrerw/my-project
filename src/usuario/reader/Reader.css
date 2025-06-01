@@ -1,0 +1,107 @@
+/* parte titulo */
+ .parte-titulo{
+    background-image: url("../../img/bg-main.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    font-size: 30px;
+  }
+  .parte-titulo::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background-image: linear-gradient(to right, #535bf2 30%, #646cff00); 
+}
+
+  .parte-primero{
+    width: 50%;
+    min-height: 100vh;
+    padding: 0 100px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+  }
+  .titulo{
+    color: var(--bg-color-default);
+    text-shadow: 5px 5px 2px var(--text-color2);
+  }
+/* parte segunda */
+  .parte-segunda{
+    width: 100%;
+    min-height: 200vh;
+    position: relative;
+    color: var(--bg-color-default);
+
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    background: var(--bg-color-main8);
+  }
+/* desplazamiento titulo */
+.desplazamiento-wrapper {
+    overflow: hidden;
+    width: 100%;
+    background: var(--bg-color-main4);
+    padding: 10px 0;
+    position: absolute;
+    top: 0%;
+}
+
+.desplazamiento-texto {
+  display: flex;
+  white-space: nowrap;
+  width: max-content;
+  gap: 10px;
+}
+
+.titulo-desplazamiento {
+  font-size: 2rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+/*  */
+.parte-segundo-titulos{
+    width: 90%;
+}
+.parte-segundo-titulo{
+    font-size: 200px;
+    text-transform: uppercase;
+    color: var(--bg-color-default2);
+    display: inline-block;
+    white-space: pre;
+}
+/* libros de la página principal */
+.img-libros{
+  width: 300px;
+  height: 400px;
+}
+.carousel-container {
+  overflow: hidden;
+  width: 100%;
+  margin: 30px 0;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 100px;
+  will-change: transform;
+}
+
+.carousel-slide {
+  flex: 0 0 auto;
+  width: 250px;
+  transition: transform 0.3s;
+}
+
+.img-libros {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}

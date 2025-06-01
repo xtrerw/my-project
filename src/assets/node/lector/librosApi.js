@@ -7,7 +7,7 @@ const router = Router();
 //libros que presentan en front-end
   router.get('/libros', async (req, res) => {
       //conseguir los libros y su autor
-      const libros = await ServerModel.Libro.find({}).populate('autorID');
+      const libros = await ServerModel.Libro.find({}).populate('autorID','nombre apellido');
       
       res.status(200).json(libros);
   });

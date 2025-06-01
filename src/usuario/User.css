@@ -32,6 +32,8 @@
     --bg-color-main4:#000000;
     --bg-color-main6:#646cff8f;
     --bg-color-main7:#216ba5;
+    --bg-color-main8:#f6d2c4;
+
     --text-color:rgba(255,215,0);
     --text-color2:rgb(101, 98, 0);
     --text-color3:rgb(0, 255, 94);
@@ -181,37 +183,6 @@ button {
     height: 50px;
     border-radius: 50%;
   }
-  .parte-titulo{
-    background-image: url("../img/bg-main.jpg");
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    font-size: 30px;
-  }
-  .parte-titulo::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%; 
-    height: 100%;
-    background-image: linear-gradient(to right, #535bf2 30%, #646cff00); 
-}
-
-  .parte-primero{
-    width: 50%;
-    min-height: 100vh;
-    padding: 0 100px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: left;
-  }
-  .titulo{
-    color: var(--bg-color-default);
-    text-shadow: 5px 5px 2px var(--text-color2);
-  }
   a {
     font-weight: 500;
     color: var(--bg-color-main2);
@@ -251,49 +222,6 @@ button {
     justify-content: space-around;
     width: 32%;
   }
-  /* parte top ventas */
-  .parte-top-ventas{
-    width: 100%;
-    height: calc(100vh - var(--height-header));
-    position: relative;
-    color: var(--bg-color-default);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20%;
-    background: var(--bg-color-main4);
-  }
-  /* título top ventas */
-.titulo-top-ventas{
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%; 
-  height: 100%;
-  background: var(--bg-color-main3);
-  color: var(--text-color);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-
-  text-shadow:5px 5px 2px var(--text-color2)
-}
-.titulo-top-ventas>h1{
-  font-size: 100px;
-}
-.titulo-top-ventas>h2{
-  width: 50%;
-  font-size: 50px;
-}
-/* libros de la página principal */
-.img-libros{
-  width: 300px;
-  height: 400px;
-}
 /* footer */
 footer {
   background-color: var(--bg-color-main4);
