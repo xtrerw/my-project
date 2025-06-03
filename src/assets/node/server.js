@@ -3,6 +3,7 @@ import { createHash } from 'crypto';
 import dotenv from 'dotenv';
 import path from 'path';
 import { type } from 'os';
+
 // cargar el archivo .env con seguridad
 dotenv.config({ path: path.resolve('src/assets/node/.env') });
 const hashpwd = (pwd) => {
@@ -346,6 +347,7 @@ const SchemaContenido=new mongoose.Schema({
     libroID:{type:mongoose.Schema.Types.ObjectId,ref:'Libro'},
     titulo:String,
     contenido:String,
+    archivo:String, // URL del archivo o contenido adicional
 });
 
 const Contenido=mongoose.model('Contenido',SchemaContenido);

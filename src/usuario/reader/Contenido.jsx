@@ -31,7 +31,7 @@ const Contenido = () => {
     useGSAP(() => {
       ScrollTrigger.create({
         trigger: ".contenido-item", 
-        markers: true,
+        markers: false,
         start: "0% 100%", 
         end: "0% 100%",
         animation: 
@@ -52,17 +52,34 @@ const Contenido = () => {
     if (!contenidos || contenidos.length === 0) return <p>Cargando...</p>;
 
   return (
-    <div className="contenido-container">
+        <div className="contenido-container">
       {contenidos.map((contenido, index) => (
-        <div
-          key={index}
-          className="contenido-item"
-        >
+        <div key={index} className="contenido-item">
           <h1 className="contenido-titulo">{contenido.titulo}</h1>
-          {/* muestrar contenido*/}
-          {contenido.contenido.split("").map((item, index) => (
-            <span key={index} className="contenido-texto">{item}</span>
-          ))}
+
+          {/* Mostrar contenido si es texto */}
+          {typeof contenido.contenido === "string" && contenido.contenido.trim().length > 0 ? (
+            <div className="contenido-texto">
+              {contenido.contenido.split("").map((item, idx) => (
+                <span key={idx} className="contenido-texto">{item}</span>
+              ))}
+            </div>
+          ) : contenido.archivo ? (
+            // Si no hay texto pero sí archivo, ofrecer descarga
+            <div className="contenido-descarga">
+              <p>Este libro está disponible como archivo:</p>
+              <a
+                href={`http://localhost:5001/uploads/${contenido.archivo}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="boton-descarga"
+              >
+                Descargar archivo
+              </a>
+            </div>
+          ) : (
+            <p>No hay contenido disponible.</p>
+          )}
         </div>
       ))}
     </div>

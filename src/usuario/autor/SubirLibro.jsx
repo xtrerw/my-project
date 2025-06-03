@@ -31,89 +31,116 @@ const SubirLibro = () => {
         }
     };
     
-    //set contenidos
-    const handleFileUpload = async (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            try {
-                const arrayBuffer = await file.arrayBuffer();
-                const result = await mammoth.extractRawText({ arrayBuffer });
-                setContent(result.value);
-            } catch (error) {
-                console.error('Error reading Word file:', error);
-            }
-        }
-    };
-    //subir contenidos
-    const handlePublish = async (e) => {
-        //prevenir el comportamiento por defecto del formulario
-        e.preventDefault();
-        try {
-            let base64Img = "";
+     // Función para manejar la carga de archivos
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const extension = file.name.split(".").pop().toLowerCase();
 
-            if (img) {
-                // Convertir la imagen a base64
-                const toBase64 = (file) => new Promise((resolve, reject) => {
-                    // Crear un objeto FileReader para leer el archivo
-                    const reader = new FileReader();
-                    // Leer el archivo como una URL de datos (base64)
-                    reader.readAsDataURL(file);
-                    // Cuando la lectura se complete, resolver la promesa con el resultado
-                    reader.onload = () => resolve(reader.result);
-                    // Si hay un error al leer el archivo, rechazar la promesa
-                    reader.onerror = (error) => reject(error);
-                });
-                base64Img = await toBase64(img);
-            }
-            const formData={
-                img: base64Img,
-                title,
-                content,
-                id,
-                price,
-                categoriaSeleccionada,
-                coleccionSeleccionada
-            }
-            //conecta a api
-            const response = await fetch('http://localhost:5001/autor/publish', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-            //conseguir los datos de la base de datos
-            const data = await response.json();
-            if (response.ok) {
-                //si se sube correctamente, redirigir al usuario a la página de mis libros
-                navigate("/Author/Mis Libros")
-                console.log('los datos subidos:', data);
-            }
-            
+      // Si es archivo .docx, extraer texto
+      if (extension === "docx") {
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          const result = await mammoth.extractRawText({ arrayBuffer });
+          setContent(result.value);
         } catch (error) {
-            console.error('Error publishing work:', error);
+          console.error("Error al leer el archivo Word:", error);
+          alert("No se pudo leer el archivo Word. ¿Está dañado?");
         }
-    };
+      } else {
+        // Otros formatos no se procesan aquí
+        setContent("");
+      }
+    }
+  };
+ // Función para publicar el libro
+  const handlePublish = async (e) => {
+    e.preventDefault();
+
+    // Validar campos obligatorios
+    if (!title || !price || !categoriaSeleccionada || !coleccionSeleccionada) {
+      alert("Por favor completa todos los campos requeridos.");
+      return;
+    }
+
+    const fileInput = document.getElementById("archivo");
+    const file = fileInput.files[0];
+
+    if (!file) {
+      alert("Por favor selecciona un archivo del libro.");
+      return;
+    }
+
+    // Crear el FormData para envío multipart
+    const formData = new FormData();
+
+    formData.append("file", file); // Archivo principal
+
+    // Si hay imagen, convertir a base64
+    if (img) {
+      const toBase64 = (file) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+        });
+      const base64Img = await toBase64(img);
+      formData.append("img", base64Img);
+    } else {
+      formData.append("img", ""); // Dejar vacío si no hay imagen
+    }
+
+    // Agregar campos de texto
+    formData.append("title", title);
+    formData.append("id", id);
+    formData.append("price", price);
+    formData.append("categoriaSeleccionada", categoriaSeleccionada);
+    formData.append("coleccionSeleccionada", coleccionSeleccionada);
+    formData.append("content", content); // contenido extraído si es docx
+
+    try {
+      const response = await fetch("http://localhost:5001/autor/publish", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        navigate("/Author/Mis Libros");
+        console.log("Libro subido correctamente:", data);
+      } else {
+        alert("Error al subir libro: " + data.message);
+      }
+    } catch (error) {
+      console.error("Error al publicar el libro:", error);
+    }
+  };
     
     //conseguir categorias
     const [categorias, setCategorias] = useState([]);
     useEffect(() => {
         const fetchCategorias = async () => {
             try {
-                const response = await fetch('http://localhost:5001/autor/categorias');
-                const data = await response.json();
-                setCategorias(data);
+            const response = await fetch('http://localhost:5001/autor/categorias');
+            const data = await response.json();
+            setCategorias(Array.isArray(data) ? data : []);
             } catch (error) {
-                console.error('Error fetching categories:', error);
+            console.error('Error fetching categories:', error);
             }
         };
         fetchCategorias();
     }, []);
+
     //conseguir colecciones seleccionadas
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
     const [coleccionSeleccionada, setColeccionSeleccionada] = useState("");
     //conseguir las colecciones según la categoria seleccionada
-    const categoriaObj = categorias.find(c => c._id === categoriaSeleccionada);
+    const categoriaObj = Array.isArray(categorias)
+    ? categorias.find(c => c._id === categoriaSeleccionada)
+    : null;
+
     
   return (
     <>

@@ -1,7 +1,10 @@
 import { Router } from "express";
 import ServerModel from "../server.js";
 import { createHash } from 'crypto';
-
+import path from "path";
+import fs from "fs";
+import multer from "multer";
+import mammoth from "mammoth"; // Para manejar archivos DOCX
 const router = Router();
 
 // Hash password function
@@ -129,66 +132,104 @@ router.post('/iniciar', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+//conseguir categorias
+// Obtener todas las categorías
+router.get("/categorias", async (req, res) => {
+  try {
+    const categorias = await ServerModel.Categoria.find();
+    res.status(200).json(categorias);
+  } catch (error) {
+    console.error("Error al obtener categorías:", error);
+    res.status(500).json({ message: "Error al obtener las categorías", error: error.message });
+  }
+});
+
 // subir los libros
-router.post('/publish', async (req, res) => {
-  // Obtener toda informacion del autor desde el cuerpo de la solicitud
-  const { img,title, content,id,price,categoriaSeleccionada,coleccionSeleccionada} = req.body;
-  
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const dir = './uploads/';
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, uniqueName + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
+
+// Ruta para publicar un libro
+router.post('/publish', upload.single('file'), async (req, res) => {
+  const { img, title, id, price, categoriaSeleccionada, coleccionSeleccionada, content } = req.body;
+  const file = req.file;
+
+  // Validación de campos obligatorios
+  if (!title || !price || !categoriaSeleccionada || !file) {
+    return res.status(400).json({ message: "Faltan campos obligatorios." });
+  }
 
   try {
-    // Buscar categoria defecto
-    const categoriaDefecto=await ServerModel.Categoria.findOne({nombre:"Imprescindibles"})
+    // Buscar categoría por defecto
+    const categoriaDefecto = await ServerModel.Categoria.findOne({ nombre: "Imprescindibles" });
     if (!categoriaDefecto) {
       return res.status(400).json({ message: "Categoría por defecto no encontrada." });
     }
-    // Crear un nuevo libro y guardarlo en la base de datos
-    const libro = new ServerModel.Libro({ 
-      img:img,
-      titulo:title,
-      autorID:id,
-      contenido:content,
-      precio:price,
-      categoria:[
+
+    // Crear y guardar el libro
+    const libro = new ServerModel.Libro({
+      img: img || "default.png", // Imagen por defecto si no se provee
+      titulo: title,
+      autorID: id,
+      contenido: content || "",
+      precio: price,
+      categoria: [
         {
-          cateID:categoriaSeleccionada,
-          colleccion:coleccionSeleccionada
+          cateID: categoriaSeleccionada,
+          colleccion: coleccionSeleccionada
         },
-        //categoria defecto como todos los libros
         {
-          cateID:categoriaDefecto,
-          colleccion:"Todos los libros"
+          cateID: categoriaDefecto._id,
+          colleccion: "Todos los libros"
         }
       ]
-
     });
-    // Guardar el libro en la base de datos
+
     await libro.save();
-    
-    // Crear un nuevo contenido y guardarlo en la base de datos
-    const contenido=new ServerModel.Contenido({ contenido:content,libroID:libro._id })
-    await contenido.save()
+
+    // Procesar archivo del contenido
+    const extension = file.originalname.split('.').pop().toLowerCase();
+    let contenidoTexto = null;
+    let archivo = null;
+
+    if (extension === "docx") {
+      // Extraer texto de archivo Word
+      const buffer = fs.readFileSync(file.path);
+      const result = await mammoth.extractRawText({ buffer });
+      contenidoTexto = result.value;
+    } else {
+      // Guardar solo el archivo (pdf, epub, etc.)
+      archivo = file.filename;
+    }
+
+    // Guardar contenido del libro
+    const contenido = new ServerModel.Contenido({
+      contenido: contenidoTexto,
+      archivo: archivo,
+      libroID: libro._id
+    });
+
+    await contenido.save();
+
     res.status(200).json({
       message: "Libro y contenido guardados correctamente",
       libro,
       contenido
     });
-    
+
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
-//obtener todos los colecciones de libros
-router.get('/categorias', async (req, res) => {
-    try {
-        // Obtener todas las categorías de la base de datos
-        const todasLasCategorias = await ServerModel.Categoria.find();
-        // Filtrar las categorías para excluir la primera (índice 0)
-        const categorias = todasLasCategorias.slice(1)
-        res.status(200).json(categorias);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-})
 //autores
 // Obtener información del autor por ID
 router.get('/:id', async (req, res) => {

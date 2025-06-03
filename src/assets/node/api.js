@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-
+import path from 'path';
 //importar todos los apis
 import librosRouter from './lector/librosApi.js';
 import autorRouter from './autor/autorApi.js';
@@ -13,6 +13,7 @@ import categoriaRouter from './admin/categoriaApi.js';
 import favoritoRouter from './lector/favoritoApi.js';
 import ocultarLibrosRouter from './admin/ocultarLibrosApi.js';
 const app = express();
+
 app.use(express.json({
   // eliminar el límite de tamaño de imgenes
   // para evitar errores al subir imágenes grandes
@@ -26,7 +27,8 @@ app.use(express.urlencoded({
 app.use(cors());
 
 //Entrada de ruta unificada
-
+// Ruta para servir archivos estáticos
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 //autor
 app.use('/autor', autorRouter);
 app.use('/misLibros', misLibrosRouter);
