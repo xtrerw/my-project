@@ -364,7 +364,7 @@ useGSAP(() => {
                 {/* <p>{libro.precio} €</p> */}
               </Link>
               <div className='categoria-libro-cantidad'>
-              {user?
+              {user.tipo=="lector" && user?
               (
                 <div
                   className={`bx bx-heart-circle ${favoritos.includes(libro._id) ? "favorito-activo" : ""}`}

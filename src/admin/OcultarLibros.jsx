@@ -99,8 +99,8 @@ const OcultarLibros = () => {
                 <h3>Autor: {libro.autorID ? `${libro.autorID.nombre} ${libro.autorID.apellido}` : "Desconocido"}</h3>
                 <p>{libro.precio} €</p>
                 {libro.oculto?
-                    (<button type='button' onClick={()=>toggleOcultarLibro(libro._id, false)} className='mostrar'>Muestrar su libro</button>):
-                    (<button type='button' onClick={()=>toggleOcultarLibro(libro._id, true)} className='ocultar'>Ocultar su libro</button>)}
+                    (<button type='button' onClick={()=>toggleOcultarLibro(libro._id, false)} className='mostrar'>Muestrar libro</button>):
+                    (<button type='button' onClick={()=>toggleOcultarLibro(libro._id, true)} className='ocultar'>Ocultar libro</button>)}
                 {/* motivo de ocultación */}
                 {libro.oculto && <h4 className='motivo-ocultacion'>Motivo de ocultación: {libro.motivo}</h4>}
             </div>
