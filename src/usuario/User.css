@@ -175,7 +175,7 @@ button {
   /* parte principal */
   main{
     padding-top: var(--height-header);
-    min-height: calc(100vh - var(--height-header));
+    min-height: 150vh;
     background-image: linear-gradient(to bottom right, var(--bg-color-gradient1) 60%, var(--bg-color-gradient2));
   }
   /* página home */
@@ -302,7 +302,7 @@ footer {
   color: var(--color-texto-footer3);
 }
 
-/* 社交媒体 */
+/* red social */
 .footer-social {
   text-align: right;
 }

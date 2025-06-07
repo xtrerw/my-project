@@ -1,3 +1,6 @@
+.mis-libros-container{
+    text-align: center;
+}
 .libro-controles{
     display: flex;
     justify-content: space-around;

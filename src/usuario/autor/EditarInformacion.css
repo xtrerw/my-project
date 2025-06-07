@@ -105,9 +105,3 @@
   margin-bottom: 16px;
 }
 
-/* Diseño responsive */
-@media (max-width: 768px) {
-  .form-row {
-    flex-direction: column;
-  }
-}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import "./Categoria.css"
 import '../../style/libro.css' // Asegúrate de tener un archivo CSS para estilos
+import '../../style/responsive.css'
 import NotFound from '../NotFound'
 import Cargando from '../../utils/Cargando'
 import gsap from "gsap";
@@ -152,7 +153,7 @@ useGSAP(() => {
     trigger: tituloRef.current,
     animation: gsap.timeline()
       .fromTo(tituloRef.current,{
-        backgroundImage:"linear-gradient(to right bottom,#0f0c29, #302b63,var(--text-color))"
+        backgroundImage:"linear-gradient(to right bottom,#0f0c29, #302b63)"
       },{
         backgroundImage:"linear-gradient(to right bottom,#0f0c2900, #302b6300)",
         duration: 1, 
@@ -177,7 +178,7 @@ useGSAP(() => {
   //libros
   ScrollTrigger.create({
     trigger:tituloRef.current,
-    markers:true,
+    markers:false,
     scrub:2,
     start:"0% top",
     end:"60% top",
@@ -218,7 +219,7 @@ useGSAP(() => {
           : null
       }</h1>
       <hr />
-      <p>¡Hazte Socio! 5% de descuento en libros</p>
+      <p>Tu aventura comienza aquí. ¡ Bienvenido a TunkBook !</p>
     </div>
 
     <div style={{
@@ -227,7 +228,6 @@ useGSAP(() => {
     }} className='categoria-libros' ref={librosRef}>
       {/* fitro de libros */}
      <aside>
-          <h2>Filtros</h2>
           {/* Buscador */}
           <div className='filtro-buscador'>
             <h3>Buscador</h3>
@@ -273,7 +273,7 @@ useGSAP(() => {
           </div>
 
           {/* Precio */}
-          <div className="filtro-bloque">
+          {/* <div className="filtro-bloque">
             <div className="filtro-header" onClick={() => setShowPrice(!showPrice)}>
               <h3>Precio</h3>
               {showPrice ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
@@ -303,7 +303,7 @@ useGSAP(() => {
                 
               </ul>
             )}
-          </div>
+          </div> */}
         </aside>
 
       {/* libros */}
@@ -357,7 +357,7 @@ useGSAP(() => {
                   ))}
                 </p>
                 <h3>{libro.autorID?.nombre} {libro.autorID?.apellido}</h3>
-                <p>{libro.precio} €</p>
+                {/* <p>{libro.precio} €</p> */}
               </Link>
               <div className='categoria-libro-cantidad'>
                 <div

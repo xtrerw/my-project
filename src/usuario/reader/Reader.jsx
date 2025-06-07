@@ -121,7 +121,7 @@ useGSAP(() => {
     trigger: ".parte-segunda",
     start: "top 50%",
     end: "30% 50%",
-    markers: true,
+    markers: false,
     scrub: 2,
     animation: gsap.fromTo(
       ".parte-segundo-titulo",

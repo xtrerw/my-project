@@ -4,6 +4,8 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+
+  position: relative;
 }
 .cambiar-password {
   width: 60%;
@@ -11,4 +13,10 @@
 }
 .cambiar-password-container .error-input{
     border:1px solid var(--color-border-error);
+}
+.pwd-btn{
+  position: absolute;
+  right: 10%;
+  bottom: 30%;
+  width: 80px;
 }

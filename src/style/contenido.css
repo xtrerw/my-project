@@ -1,6 +1,5 @@
 .contenido-container {
     padding: 2rem;
-    background-color: var(--bg-color-default3);
     min-height: 100vh;
     display: flex;
     flex-direction: column;

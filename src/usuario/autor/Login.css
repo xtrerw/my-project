@@ -5,7 +5,7 @@
     align-items: center;
     justify-content: center;
 
-    background-image: linear-gradient(to bottom right, var(--bg-color-gradient1), var(--bg-color-gradient2));
+    /* background-image: linear-gradient(to bottom right, var(--bg-color-gradient1), var(--bg-color-gradient2)); */
 }
 
 .form-iniciar button{

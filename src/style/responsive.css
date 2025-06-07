@@ -1,5 +1,13 @@
 @media screen and (max-width:1748px) {
+   :root{
+      --height-header:50px
+   }
    /* home */
+   /* icon Tunk */
+   .tunk-icon{
+      height: 30px;
+      width: 30px;
+   }
    /* titulo 1 */
    .parte-titulo{
       font-size: 25px;
@@ -18,7 +26,7 @@
    /* libros */
    .libro-item{
       width: 200px;
-      height: 300px;
+      min-height: 300px;
       padding: 15px 10px;
    }
    /* imagen de libro */
@@ -40,7 +48,71 @@
    }
    /* categorias */
    /* categoria titulo */
-   .categoria-titulo>h1 {
-      font-size: 50px;
+   .categoria-titulo > h1 {
+      font-size: 150px !important;
+  }
+  .categoria-titulo>p{
+      font-size: 50px !important;
    }
+   /* main libros de categoria */
+   .categoria-libros{
+      padding: 2rem 10px !important;
+   } 
+   /* icon de mi favorito */
+   .bx-heart-circle{
+      right: 10px !important;
+   }
+   /* iniciar sesion */
+   /* form de iniciar sesion */
+   .form-iniciar>form{
+      min-height: 300px;
+      padding: 30px 20px;
+   }
+   input,select{
+      padding: 8px !important;
+      margin: 5px 0 !important;
+   }
+   /* icon hidden de form iniciar sesion */
+   .form-registro>.password-input-container>.bx {
+      top: 30%;
+   }
+   /* mis datos */
+   /* main */
+   .profile-container{
+      max-height: none !important;
+   }
+   /* editar-informacion */
+   /* main */
+   .profile-content{
+      height: 500px;
+   }
+   /* titulo */
+   .editar-informacion h1{
+      display: none;
+      margin-bottom: 2rem !important;
+   }
+   /* form */
+   .editar-form{
+      gap: 0.5rem !important;
+   }
+   /* cambiar contraseña */
+   /* btn siguiente */
+
+   /* mis libros */
+   /* libros */
+   /* btn eliminar */
+   .mis-libros-container .btn-editar,.mis-libros-container .btn-eliminar,.mis-libros-container .btn-disabled{
+      width: 50px !important;
+      padding: 5px !important;
+      font-size: 10px;
+      margin: 0 5px;
+      border-radius: 3px;
+   }
+}
+
+/* Diseño responsive */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+  }
 }

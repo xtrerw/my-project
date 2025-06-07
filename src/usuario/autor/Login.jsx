@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import "./Login.css";
 import "../../style/calendario.css"
+import "../../style/responsive.css"
 // import "../../style/PasswordInput.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from 'react';

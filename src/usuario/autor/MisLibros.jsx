@@ -85,7 +85,7 @@ const MisLibros = () => {
               to={`/Libros/${libro._id}`}>
                 <img src={libro.img} alt={libro.titulo} />
                 <h2>{libro.titulo}</h2>
-                <p>{libro.precio} €</p>
+                {/* <p>{libro.precio} €</p> */}
               </Link>
               <div className="libro-controles">
                 <button onClick={() => handleEliminar(libro._id)} className={libro.oculto? 'btn-disabled':'btn-eliminar'}>Eliminar</button>

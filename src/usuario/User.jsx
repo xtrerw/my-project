@@ -21,12 +21,12 @@ import { useUser } from "../context/UserContext";
 const menuAutor = [
   {nombre: "Mis Datos",},
   {nombre: "Mis Libros",},
-  {nombre: "Ventas",
-    subItems: [
-      { item: "Mis Ventas", },
-      { item: "Historial de Compras", },
-    ],
-  },
+  // {nombre: "Ventas",
+  //   subItems: [
+  //     { item: "Mis Ventas", },
+  //     { item: "Historial de Compras", },
+  //   ],
+  // },
   {nombre: "Modelo de Escribir",
     subItems: [
       { item: "Subir Mi Libro Completo", },

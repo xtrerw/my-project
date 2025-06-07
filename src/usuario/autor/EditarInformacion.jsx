@@ -113,14 +113,18 @@ const EditarInformacion = ({onSuccess}) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId })
     })
-      .then(res => res.json())
-      .then(data => {
-        console.log("¡Te has registrado como lector con éxito!");
-        console.log(data);
-        
+      .then(async res => {
+        if (res.ok) {
+          alert("Registro con exito")
+          return res.json();
+        } else {
+          const errorData = await res.json();
+          //sale error para catch conseguirlo
+          throw new Error(errorData.mensaje || "Registro fallado");
+        }
       })
       .catch(err => {
-        console.error("Error al crear lector:", err);
+        alert("Error: " + err.message);
       });
   };
   return (
