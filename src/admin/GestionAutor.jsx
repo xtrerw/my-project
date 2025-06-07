@@ -4,11 +4,15 @@ import { useEffect } from 'react'
 import './GestionCuenta.css'
 import Cargando from '../utils/Cargando'; // Importar el componente de carga
 import { Link } from 'react-router-dom';
+import BuscadorCuenta from './BuscadorCuenta';
 const GestionAutor = () => {
   const [loading, setLoading] = useState(false);
   //conseguir la lista de autores
   const [autores, setAutores] = useState([])
   //conseguir la lista de autores
+  //buscador de autores
+
+  const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
     setLoading(true);
     fetch("http://localhost:5001/autor/listado")
@@ -24,6 +28,10 @@ const GestionAutor = () => {
         setLoading(false); // Desactivar el indicador de carga después de obtener los datos
       });
   }, []);
+  //buscador de autores
+  const autoresFiltrados = autores.filter((autor) =>
+    `${autor.nombre} ${autor.apellido} ${autor.usernombre}`.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   //actualizar el estado de un autor
   const handleChange = (id, newActivo) => {
     setAutores((preAutor) =>
@@ -83,7 +91,14 @@ const GestionAutor = () => {
 
   return (
     <div className="contenedor-cards">
-      {autores.map((autor) => (
+      {/* Buscador */}
+      <BuscadorCuenta
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      placeholder="Buscar autor..."
+      />
+      <div className='grid-layout'>
+        {autoresFiltrados.map((autor) => (
         <form key={autor._id} onSubmit={(e)=>handleSubmit(e,autor)} className="card-usuario" >
           <h2>{autor.nombre} {autor.apellido}</h2>
           <p>usuario: {autor.usernombre}</p>
@@ -110,6 +125,8 @@ const GestionAutor = () => {
           
         </form>
       ))}
+      </div>
+      
     </div>
   )
 }

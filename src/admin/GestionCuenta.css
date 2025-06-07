@@ -1,13 +1,21 @@
 
 .contenedor-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-areas:
+    "buscador"
+    "cards";
+    /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
 
     width: 100%;
     gap: 20px;
     padding: 20px;
   }
-  
+  .grid-layout{
+    grid-area: cards;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1rem;
+  }
   .card-usuario {
     background: var(--color-texto-footer3);
     border: 1px solid var(--color-texto-footer3);

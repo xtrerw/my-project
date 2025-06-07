@@ -3,12 +3,14 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import './GestionCuenta.css'
 import Cargando from '../utils/Cargando'; // Importar el componente de carga
+import BuscadorCuenta from './BuscadorCuenta';
 const GestionLector = () => {
 
   const [loading, setLoading] = useState(false);
   //conseguir la lista de usuarios
   const [usuarios, setUsuarios] = useState([])
   //conseguir la lista de usuarios
+   const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
     setLoading(true);
     fetch("http://localhost:5001/usuario/listado")
@@ -82,30 +84,45 @@ const GestionLector = () => {
       });
   }
   if (loading) return <Cargando/>; // Indicador de carga
+
+  // Filtrar usuarios según el término de búsqueda
+  const usuariosFiltrados = usuarios.filter((user) =>
+    `${user.nombre} ${user.apellido} ${user.usernombre}`.toLowerCase().includes(searchTerm.trim().toLowerCase())
+  );
   return (
     <div className="contenedor-cards">
+
+       <BuscadorCuenta
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="Buscar lector por nombre o usuario..."
+      />
+
+      <div className='grid-layout'>
       {/* conseguir todos usuarios */}
-      {usuarios.map((usuario) => (
-        <form key={usuario._id} onSubmit={(e)=>handleSubmit(e,usuario)} className='card-usuario' >
-          <h2>{usuario.nombre} {usuario.apellido}</h2>
-          <p>usuario: {usuario.usernombre}</p>
-          <select name="activo" id="" 
-          value={usuario.activo}
-          // 
-          onChange={(e) => 
-            handleChange(
-              usuario._id, 
-            //convertir el valor a booleano
-            e.target.value=== "true"
-            )}>
-            <option value="true">activo</option>
-            <option value="false">inactivo</option>
-          </select>
-          <button type="submit">actualizar</button>
-          {/* btn eliminar */}
-          <button className='btn-eliminar' onClick={()=>handleDelete(usuario._id)}>Eliminar</button>
-        </form>
-      ))}
+        {usuariosFiltrados.map((usuario) => (
+          <form key={usuario._id} onSubmit={(e)=>handleSubmit(e,usuario)} className='card-usuario' >
+            <h2>{usuario.nombre} {usuario.apellido}</h2>
+            <p>usuario: {usuario.usernombre}</p>
+            <select name="activo" id="" 
+            value={usuario.activo}
+            // 
+            onChange={(e) => 
+              handleChange(
+                usuario._id, 
+              //convertir el valor a booleano
+              e.target.value=== "true"
+              )}>
+              <option value="true">activo</option>
+              <option value="false">inactivo</option>
+            </select>
+            <button type="submit">actualizar</button>
+            {/* btn eliminar */}
+            <button className='btn-eliminar' onClick={()=>handleDelete(usuario._id)}>Eliminar</button>
+          </form>
+        ))}
+      </div>
+     
     </div>
   )
 }
