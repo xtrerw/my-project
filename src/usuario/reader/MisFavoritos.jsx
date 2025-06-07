@@ -4,6 +4,7 @@ import Cargando from '../../utils/Cargando'
 import { useEffect, useState } from 'react';
 import './MisFavoritos.css';
 import NotFound from "../NotFound";
+import { Link } from 'react-router-dom';
 const MisFavoritos = () => {
     //conseguir usuario
     const {user}=useUser()
@@ -71,8 +72,10 @@ const MisFavoritos = () => {
             item? (
             <div key={item._id}>
                 <h4>{item.titulo}</h4>
+                <Link to={`/Libros/${item._id}`}  >
                 <img src={item.img} alt={item.titulo} width={100} />
-                <p>{item.precio} €</p>
+                </Link>
+                {/* <p>{item.precio} €</p> */}
                 <button onClick={() => eliminarFavorito(item._id)}>Eliminar</button>
             </div>
             ) : (<NotFound/>)
