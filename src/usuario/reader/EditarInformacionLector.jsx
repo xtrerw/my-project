@@ -12,6 +12,7 @@ import { useUser } from '../../context/UserContext';
 
 registerLocale('es', es)
 const EditarInformacionLector = ({onSuccess}) => {
+  
     // Obtener el user
     const { user } = useUser();
       //Si hay error      

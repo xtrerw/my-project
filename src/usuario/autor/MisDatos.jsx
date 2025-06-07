@@ -10,6 +10,11 @@ const MisDatos = () => {
   const [userData, setUserData] = useState(null);
   const [selectedTab, setSelectedTab] = useState("Mi Tunk");
 
+    //hasta top en caso clic
+    useEffect(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
+
   // Función para obtener los datos del usuario desde la API
   const fetchUserData = () => {
     const userId = localStorage.getItem("userId");

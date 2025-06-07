@@ -37,6 +37,11 @@ function Author() {
     const [tipoUsuario, setTipoUsuario] = useState('autor');
     //Variable id para navegar al autor correspondiente
     const [id,setId]=useState()
+
+      //hasta top en caso clic
+      useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, []);
     //
     //Función para iniciar sesión del autor
     const handleIniciar = async (e) => {

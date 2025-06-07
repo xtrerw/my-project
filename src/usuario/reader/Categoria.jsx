@@ -46,6 +46,10 @@ const Categoria = () => {
     { label: '25€ - 50€', min: 25, max: 50 },
   ];
 
+    //hasta top en caso clic
+    useEffect(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [categoriaId, subcategoriaId]);
 
   //conseguir las categorias desde mango db
   useEffect(()=>{
@@ -360,10 +364,15 @@ useGSAP(() => {
                 {/* <p>{libro.precio} €</p> */}
               </Link>
               <div className='categoria-libro-cantidad'>
+              {user?
+              (
                 <div
                   className={`bx bx-heart-circle ${favoritos.includes(libro._id) ? "favorito-activo" : ""}`}
                   onClick={() => handleAgregarFavorito(libro)}
                 ></div>
+              ):null 
+              }
+                
               </div>
               <p className={`${faltaUser? "error":"sinError"}`}>Debes iniciar sesión para añadir favoritos</p>
             </div>)))}

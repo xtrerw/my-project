@@ -4,6 +4,7 @@ import { validateCategoria } from '../utils/validateCategoria';//introduce archi
 import { useFormValidation } from '../utils/useFormValidation';
 import Cargando from '../utils/Cargando';
 const GestionCategoria = () => {
+  
   const [loading, setLoading] = useState(false);
   //reiniciar funciones de validar
   const { errores, mensajeError, validar } = useFormValidation(validateCategoria);
@@ -19,6 +20,10 @@ const GestionCategoria = () => {
   setColleccion('');
 };
 
+//hasta top en caso clic
+      useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, [editId]);
 
   // Obtener las categorías al cargar
   useEffect(() => {

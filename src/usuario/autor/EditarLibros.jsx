@@ -7,6 +7,11 @@ import ePub from 'epubjs';
 import subirImgDefault from '../../img/subir-img-default.png';
 
 const EditarLibros = ({ libroId, onCancel, onSuccess }) => {
+    //hasta top en caso clic
+    useEffect(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
+    
   const [formData, setFormData] = useState({
     titulo: '',
     precio: '',

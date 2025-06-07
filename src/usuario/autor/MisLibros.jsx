@@ -13,6 +13,10 @@ const MisLibros = () => {
   //editar libros
   const [editLibroId, setEditLibroId] = useState(null);
 
+  //hasta top en caso clic
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   useEffect(() => {
     // comprobar si el usuario está autenticado

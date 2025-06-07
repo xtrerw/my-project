@@ -6,6 +6,11 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
 import { useGSAP } from "@gsap/react";
 function Reader() {
+  //hasta top en caso clic
+      useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, []);
+    
   const [libros, setLibros] = useState([]);
 
   useEffect(() => {
@@ -171,7 +176,7 @@ useGSAP(() => {
                   <img src={libro.img} alt={libro.titulo} />
                   <h2>{libro.titulo}</h2>
                   <h3>{libro.autorID?.nombre} {libro.autorID?.apellido}</h3>
-                  <p>{libro.precio} €</p>
+                  {/* <p>{libro.precio} €</p> */}
                 </Link>
               </div>
 

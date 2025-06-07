@@ -6,6 +6,10 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from 'gsap/all';
 import { useNavigate } from 'react-router-dom';
 const Contenido = () => {
+    //hasta top en caso clic
+    useEffect(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
     const {id}=useParams()
     
     const [contenidos,setContenidos]=useState([])

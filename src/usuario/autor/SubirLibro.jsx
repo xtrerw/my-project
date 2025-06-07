@@ -15,6 +15,11 @@ const SubirLibro = () => {
     const [price, setPrice] = useState(0); // precio inicial
     const [img, setImg] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
+
+      //hasta top en caso clic
+      useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, []);
     //conseguir el precio
     const handlePriceChange = (e) => {
         const value = e.target.value;

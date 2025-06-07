@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { useUser } from '../../context/UserContext';
 import NotFound from '../NotFound';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,10 @@ import CambiarContrasena from '../autor/CambiarContrasena';
 import EditarInformacionLector from './EditarInformacionLector';
 import MisFavoritos from './MisFavoritos';
 const PerfilReader = () => {
+    //hasta top en caso clic
+    useEffect(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
   //funcion de navegacion
   const navigate = useNavigate();
   // seleccionar la pestaña activa
