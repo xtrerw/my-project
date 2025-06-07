@@ -46,6 +46,12 @@ const Categoria = () => {
     { label: '25€ - 50€', min: 25, max: 50 },
   ];
 
+  // formato de los libros
+  const [librosConFormato, setLibrosConFormato] = useState({});
+  //filtro formato
+  const [formatoSeleccionado, setFormatoSeleccionado] = useState([]); // "pdf", "no-pdf"
+
+const [showFormato, setShowFormato] = useState(true);
     //hasta top en caso clic
     useEffect(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -100,6 +106,20 @@ const Categoria = () => {
   //   });
   // };
 
+  //conseguir los formatos
+  useEffect(() => {
+    if (!libros) return; // 
+
+    libros.forEach(libro => {
+      fetch(`http://localhost:5001/libros/libros/${libro._id}`)
+        .then(res => res.json())
+        .then(data => {
+          const tienePDF = Array.isArray(data) && data.some(c => c.archivo);
+          setLibrosConFormato(prev => ({ ...prev, [libro._id]: tienePDF }));
+        });
+    });
+  }, [libros]);
+
 
 
   //funcion para agregar libros a favoritos
@@ -140,6 +160,7 @@ useEffect(() => {
   }
 }, [user]);
 
+//
 
 //referencia de titulo y libros  
 const tituloRef = useRef();
@@ -276,6 +297,50 @@ useGSAP(() => {
             )}
           </div>
 
+
+{/* Formato */}
+<div className="filtro-bloque">
+  <div className="filtro-header" onClick={() => setShowFormato(!showFormato)}>
+    <h3>Formato</h3>
+    {showFormato ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+  </div>
+
+  {showFormato && (
+    <ul>
+      <li>
+        <input
+          type="checkbox"
+          id="formato-pdf"
+          checked={formatoSeleccionado.includes("pdf")}
+          onChange={(e) => {
+            const isChecked = e.target.checked;
+            setFormatoSeleccionado(prev =>
+              isChecked ? [...prev, "pdf"] : prev.filter(f => f !== "pdf")
+            );
+          }}
+        />
+        <label htmlFor="formato-pdf">PDF</label>
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          id="formato-no-pdf"
+          checked={formatoSeleccionado.includes("no-pdf")}
+          onChange={(e) => {
+            const isChecked = e.target.checked;
+            setFormatoSeleccionado(prev =>
+              isChecked ? [...prev, "no-pdf"] : prev.filter(f => f !== "no-pdf")
+            );
+          }}
+        />
+        <label htmlFor="formato-no-pdf">Leer en linea</label>
+      </li>
+    </ul>
+  )}
+</div>
+
+
+
           {/* Precio */}
           {/* <div className="filtro-bloque">
             <div className="filtro-header" onClick={() => setShowPrice(!showPrice)}>
@@ -308,7 +373,7 @@ useGSAP(() => {
               </ul>
             )}
           </div> */}
-        </aside>
+      </aside>
 
       {/* libros */}
       <div>
@@ -320,6 +385,13 @@ useGSAP(() => {
         //filtrar todos los libros que cumple con las condiciones
          .filter(libro =>
             {
+              const tienePDF = librosConFormato[libro._id] === true;
+
+              const coincideFormato =
+                formatoSeleccionado.length === 0 || // se muestra todos sin selecciona
+                (tienePDF && formatoSeleccionado.includes("pdf")) ||
+                (!tienePDF && formatoSeleccionado.includes("no-pdf"));
+
               //verificar la categoria seleccionado si esta coincide a la categoria de los libros
               const coincideSubcategoria = !subcategoriaId || libro.categoria.some(cat => cat.colleccion.includes(subcategoriaId));
               //verificar los texto insertados si esta coincide al nombre de libros,"" es para evitar fallback de undefine
@@ -337,18 +409,22 @@ useGSAP(() => {
                 libro.precio >= range.min &&
                 libro.precio <= range.max
               );
+               
               //verificar si esta libro oculto
               const libroOculto = libro.oculto
               // Devolver el libro si coincide con todos los filtros y no está oculto 
               if (libroOculto) return false; // Si el libro está oculto, no lo mostramos
-              
 
-              return coincideSubcategoria && coincideBusqueda && coincideRating && coincidePrecio;
+              return coincideSubcategoria && coincideBusqueda && coincideRating && coincidePrecio&&coincideFormato;
             }
           )
         .map((libro, index) => (
             <div key={index} ref={el => libroRefs.current[index] = el} className='categoria-libro'>
               <Link to={`/Libros/${libro._id}`} className='libro-item'>
+              {librosConFormato[libro._id] && (
+                <div className="etiqueta-pdf">PDF</div>
+              )}
+
                 <img src={`${libro.img}`} alt={libro.titulo} />
                 <h2>{libro.titulo}</h2>
                 <p>

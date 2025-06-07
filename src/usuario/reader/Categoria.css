@@ -174,3 +174,12 @@ aside h2 {
 .sinError{
   visibility: hidden;
 }
+/* etiqueta pdf */
+.etiqueta-pdf{
+  position: absolute;
+  left: 10px;
+  top: 0;
+  background: var(--color-error-text);
+  color: var(--bg-color-default);
+  padding: 5px;
+}
