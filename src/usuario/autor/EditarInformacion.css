@@ -12,11 +12,11 @@
 }
 
 /* Formulario general */
-.editar-form {
+/* .editar-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
+} */
 
 /* Filas de elementos */
 .form-row, .form-row-full {
@@ -86,6 +86,8 @@
 }
 /* Botón de guardar cambios alineado a la derecha */
 .guardar-btn{
+  float: right;
+  width: 200px;
   background-color: var(--bg-color-main);
   color: var(--bg-color-default);
 }

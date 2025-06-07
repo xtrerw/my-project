@@ -168,7 +168,7 @@ const CambiarContrasena = () => {
                 </label>
             </div>
             <div className="error-message">{errorPassword}</div>
-            <button type="submit" className="guardar-btn pwd-btn">Cambiar Contraseña</button>
+            <button type="submit" className="guardar-btn">Cambiar Contraseña</button>
           </form>
         ):(
         // formulario de introducir contraseña anterior
@@ -192,7 +192,7 @@ const CambiarContrasena = () => {
               </label>
           </div>
           <div className={isErrorAnterior? "error-message":"exito"}>{errorAnterior}</div>
-          <button type="submit" className="guardar-btn pwd-btn">Siguiente</button>
+          <button type="submit" className="guardar-btn">Siguiente</button>
         </form>
         )
       }

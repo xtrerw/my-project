@@ -30,4 +30,16 @@
     line-height: 1.8;
     font-family: 'Courier New', Courier, monospace;
   }
-  
+/* btn acceso a iniciar */
+.btn-acceso-iniciar,.btn-add-favorito{
+  float: right;
+  color: var(--bg-color-default);
+  background: var(--bg-color-main2);
+  box-shadow: 0px 0px 1px 2px var(--bg-color-default);
+  margin-top: 2rem;
+}
+.bxs-heart-circle{
+  float: right;
+  font-size: 50px;
+  color: var(--color-error-text);
+}

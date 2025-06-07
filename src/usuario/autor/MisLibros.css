@@ -9,6 +9,7 @@
 .btn-editar,.btn-eliminar,.btn-disabled {
    min-width: unset;
    width: 100px;
+   margin: 10px;
 }
 .btn-eliminar {
     background: var(--color-error-text);

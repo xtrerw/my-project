@@ -233,7 +233,9 @@ const SubirLibro = () => {
                 </select>
             </div>
         </div>
-        <button type="submit">Subir</button>
+        <button style={{
+          boxShadow:"0 0 1px 2px var(--bg-color-default)"
+        }} type="submit">Subir</button>
     </form>
     )
     : (

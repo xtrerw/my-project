@@ -364,14 +364,13 @@ useGSAP(() => {
                 {/* <p>{libro.precio} €</p> */}
               </Link>
               <div className='categoria-libro-cantidad'>
-              {user.tipo=="lector" && user?
-              (
+              {user && user.tipo === "lector" ? (
                 <div
                   className={`bx bx-heart-circle ${favoritos.includes(libro._id) ? "favorito-activo" : ""}`}
                   onClick={() => handleAgregarFavorito(libro)}
                 ></div>
-              ):null 
-              }
+              ) : null}
+
                 
               </div>
               <p className={`${faltaUser? "error":"sinError"}`}>Debes iniciar sesión para añadir favoritos</p>
