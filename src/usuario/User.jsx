@@ -17,27 +17,22 @@ import PerfilReader from "./reader/PerfilReader";
 import NotFound from "./NotFound";
 import { useUser } from "../context/UserContext";
 
-// menu para autores
+// Menú para autores
 const menuAutor = [
   {nombre: "Mis Datos",},
   {nombre: "Mis Libros",},
-  // {nombre: "Ventas",
-  //   subItems: [
-  //     { item: "Mis Ventas", },
-  //     { item: "Historial de Compras", },
-  //   ],
-  // },
   {nombre: "Modelo de Escribir",
     subItems: [
       { item: "Subir Mi Libro Completo", },
     ],
   }
 ]
-//componente principal
+
+// Componente principal
 const User = () => {
-  //estado de categorias
+  // Estado de categorías
   const [categorias, setCategorias] = useState([]);
-  //conseguir categoría activa
+  // Obtener las categorías del backend
   useEffect(() => {
     fetch("http://localhost:5001/usuario/categorias")
       .then((response) => response.json())
@@ -48,72 +43,78 @@ const User = () => {
         console.error("Error fetching categories:", error);
       });
   }, []);
-  //conseguir el estado de autenticación del usuario
-  const {user}=useUser();
-  // categoria activa para reader
-  const [activeCategory, setActiveCategory] = useState(null);
 
-  //dividir las paginas de autores y lectores
+  const {user}=useUser();
+  // Categoría activa
+  const [activeCategory, setActiveCategory] = useState(null);
+  // Determina si el usuario es autor
   const [isAuthor, setIsAuthor] = useState(false);
-  //pagina de inicio de sesión
+  // Estado del menú responsive (abierto/cerrado)
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const location=useLocation();
   const isLoginPage = location.pathname === "/login";
-  //comprobar si el usuario es autor o lector
+
+  // Verifica si el usuario autenticado es autor
   useEffect(() => {
     if (user) {
       setIsAuthor(user.tipo=== "autor");
     }
   }, [user]);
-  
-
 
   return (
     <>
-      {/* menu */}
       <header>
-        {/* icon de home */}
-        <Link to="/" onClick={()=>setIsAuthor(false)}>
-          <img src={tunkIcon} className="tunk-icon" />
-        </Link> 
+        {/* icono de inicio */}
+        <div className="tunk-icon-responsive">
+          <Link to="/" onClick={()=>setIsAuthor(false)}>
+            <img src={tunkIcon} className="tunk-icon" />
+          </Link> 
+
+          {/* Botón de menú para móviles */}
+          <i className="bx bx-menu" onClick={() => setMenuOpen(!menuOpen)}>
+          </i>
+        </div>
+        
+        
+        {/* Menú principal, dependiendo del tipo de usuario */}
         {!isLoginPage && ( isAuthor ? 
-         // menu de autor
-         ( <nav className="menu">
-          {menuAutor.map((item, index) => (
-            <div
-              key={index}
-              className="menu-item"
-              onMouseEnter={() => setActiveCategory(index)}
-              onMouseLeave={() => setActiveCategory(null)}
-            >
-              {/* menu principal */}
-              {/* para evitar saltar a otras páginas por item principal sin subitem */}
-              {item.subItems ? (
-                <div className="menu-link">{item.nombre}</div>
-              ) : (
-                <Link to={`/Author/${item.nombre}`} className="menu-link">
-                  {item.nombre}
-                </Link>
-              )}
-    
-              {/* submenu */}
-              {item.subItems && activeCategory === index && (
-                <div className="dropdown">
-                  {item.subItems.map((subItem, subIndex) => (
-                    <Link
-                      key={subIndex}
-                      to={`/Author/${item.nombre}/${subItem.item}`}
-                      className="dropdown-item"
-                    >
-                      {subItem.item}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </nav>) : (
-          // menu de reader
-          <nav className="menu">
+          <nav className={`menu ${menuOpen ? 'open' : ''}`}>
+            {menuAutor.map((item, index) => (
+              <div
+                key={index}
+                className="menu-item"
+                onMouseEnter={() => setActiveCategory(index)}
+                onMouseLeave={() => setActiveCategory(null)}
+              >
+                {/* Menú principal del autor */}
+                {item.subItems ? (
+                  <div className="menu-link">{item.nombre}</div>
+                ) : (
+                  <Link to={`/Author/${item.nombre}`} className="menu-link" onClick={() => setMenuOpen(false)}>
+                    {item.nombre}
+                  </Link>
+                )}
+                {/* Submenú del autor */}
+                {item.subItems && activeCategory === index && (
+                  <div className="dropdown">
+                    {item.subItems.map((subItem, subIndex) => (
+                      <Link
+                        key={subIndex}
+                        to={`/Author/${item.nombre}/${subItem.item}`}
+                        className="dropdown-item"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {subItem.item}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </nav>
+        : (
+          <nav className={`menu ${menuOpen ? 'open' : ''}`}>
             {categorias.map((categoria, index) => (
               <div
                 key={index}
@@ -121,14 +122,13 @@ const User = () => {
                 onMouseEnter={() => setActiveCategory(index)}
                 onMouseLeave={() => setActiveCategory(null)}
               >
-                {/* menu principal */}
-                <div to={`/${categoria.nombre}`}>{categoria.nombre}</div>
-
-                {/* menu desplada */}
+                {/* Nombre de categoría principal */}
+                <div>{categoria.nombre}</div>
+                {/* Subcategorías desplegables */}
                 {activeCategory === index && (
                   <div className="dropdown">
                     {categoria.colleccion.map((subitem, subIndex) => (
-                      <Link key={subIndex} to={`/${categoria.nombre}/${subitem}`} className="dropdown-item" >
+                      <Link key={subIndex} to={`/${categoria.nombre}/${subitem}`} className="dropdown-item" onClick={() => setMenuOpen(false)}>
                         {subitem}
                       </Link>
                     ))}
@@ -138,13 +138,13 @@ const User = () => {
             ))}
           </nav>
         ))}
+
+        {/* Botón de login o saludo al usuario */}
         <button className="dancing-script btn-login">
         {
-          // si el usuario no está autenticado o está en la página de inicio de sesión
           !user || isLoginPage ? (
             <Link to="/login">Iniciar Sesión</Link>
           ) : 
-          // si el usuario es autor
           user.tipo === "autor" ? (
             isAuthor ? (
               <p>Bienvenido {user.usernombre}</p>
@@ -152,7 +152,6 @@ const User = () => {
               <Link to="/login">Iniciar Sesión</Link>
             )
           ) : 
-          // si el usuario es lector
           user.tipo === "lector" ? (
             !isAuthor ? (
               <Link to="/Perfil de lector">Bienvenido {user.usernombre}</Link>
@@ -163,48 +162,28 @@ const User = () => {
             <Link to="/login">Iniciar Sesión</Link>
           )
         }
-
         </button>
       </header>
-      
-      {/* main */}
+
       <main className="main-content">
-        {/* rutas */}
+        {/* Rutas de navegación */}
         <Routes>
-          
           <Route path="/login" element={<Login />} /> 
           <Route path="/" element={<Reader />} />
-          {/* router para author */}
-          {/* 1 -（Mis Datos, Mis Libros, Ventas, Modelo de Escribir） */}
           <Route path="/Author/Mis Datos/*" element={<MisDatos />} />
           <Route path="/Author/Mis Libros" element={<MisLibros />} />
-
-          {/* 2 - Ventas */}
-          
           <Route path="/Author/Ventas/Mis Ventas" element={<MisVentas />} />
           <Route path="/Author/Ventas/Historial de Compras" element={<HistorialCompras />} />
-
-          {/* 2 - Modelo de Escribir */}
-          
           <Route path="/Author/Modelo de Escribir/Subir Mi Libro Completo" element={<SubirLibro />} />
           <Route path="/Author/Modelo de Escribir/Escribir Online" element={<EscribirOnline />} />
-
-          {/* Lector */}
-          {/* router de libros */}
           <Route path="/Libros/:id" element={<Contenido />} />
-          {/* router de subitem */}
-           <Route path="/:categoriaId/:subcategoriaId" element={<Categoria />} />
-          {/* router de perfil de lector */}
+          <Route path="/:categoriaId/:subcategoriaId" element={<Categoria />} />
           <Route path="/Perfil de lector" element={<PerfilReader />} /> 
-
-          {/* 404 not found */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
 
-      {/* footer */}
       <footer>
-      {/* categoría */}
       <div className="footer-categories">
         <div className="categories-grid">
           {categorias.map((categoria, index) => (
@@ -225,10 +204,8 @@ const User = () => {
         </div>
       </div>
 
-      {/* linea devisoria */}
       <div className="footer-divider"></div>
 
-      {/* imformación debaja */}
       <div className="footer-bottom">
         <p>COPYRIGHT © 2024 TunkBooks. Todos los derechos reservados.</p>
 
@@ -238,7 +215,6 @@ const User = () => {
           <Link to="/cookies">Cookies</Link>
         </div>
 
-        {/* red social */}
         <div className="footer-social">
           <div className="social-icons">
             <a href="https://instagram.com" target="_blank">
@@ -253,14 +229,12 @@ const User = () => {
             <a href="https://youtube.com" target="_blank">
               <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="Youtube" />
             </a>
-
           </div>
         </div>
       </div>
     </footer>
-   
     </>
   );
 };
 
-export default User
+export default User;

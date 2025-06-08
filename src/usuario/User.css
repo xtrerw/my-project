@@ -140,6 +140,21 @@ button {
     color: var(--bg-color-main2);
   }
   
+  .tunk-icon-responsive{
+    display: flex;
+    gap: 10px;
+  }
+
+  .bx-menu {
+    display: none;
+    font-size: 1.8rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 0;
+    align-self: center;
+    text-align: center;
+  }
   .dropdown {
     position: absolute;
     top: 100%;
@@ -326,7 +341,10 @@ footer {
   transform: scale(1.2);
 }
 
-
+  .menu.open {
+    background: var(--bg-color-default);
+    color: var(--bg-color-main);
+  }
 
 /* Estilo para campos en error */
 .error-input {
@@ -343,8 +361,4 @@ footer {
 }
 .exito{
   color: var(--color-exito-text);
-}
-/* responsive */
-@media screen and (max-width:768px) {
-  
 }

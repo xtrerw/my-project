@@ -80,6 +80,7 @@
    /* main */
    .profile-container{
       max-height: none !important;
+      max-width: 800px !important;
    }
    /* editar-informacion */
    /* main */
@@ -111,8 +112,202 @@
 }
 
 /* Diseño responsive */
-@media (max-width: 768px) {
-  .form-row {
-    flex-direction: column;
+/* responsive */
+@media (max-width: 850px) {
+  /* menu hamburger */
+  /* icon tunk */
+  .tunk-icon{
+    width: 1.5rem !important;
+    height: 1.5rem !important;
   }
+  .bx-menu {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+      text-align: center;
+    font-size: 30px !important;
+  }
+
+  .menu {
+    display: none !important;
+    flex-direction: column !important;
+    background-color: var(--bg-color-default) !important;
+    position: absolute !important;
+    top: 60px !important;
+    left: 10px !important;
+    width: 200px !important;
+    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); */
+    z-index: 10 !important;
+  }
+
+  .menu.open {
+    display: flex !important;
+    background: var(--bg-color-default) !important;
+    color: var(--bg-color-main) !important;
+  }
+
+  .menu-item {
+    padding: 10px !important;
+  }
+
+  .dropdown {
+    position: static !important;
+    background-color: var(--bg-color-default) !important;
+    box-shadow: none !important;
+  }
+
+  /* titulo home */
+  .parte-primero{
+    width: auto !important;
+  }
+  .titulo{
+    font-size: 50px !important;
+  }
+  .parte-primero{
+    min-height: 50vh !important;
+  }
+  /* titulo desplazamiento */
+  .titulo-desplazamiento{
+    font-size: 1rem !important;
+  }
+  /* parte segunda */
+  .parte-segunda{
+    min-height: 100vh !important;
+  }
+  .parte-segundo-titulos{
+    width: 90% !important;
+  }
+  .parte-segundo-titulo{
+    font-size: 50px !important;
+  }
+  /* carousel */
+  .carousel-slide{
+   width: 180px;
+  }
+  /* main */
+  main{
+    min-height: 50vh !important;
+  }
+  /* categoria */
+  /* categoria titulo */
+  .categoria-titulo{
+    min-height: 50vh !important;
+  }
+  .categoria-titulo>h1{
+    font-size: 60px !important;
+  }
+  .categoria-titulo>hr{
+    display: none;
+  }
+  .categoria-titulo>p{
+    font-size: 20px !important;
+  }
+  /* categoria libros y filtro */
+  .categoria-libros{
+    gap: 10px !important;
+    padding: 20px 0 !important;
+  }
+  /* filtro categoria */
+  aside h3{
+    font-size: 15px !important;
+  }
+  aside label{
+    font-size: 12px !important;
+  }
+  svg{
+    width: 15px !important;
+    height: 15px !important;
+  }
+  /* categoria libros */
+  .categoria-libro{
+    width: 180px !important;
+  }
+  .libro-item{
+    width: 150px !important;
+    min-height: 0 !important;
+    height: 200px !important;
+  }
+  .libro-item img{
+    width: 80px !important;
+    height: 100px !important;
+  }
+  /* contenido */
+  .contenido-container{
+    min-height: 50vh !important;
+  }
+  /* form iniciar */
+  .form-iniciar>form{
+    width: 300px !important;
+  }
+  /* informacion autor */
+  /* parte main */
+  .profile-container{
+    margin: 0 !important;
+    border-radius: 0 !important;
+    max-width: 900px !important;
+  }
+  /* aside informacion */
+  .profile-sidebar{
+    width: 150px !important;
+    padding: 10px !important;
+  }
+  .profile-sidebar h2{
+    font-size: 1rem !important;
+    margin-bottom: 5px !important;
+  }
+  /* contenido de informacion */
+  .profile-content{
+    padding: 10px !important;
+  }
+  /* titulo */
+  .info-section h1{
+    font-size: 30px !important;
+  }
+  .info-item{
+    font-size: 10px !important;
+  }
+  /* editar informacion */
+  .editar-form label{
+    font-size: 10px;
+  }
+  .editar-form input, .editar-form select{
+    font-size: 8px !important;
+  }
+  .btns-editar{
+    flex-direction: column !important;
+    gap: 10px !important;
+    justify-content: center !important;
+    align-items: flex-end !important;
+  }
+  .guardar-btn, .convertir-btn{
+    width: auto !important;
+    font-size: 10px !important;
+    padding: 5px !important;
+    min-width: 80px !important;
+  }
+  /* icon hidden */
+  .bx-show, .bx-hide{
+    font-size: 10px;
+    top: 55%;
+  }
+  /* subir libros */
+  /* imagen */
+  .subir-libro-form .preview-container{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  /* label */
+  .subir-libro-form label, .subir-libro-form div{
+    width: 300px !important;
+  }
+  /* admin */
+  .pagina-admin h1{
+      font-size: 2rem !important;
+  }
+  .main-admin{
+      min-height: 100vh !important;
+  }
+  
 }
+
