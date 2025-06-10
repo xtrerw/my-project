@@ -78,3 +78,69 @@
     background-color: var(--bg-color-main5);
     color: var(--bg-color-default);
   }
+
+  @media screen and (max-width: 768px) {
+  .main-admin {
+    flex-direction: column;
+  }
+
+  .nav-admin {
+    width: 100%;
+    padding: 10px;
+  }
+  /* menu */
+.menu-admin-item>div{
+  gap: 5px;
+}
+/* main menu */
+  .menu-admin-title {
+    font-size: 1rem;
+    padding:0;
+    background: none;
+    color: var(--bg-color-default);
+  }
+.menu-admin-title:hover{
+  background: none;
+  color: var(--bg-color-main);
+  text-decoration: underline;
+}
+  .submenu li {
+    text-align: center;
+  }
+
+  .menu-admin-link{
+    font-size: 0.8rem;
+    padding: 0;
+
+  }
+  /* card */
+  .grid-layout{
+    grid-template-columns:auto
+  }
+}
+
+ @media screen and (max-width: 500px) {
+  .pagina-admin h1{
+    font-size: 1rem !important;
+  }
+  /* buscador */
+  .buscador-componente{
+    width: 100%;
+  } 
+  /* btn categoria */
+  .gestion-categoria-container{
+    border-radius: 0;
+    margin: 0;
+  }
+  .gestion-categoria-item{
+    display: grid;
+    justify-content: center;
+  }
+  .gestion-categoria-item>div{
+    display: flex;
+  }
+  .gestion-categoria-item button{
+    margin-left: 0;
+    margin: 3px;
+  }
+}
