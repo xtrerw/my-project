@@ -97,7 +97,7 @@ const OcultarLibros = () => {
                 <img src={libro.img || "https://via.placeholder.com/300x300"} alt={libro.titulo} />
                 <h2>{libro.titulo}</h2>
                 <h3>Autor: {libro.autorID ? `${libro.autorID.nombre} ${libro.autorID.apellido}` : "Desconocido"}</h3>
-                <p>{libro.precio} €</p>
+                {/* <p>{libro.precio} €</p> */}
                 {libro.oculto?
                     (<button type='button' onClick={()=>toggleOcultarLibro(libro._id, false)} className='mostrar'>Muestrar libro</button>):
                     (<button type='button' onClick={()=>toggleOcultarLibro(libro._id, true)} className='ocultar'>Ocultar libro</button>)}
