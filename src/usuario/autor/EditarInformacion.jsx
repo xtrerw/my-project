@@ -16,18 +16,19 @@ const EditarInformacion = ({onSuccess}) => {
     const { errores, mensajeError, validar } = useFormValidation(validateEditarInformacion);
 
   // Estado inicial del formulario con campos vacíos
-  const [formData, setFormData] = useState({
-    nombre: "",
-    apellido: "",
-    fechaNacimiento: "",
-    direccion: "",
-    codigoPostal: "",
-    provincia: "",
-    pais: "España",
-    nacionalidad: "",
-    genero: "",
-    email: "",
-  });
+const [formData, setFormData] = useState({
+  nombre: "",
+  apellido: "",
+  fechaNacimiento: "",
+  direccion: "",
+  codigoPostal: "",
+  provincia: "",
+  pais: "España",
+  nacionalidad: "",
+  genero: "",
+  email: "",
+  tipo: "autor", // 
+});
 
   // Cargar datos del usuario desde la API cuando el componente se monta
   useEffect(() => {
@@ -50,6 +51,7 @@ const EditarInformacion = ({onSuccess}) => {
             nacionalidad: data.nacionalidad || "",
             genero: data.genero || "",
             email: data.email || "",
+            tipo: data.tipo || "autor"
           });
         })
         .catch(error => {

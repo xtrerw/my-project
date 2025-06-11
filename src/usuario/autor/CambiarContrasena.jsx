@@ -17,7 +17,7 @@ const CambiarContrasena = () => {
    const [error, setError] = useState(false);
   // Contenido de error de contraseña
   const [errorPassword, setErrorPassword] = useState();
-
+const [esExito, setEsExito] = useState(false);
   // Manejar cambios en los inputs del formulario de contraseña nueva
   const handleChange = (e) => {
     setFormData({
@@ -38,6 +38,7 @@ const CambiarContrasena = () => {
     if (errorPassword) {
       setError(true);
       setErrorPassword(errorPassword);
+      setEsExito(false);
       return;
     }
 
@@ -56,10 +57,12 @@ const CambiarContrasena = () => {
         setError(false);
         // Aquí puedes manejar la respuesta del servidor después de actualizar la contraseña
         setErrorPassword("Contraseña actualizada:", data);
+        setEsExito(true);
       })
       .catch(error => {
         setError(true);
         setErrorPassword("Error al actualizar la contraseña:", error);
+        setEsExito(false);
       });
     }
   };
@@ -167,7 +170,9 @@ const CambiarContrasena = () => {
                     ></i>
                 </label>
             </div>
-            <div className="error-message">{errorPassword}</div>
+            <div className={esExito ? "success-message" : "error-message"}>
+              {errorPassword}
+            </div>
             <button type="submit" className="guardar-btn">Cambiar Contraseña</button>
           </form>
         ):(
