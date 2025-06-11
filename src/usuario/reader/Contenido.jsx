@@ -124,21 +124,20 @@ const handleAgregarFavorito = () => {
           )}
 
         {/* agregar favorito */}
-        {!user ? (
+        {!user || user.tipo !== "lector" ? (
           <Link to="/login">
             <button className='btn-acceso-iniciar'>
               Iniciar sesión para añadir a favoritos
             </button>
           </Link>
-        ) : user.tipo === "lector" ? (
-          favoritos.includes(id) ? (
-            < i className='bx  bxs-heart-circle'  ></i> 
-          ) : (
-            <button onClick={handleAgregarFavorito} className="btn-add-favorito">
-              Añadir a favoritos ❤️
-            </button>
-          )
-        ) : null}
+        ) : favoritos.includes(id) ? (
+          <i className='bx bxs-heart-circle'></i>
+        ) : (
+          <button onClick={handleAgregarFavorito} className="btn-add-favorito">
+            Añadir a favoritos ❤️
+          </button>
+        )}
+
         </div>
       ))}
       
