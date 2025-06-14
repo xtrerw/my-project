@@ -5,15 +5,11 @@ import gsap from 'gsap'
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from 'gsap/all';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../../context/UserContext'
 const Contenido = () => {
     //hasta top en caso clic
     useEffect(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
-    // agregar favorito
-    const { user } = useUser(); // usuario registrado
-    const [favoritos, setFavoritos] = useState([]);
 
     const {id}=useParams()
     
@@ -34,38 +30,6 @@ const Contenido = () => {
         .catch(error => {navigate("/not-found")}); 
     },[id])
 
-    useEffect(() => {
-  if (user?._id) {
-    fetch(`http://localhost:5001/favoritos/${user._id}`)
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data.libros)) {
-          const ids = data.libros.map((item) => item._id || item.libroID);
-          setFavoritos(ids);
-        }
-      })
-      .catch(err => console.error("Error al obtener favoritos:", err));
-  }
-}, [user]);
-
-const handleAgregarFavorito = () => {
-  if (!user || !user._id || user.tipo !== 'lector') {
-    navigate("/login", { state: { from: `/Libros/${id}` } }); // 登录后返回原页
-    return;
-  }
-
-  fetch(`http://localhost:5001/favoritos/${user._id}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ libroID: id }),
-  })
-    .then(res => {
-      if (res.ok) {
-        setFavoritos(prev => [...prev, id]);
-      }
-    })
-    .catch(err => console.error("Error al añadir favorito:", err));
-};
 
 
     gsap.registerPlugin(ScrollTrigger);
@@ -122,25 +86,8 @@ const handleAgregarFavorito = () => {
           ) : (
             <p>No hay contenido disponible.</p>
           )}
-
-        {/* agregar favorito */}
-        {!user || user.tipo !== "lector" ? (
-            <Link to="/login">
-              <button className='btn-acceso-iniciar'>
-                Iniciar sesión para añadir a favoritos
-              </button>
-            </Link>
-          ) : favoritos.includes(id) ? (
-            <i className='bx bxs-heart-circle'></i>
-          ) : (
-            <button onClick={handleAgregarFavorito} className="btn-add-favorito">
-              Añadir a favoritos ❤️
-            </button>
-          )}
-
         </div>
       ))}
-    
     </div>
   )
 }

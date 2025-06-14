@@ -86,7 +86,7 @@ const MisLibros = () => {
             <div className="libro-item" key={index}>
               <Link 
               className={libro.oculto ? "libro-oculto" : ""}
-              to={`/Libros/${libro._id}`}>
+              to={`/MisLibros/${libro._id}`}>
                 <img src={libro.img} alt={libro.titulo} />
                 <h2>{libro.titulo}</h2>
                 {/* <p>{libro.precio} €</p> */}

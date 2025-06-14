@@ -2,6 +2,7 @@ import { Routes, Route, Link, useLocation } from "react-router-dom";
 import Reader from "./reader/Reader";
 import Login from "./autor/Login";
 import Contenido from "./reader/Contenido";
+import ContenidoAutor from "./autor/ContenidoAutor";
 import { useState,useEffect } from "react";
 import "./User.css";
 import "../style/responsive.css"
@@ -177,6 +178,7 @@ const User = () => {
           <Route path="/Author/Modelo de Escribir/Subir Mi Libro Completo" element={<SubirLibro />} />
           <Route path="/Author/Modelo de Escribir/Escribir Online" element={<EscribirOnline />} />
           <Route path="/Libros/:id" element={<Contenido />} />
+          <Route path="/MisLibros/:id" element={<ContenidoAutor />} />
           <Route path="/:categoriaId/:subcategoriaId" element={<Categoria />} />
           <Route path="/Perfil de lector" element={<PerfilReader />} /> 
           <Route path="*" element={<NotFound />} />
