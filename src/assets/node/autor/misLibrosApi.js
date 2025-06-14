@@ -1,5 +1,9 @@
 import {Router} from 'express';
 import ServerModel from '../server.js';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+import mammoth from 'mammoth';
 
 const router = Router();
 
@@ -38,54 +42,101 @@ router.get('/libro/:id', async (req, res) => {
 });
 
 //Editar los libros
-router.put('/libro/:id', async (req, res) => {
-    //conseguir id
-    const {id}=req.params
-    // Buscar categoría por defecto "Todos los libros"
-    
-    const { titulo, precio, contenido, img, categoriaSeleccionada, coleccionSeleccionada } = req.body;
-    console.log("✉️ Recibido en PUT /libro:", typeof id);
-
-    
-    try {
-        // categoria que usuario ha elegido
-         const categorias = [
-            {
-                cateID: categoriaSeleccionada,
-                colleccion: [coleccionSeleccionada]
-            }
-        ];
-        // categoria defecto
-        const categoriaDefault = await ServerModel.Categoria.findOne({ nombre: 'Todos los libros' });
-        // agregar categoria defecto
-        if (categoriaDefault && categoriaDefault._id) {
-            categorias.push({
-                cateID: categoriaDefault._id,
-                colleccion: ["Todos los libros"]
-            });
-        } else {
-            console.warn('Categoría "Todos los libros" no encontrada');
-        }
-        //actualizar la informacion de libros
-        const libroActualizado = await ServerModel.Libro.findByIdAndUpdate(id,
-        {
-            titulo,
-            precio,
-            contenido,
-            img,
-            categoria: categorias,
-        },
-        { new: true }
-        );
-
-        if (!libroActualizado) {
-        return res.status(404).json({ error: 'Libro no encontrado' });
-        }
-
-        res.json(libroActualizado);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const dir = './uploads/';
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+    cb(null, dir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, uniqueName + path.extname(file.originalname));
+  }
 });
+const upload = multer({ storage });
+
+// 👇 替换这个路由
+router.put('/libro/:id', upload.single('file'), async (req, res) => {
+  const { id } = req.params;
+  const {
+    titulo,
+    precio,
+    img,
+    categoriaSeleccionada,
+    coleccionSeleccionada
+  } = req.body;
+  const file = req.file;
+
+  if (!titulo || !precio || !categoriaSeleccionada) {
+    return res.status(400).json({ message: "Campos obligatorios faltantes." });
+  }
+
+  try {
+    // preparar categorías
+    const categorias = [
+      {
+        cateID: categoriaSeleccionada,
+        colleccion: [coleccionSeleccionada]
+      }
+    ];
+    const categoriaDefault = await ServerModel.Categoria.findOne({ nombre: 'Todos los libros' });
+    if (categoriaDefault) {
+      categorias.push({
+        cateID: categoriaDefault._id,
+        colleccion: ["Todos los libros"]
+      });
+    }
+
+    // actualizar datos principales del libro
+    const libroActualizado = await ServerModel.Libro.findByIdAndUpdate(id, {
+      titulo,
+      precio,
+      img,
+      categoria: categorias
+    }, { new: true });
+
+    if (!libroActualizado) {
+      return res.status(404).json({ error: 'Libro no encontrado' });
+    }
+
+    // actualizar contenido
+    let contenidoTexto = null;
+    let archivo = null;
+
+    if (file) {
+      const extension = file.originalname.split('.').pop().toLowerCase();
+
+      if (extension === 'docx') {
+        const buffer = fs.readFileSync(file.path);
+        const result = await mammoth.extractRawText({ buffer });
+        contenidoTexto = result.value;
+      } else {
+        archivo = file.filename;
+      }
+
+      // Verificar si ya existe contenido
+      const contenidoExistente = await ServerModel.Contenido.findOne({ libroID: id });
+      if (contenidoExistente) {
+        contenidoExistente.contenido = contenidoTexto || '';
+        contenidoExistente.archivo = archivo || '';
+        await contenidoExistente.save();
+      } else {
+        const nuevoContenido = new ServerModel.Contenido({
+          contenido: contenidoTexto || '',
+          archivo: archivo || '',
+          libroID: id
+        });
+        await nuevoContenido.save();
+      }
+    }
+
+    res.status(200).json({ message: "Libro actualizado con éxito", libro: libroActualizado });
+
+  } catch (error) {
+    console.error("Error al actualizar libro:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 export default router;

@@ -2,24 +2,33 @@
 import React, { useState, useEffect } from 'react';
 // manejar tipo de docx,pdf,epub
 import mammoth from 'mammoth';
-import * as pdfjsLib from 'pdfjs-dist';
 import ePub from 'epubjs';
 import subirImgDefault from '../../img/subir-img-default.png';
+import * as pdfjsLib from 'pdfjs-dist';
+
+// 👉 usar CDN oficial para evitar error con Vite
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+
 
 const EditarLibros = ({ libroId, onCancel, onSuccess }) => {
+
+  const [selectedFile, setSelectedFile] = useState(null);
+
     //hasta top en caso clic
     useEffect(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
     
-  const [formData, setFormData] = useState({
-    titulo: '',
-    precio: '',
-    contenido: '',
-    img: '',
-    categoriaSeleccionada: '',
-    coleccionSeleccionada: ''
-  });
+const [formData, setFormData] = useState({
+  titulo: '',
+  precio: '',
+  contenido: '',
+  img: '',
+  categoriaSeleccionada: '',
+  coleccionSeleccionada: '',
+  tipoArchivo: '' // nuevo campo para que el backend sepa cómo guardar
+});
+
 
   const [previewUrl, setPreviewUrl] = useState(null);
   const [categorias, setCategorias] = useState([]);
@@ -63,74 +72,70 @@ const EditarLibros = ({ libroId, onCancel, onSuccess }) => {
   };
 
   //  Convertir archivo .docx a texto
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
-    try {
-        if (file) {
-            //.docx con mammoth
-            const arrayBuffer = await file.arrayBuffer();
-            const result = await mammoth.extractRawText({ arrayBuffer });
-            setFormData({ ...formData, contenido: result.value });
-        }
-        else if (fileName.endsWith('.pdf')) {
-        // .pdf con pdfjs
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-        let texto = '';
-        for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
-            const pageText = content.items.map(item => item.str).join(' ');
-            texto += pageText + '\n\n';
-        }
-        setFormData({ ...formData, contenido: texto });
+ // Manejar carga de archivo (.docx, .pdf, .epub)
+const handleFileUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
 
-        }else if (fileName.endsWith('.epub')) {
-        //.epub con epub.js
-        const reader = new FileReader();
-        reader.onload = async () => {
-            const book = ePub(reader.result);
-            const rendition = book.renderTo('epub-view', { width: 0, height: 0 }); // invisible
-            await book.ready;
+  const fileName = file.name.toLowerCase();
+  const extension = fileName.split('.').pop();
 
-            let text = '';
-            const spineItems = book.spine.items;
+  setSelectedFile(file); // 👉 关键：用于后续 handleSubmit 上传
 
-            for (const item of spineItems) {
-            const content = await item.load(book.load.bind(book));
-            const rawText = content.textContent || '';
-            text += rawText + '\n\n';
-            item.unload();
-            }
+  try {
+    if (extension === 'docx') {
+      // DOCX: extraer texto y mostrar en contenido
+      const arrayBuffer = await file.arrayBuffer();
+      const result = await mammoth.extractRawText({ arrayBuffer });
+      setFormData({
+        ...formData,
+        contenido: result.value,
+        tipoArchivo: 'texto' // 可选字段供后端参考
+      });
 
-            setFormData({ ...formData, contenido: text });
-        };
-        reader.readAsArrayBuffer(file);
-        } else {
-        alert('Formato no soportado. Solo .docx, .pdf, .epub');
-        }
-    } catch (error) {
-        console.error('Error al leer archivo:', err);
-        alert('No se pudo leer el archivo. Verifique el formato.');
-    } 
-  };
-
-  // Enviar formulario para guardar cambios
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const res = await fetch(`http://localhost:5001/misLibros/libro/${libroId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    });
-
-    if (res.ok) {
-      onSuccess(); // Notificar éxito al padre
     } else {
-      alert('Error al guardar los cambios');
+      // PDF、EPUB：不处理内容，只保留文件
+      setFormData({
+        ...formData,
+        contenido: '',
+        tipoArchivo: 'archivo'
+      });
     }
-    console.log("Enviando:", formData);
-  };
+  } catch (error) {
+    console.error('Error al leer archivo:', error);
+    alert('No se pudo procesar el archivo.');
+  }
+};
+
+
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const form = new FormData();
+  form.append('titulo', formData.titulo);
+  form.append('precio', formData.precio);
+  form.append('img', formData.img);
+  form.append('categoriaSeleccionada', formData.categoriaSeleccionada);
+  form.append('coleccionSeleccionada', formData.coleccionSeleccionada);
+
+  if (selectedFile) {
+    form.append('file', selectedFile); // 关键是这一行
+  }
+
+  const res = await fetch(`http://localhost:5001/misLibros/libro/${libroId}`, {
+    method: 'PUT',
+    body: form
+  });
+
+  if (res.ok) {
+    onSuccess();
+  } else {
+    alert('Error al guardar los cambios');
+  }
+};
+
 
   return (
     <form onSubmit={handleSubmit} className="subir-libro-form">
