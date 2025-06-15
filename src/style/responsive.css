@@ -115,6 +115,21 @@
    }
 }
 /* Diseño responsive */
+@media (max-width:1000px) and (max-height:1000px){
+  main{
+    min-height: 50vh !important;
+  }
+  /* subir libros */
+  /* main */
+  .subir-libro-main{
+    padding: 0 !important;
+  }
+  .subir-libro-form {
+    border-radius: 0 !important;
+    height: 100% !important;
+    width: 100% !important;
+  }
+}
 /* responsive */
 @media (max-width: 850px) {
   /* menu hamburger */
@@ -293,10 +308,22 @@
   }
   /* icon hidden */
   .bx-show, .bx-hide{
-    font-size: 10px;
+    font-size: 20px;
     top: 55%;
   }
   /* subir libros */
+  /* titluo y imagen */
+  .subir-libro-titulo{
+    flex-direction: column !important;
+    width: 100vw !important;
+  }
+  /* titulo */
+  .subir-libro-titulo-libro{
+    font-size: 20px !important;
+  }
+  .subir-libro-titulo-libro>input{
+    font-size: 1rem;
+  }
   /* imagen */
   .subir-libro-form .preview-container{
     display: flex !important;
@@ -304,7 +331,7 @@
     align-items: center !important;
   }
   /* label */
-  .subir-libro-form label, .subir-libro-form div{
+  .subir-libro-form label{
     width: 300px !important;
   }
   /* admin */
