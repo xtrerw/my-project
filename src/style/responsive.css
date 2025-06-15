@@ -369,3 +369,12 @@
     }
 }
 
+@media (max-width:400px) {
+    .btn-volver{
+      top: 5px !important;
+      left: 5px !important;
+    }
+    .btn-volver>.bx-chevron-left{
+      font-size: 30px !important;
+    }
+}
