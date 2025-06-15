@@ -90,8 +90,8 @@ router.post("/convertirse", async (req, res) => {
     await nuevoAutor.save();
 
     // (Opcional) Actualizar tipo en la colección original
-    usuario.tipo = "autor";
-    await usuario.save();
+    // usuario.tipo = "autor";
+    // await usuario.save();
 
     res.status(201).json({ message: "Usuario convertido a autor", autor: nuevoAutor });
 

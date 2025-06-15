@@ -111,27 +111,30 @@ const EditarInformacionLector = ({onSuccess}) => {
   //convertirse en autor
   const handleConvertirse = () => {
     // Obtener el user id
-    const userId=user._id
+   const userId = user?._id;
 
-    if (!userId) {
-      console.error("No se encontró el userId en localStorage");
-      return;
-    }
+  if (!userId) {
+    alert("No se encontró tu sesión. Por favor, vuelve a iniciar sesión.");
+    return;
+  }
 
-    fetch("http://localhost:5001/usuario/convertirse", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId })
+  fetch("http://localhost:5001/usuario/convertirse", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId })
+  })
+    .then(async res => {
+      if (res.ok) {
+        alert("¡Te has registrado como autor con éxito!");
+        return res.json();
+      } else {
+        const errorData = await res.json();
+        throw new Error(errorData.mensaje || "Registro fallido");
+      }
     })
-      .then(res => res.json())
-      .then(data => {
-        console.log("¡Te has registrado como autor con éxito!");
-        console.log(data);
-        
-      })
-      .catch(err => {
-        console.error("Error al crear lector:", err);
-      });
+    .catch(err => {
+      alert("Error: " + err.message);
+    });
   };
     return (
       <div className="editar-informacion">
