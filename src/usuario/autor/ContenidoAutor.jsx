@@ -5,7 +5,7 @@ import gsap from 'gsap'
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from 'gsap/all';
 import { useNavigate } from 'react-router-dom';
-const Contenido = () => {
+const ContenidoAutor = () => {
     //hasta top en caso clic
     useEffect(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -59,6 +59,12 @@ const Contenido = () => {
 
   return (
         <div className="contenido-container">
+          <div
+            onClick={() => navigate('/Author/Mis Libros')}
+            className="btn-volver"
+          >
+            < i className='bx  bx-chevron-left'  ></i> 
+          </div>
       {contenidos.map((contenido, index) => (
         <div key={index} className="contenido-item">
           <h1 className="contenido-titulo">{contenido.titulo}</h1>
@@ -92,4 +98,4 @@ const Contenido = () => {
   )
 }
 
-export default Contenido
+export default ContenidoAutor
