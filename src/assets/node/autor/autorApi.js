@@ -288,41 +288,55 @@ router.put('/:id', async (req, res) => {
   });
 //Verificar contraseña anterior por ID
 router.post('/password/:id', async (req, res) => {
-    const { id } = req.params;
-    const { contrasena } = req.body;
-    const hashedPwd = hashpwd(contrasena);
-    let autor;
-    try {
-        // Buscar el autor por ID y verificar la contraseña
-        autor = await ServerModel.Autor.findById(id);
-        //contraseña incorrecta
-        if (!autor) {
-            autor = await ServerModel.Usuario.findById(id);
-            if (!autor) {
-                return res.status(404).json({ message: "Usuario no encontrado" });
-            }
-        }
-        // Verificar si la contraseña coincide
-        if (hashedPwd !== autor.password) {
-            return res.status(401).json({ message: "Contraseña incorrecta" });
-        }
-        res.status(200).json({ message: "Contraseña correcta" });
-    } catch (error) {
-      console.error("verificar contraseña error", error.message, error.stack);
-      res.status(500).json({ message: "Error al verificar contraseña", error: error.message });
+  const { id } = req.params;
+  const { contrasena } = req.body;
+  const hashedPwd = hashpwd(contrasena);
+
+  try {
+    // Primero buscar en usuarios (lectores)
+    let usuario = await ServerModel.Usuario.findById(id);
+
+    // Si no está en usuarios, buscar en autores
+    if (!usuario) {
+      usuario = await ServerModel.Autor.findById(id);
     }
-  });
+
+    // Si no se encuentra en ningún modelo
+    if (!usuario) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Verificar contraseña
+    if (hashedPwd !== usuario.password) {
+      return res.status(401).json({ message: "Contraseña incorrecta" });
+    }
+
+    res.status(200).json({ message: "Contraseña correcta" });
+  } catch (error) {
+    console.error("Error al verificar contraseña:", error.message);
+    res.status(500).json({ message: "Error del servidor", error: error.message });
+  }
+});
 
 // Cambiar contraseña del autor por ID
 router.put('/password/:id', async (req, res) => {
     const { id } = req.params;
     const { contrasena } = req.body;
+    const hashedPwd = hashpwd(contrasena);
     try {
-        const autor = await ServerModel.Autor.findByIdAndUpdate(id, { password: hashpwd(contrasena) }, { new: true });
-        if (!autor) {
-            return res.status(404).json({ message: "Autor no encontrado" });
+        let lector = await ServerModel.Usuario.findById(id);
+        let autor = await ServerModel.Autor.findById(id);
+        let usuario;
+
+        if (lector) {
+          usuario = await ServerModel.Usuario.findByIdAndUpdate(id, { password: hashedPwd }, { new: true });
+        } else if (autor) {
+          usuario = await ServerModel.Autor.findByIdAndUpdate(id, { password: hashedPwd }, { new: true });
+        } else {
+          return res.status(404).json({ message: "Usuario no encontrado" });
         }
-        res.status(200).json(autor);
+
+        res.status(200).json({ message: "Contraseña actualizada correctamente", usuario });
     } catch (error) {
       console.error("cambiar contraseña error", error.message, error.stack);
       res.status(500).json({ message: "Error al actualizar contraseña", error: error.message });
