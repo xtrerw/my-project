@@ -262,16 +262,18 @@ router.put('/:id', async (req, res) => {
     const { nombre, apellido, fechaNacimiento, direccion, codigoPostal, provincia, pais, nacionalidad, genero, email,telefono,tipo } = req.body;
     let usuario
     // Validar que el ID es un ObjectId válido
+    let lector = await ServerModel.Usuario.findById(id);
+    let autor = await ServerModel.Autor.findById(id);
     try {
       //si es lector
-        if (tipo==="lector") {
+        if (lector) {
           usuario=await ServerModel.Usuario.findByIdAndUpdate(id,{
             nombre: nombre,apellido:apellido,fechaNacimiento:fechaNacimiento,direccion:direccion,nacionalidad:nacionalidad,codigoPostal:codigoPostal,provincia:provincia,pais:pais,telefono:telefono,genero:genero,email:email
           },
           {new: true})
         } 
         // si es autor
-        else if (tipo==="autor") {
+        else if (autor) {
           usuario = await ServerModel.Autor.findByIdAndUpdate(id, { nombre, apellido, fechaNacimiento, direccion, codigoPostal, provincia, pais, nacionalidad, genero, email }, { new: true });
         } else {
             return res.status(404).json({ message: "Usuario no encontrado" });

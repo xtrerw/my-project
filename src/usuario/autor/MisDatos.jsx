@@ -132,6 +132,7 @@ const MisDatos = () => {
             )}
 
             {selectedTab === "Editar Información" && <EditarInformacion 
+              tipoUsuario={userData.tipo}
               onSuccess={() => {
                 fetchUserData(); //conseguir los datos actualizados
                 setSelectedTab("Mi Tunk");//pasar a la pestaña de "Mi Tunk"

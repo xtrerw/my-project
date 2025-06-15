@@ -84,7 +84,7 @@ const EditarInformacionLector = ({onSuccess}) => {
       const hayError = validar(formData); // Ejecuta la validación al cargar el componente
       if (hayError) return; // Si hay errores, no enviar el formulario
       // Si no hay errores, proceder a enviar los datos
-      
+      const { tipo, ...restFormData } = formData;
       if (userId) {
         // Realizar la solicitud PUT a la API para actualizar los datos del usuario
         fetch(`http://localhost:5001/autor/${userId}`, {
@@ -93,7 +93,7 @@ const EditarInformacionLector = ({onSuccess}) => {
             'Content-Type': 'application/json'
           },
           // Enviar los datos del formulario como JSON
-          body: JSON.stringify(formData)
+          body: JSON.stringify({ ...restFormData, tipo: "lector" })
         })
           .then(response => response.json())
           .then(data => {
