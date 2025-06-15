@@ -110,6 +110,13 @@ const EditarInformacionLector = ({onSuccess}) => {
 
   //convertirse en autor
   const handleConvertirse = () => {
+
+    // Validar antes de enviar
+  const hayError = validar(formData);
+  if (hayError) {
+    alert("Por favor, rellena todos los campos obligatorios antes de convertirte.");
+    return;
+  }
     // Obtener el user id
    const userId = user?._id;
 
@@ -129,7 +136,7 @@ const EditarInformacionLector = ({onSuccess}) => {
         return res.json();
       } else {
         const errorData = await res.json();
-        throw new Error(errorData.mensaje || "Registro fallido");
+        throw new Error(errorData.mensaje || "Registro fallido o rellenar tu formulario");
       }
     })
     .catch(err => {

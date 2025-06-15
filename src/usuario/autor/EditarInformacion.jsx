@@ -104,6 +104,12 @@ const [formData, setFormData] = useState({
   //convertirse en lector
   const handleConvertirse = () => {
 
+      const hayError = validar(formData);
+      if (hayError) {
+        alert("Por favor, rellena todos los campos obligatorios antes de convertirte.");
+        return;
+      }
+
     const userId = localStorage.getItem("userId");
     if (!userId) {
       console.error("No se encontró el userId en localStorage");
