@@ -148,39 +148,42 @@ const SubirLibro = () => {
 
     
   return (
-    <>
+    <div className='subir-libro-main'>
     {id? (
-            <form onSubmit={handlePublish} className="subir-libro-form">
-        <h2>Subir Libro</h2>
-        <label htmlFor="img" className="preview-container">
+      <form onSubmit={handlePublish} className="subir-libro-form">
+          <div className='subir-libro-titulo'>
+          <label htmlFor="img" className="preview-container">
             {/* muestra la imagen subida */}
             
-                <img src={previewUrl || subirImgDefault} alt="Vista previa" className="preview-image" />
+            <img src={previewUrl || subirImgDefault} alt="Vista previa" className="preview-image" />
 
             {/* subir img */}
             <input
             id="img"
             accept="image/*" 
             type="file"
-            name=""
+            name="img"
             onChange={handleImageUpload}
-            required
             hidden
             />
            
-        </label>
+          </label>
         
-        <label htmlFor="titulo">
-            Titulo:
-            <input
-                id="titulo"
-                type="text"
-                placeholder="Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-            />
-        </label>
+          <label htmlFor="titulo" className='subir-libro-titulo-libro'>
+              Titulo:
+              <input
+                  id="titulo"
+                  type="text"
+                  placeholder="Title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+              />
+          </label>
+        </div>
+        <fieldset>
+          
+        
         <label htmlFor="archivo">
             Contenido:
             <input
@@ -192,7 +195,7 @@ const SubirLibro = () => {
             />
         </label>
         <label htmlFor="precio" className='input-precio'>
-            Precio:
+            Precio (€):
             <input
                 id="precio"
                 type="number"
@@ -201,12 +204,12 @@ const SubirLibro = () => {
                 onChange={handlePriceChange}
                 required
             />
-            <p className="currency-symbol">€</p>
+            {/* <p className="currency-symbol">€</p> */}
         </label>
         <div className='select-categoria'>
             <div>
                 <label htmlFor="">Categoria:</label>
-                <select name="" id="" 
+                <select name="categoria" id="" 
                 value={categoriaSeleccionada}
                 onChange={(e) => setCategoriaSeleccionada(e.target.value)}
                 required>
@@ -233,15 +236,17 @@ const SubirLibro = () => {
                 </select>
             </div>
         </div>
+        </fieldset>
         <button style={{
           boxShadow:"0 0 1px 2px var(--bg-color-default)"
         }} type="submit">Subir</button>
+        
     </form>
     )
     : (
         <Author />
     )}
-    </>
+    </div>
   )
 }
 

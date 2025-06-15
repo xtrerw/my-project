@@ -138,65 +138,76 @@ const handleSubmit = async (e) => {
 
 
   return (
-    <form onSubmit={handleSubmit} className="subir-libro-form">
-      <h2>Editar Libro</h2>
+      <div className='subir-libro-main'>
+        <form onSubmit={handleSubmit} className="subir-libro-form">
+          <div className='subir-libro-titulo'>
+            <label htmlFor="img" className="preview-container">
+            <img src={previewUrl || subirImgDefault} alt="Vista previa" className="preview-image" />
+            <input id="img" type="file" accept="image/*" onChange={handleImageUpload} hidden />
+          </label>
 
-      <label htmlFor="img" className="preview-container">
-        <img src={previewUrl || subirImgDefault} alt="Vista previa" className="preview-image" />
-        <input id="img" type="file" accept="image/*" onChange={handleImageUpload} hidden />
-      </label>
+          <label className='subir-libro-titulo-libro'>Título:
+            <input
+            type="text"
+            value={formData.titulo}
+            onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
+            required
+            />
+          </label>
+          </div>
+          
+        <fieldset>
 
-      <label>Título:
-        <input
-          type="text"
-          value={formData.titulo}
-          onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
-          required
-        />
-      </label>
+          <label>Contenido:
+            <input type="file" accept=".docx,.pdf,.epub,.mobi" onChange={handleFileUpload} />
+          </label>
 
-      <label>Contenido:
-        <input type="file" accept=".docx,.pdf,.epub,.mobi" onChange={handleFileUpload} />
-      </label>
+          <label>Precio (€):
+            <input
+            type="number"
+            value={formData.precio}
+            onChange={(e) => setFormData({ ...formData, precio: e.target.value })}
+            required
+            />
+          </label>
 
-      <label>Precio (€):
-        <input
-          type="number"
-          value={formData.precio}
-          onChange={(e) => setFormData({ ...formData, precio: e.target.value })}
-          required
-        />
-      </label>
+          <div className='select-categoria'>
+              <label>Categoría:
+              <select
+              value={formData.categoriaSeleccionada}
+              onChange={(e) => setFormData({ ...formData, categoriaSeleccionada: e.target.value })}
+              required
+              >
+              <option value="">Seleccione una</option>
+              {categorias.map(cat => (
+              <option key={cat._id} value={cat._id}>{cat.nombre}</option>
+              ))}
+              </select>
+            </label>
 
-      <label>Categoría:
-        <select
-          value={formData.categoriaSeleccionada}
-          onChange={(e) => setFormData({ ...formData, categoriaSeleccionada: e.target.value })}
-          required
-        >
-          <option value="">Seleccione una</option>
-          {categorias.map(cat => (
-            <option key={cat._id} value={cat._id}>{cat.nombre}</option>
-          ))}
-        </select>
-      </label>
+            <label>Colección:
+              <select
+              value={formData.coleccionSeleccionada}
+              onChange={(e) => setFormData({ ...formData, coleccionSeleccionada: e.target.value })}
+              required
+              >
+              <option value="">Seleccione una</option>
+              {categorias.find(c => c._id === formData.categoriaSeleccionada)?.colleccion?.map((col, idx) => (
+              <option key={idx} value={col}>{col}</option>
+              ))}
+              </select>
+            </label>
+          </div>
+          
+        </fieldset>
+       
 
-      <label>Colección:
-        <select
-          value={formData.coleccionSeleccionada}
-          onChange={(e) => setFormData({ ...formData, coleccionSeleccionada: e.target.value })}
-          required
-        >
-          <option value="">Seleccione una</option>
-          {categorias.find(c => c._id === formData.categoriaSeleccionada)?.colleccion?.map((col, idx) => (
-            <option key={idx} value={col}>{col}</option>
-          ))}
-        </select>
-      </label>
+        <button type="submit">Guardar Cambios</button>
+        <button type="button" onClick={onCancel} style={{background:"var(--color-error-text)",color:"var(--bg-color-default)"}}>Cancelar</button>
 
-      <button type="submit">Guardar Cambios</button>
-      <button type="button" onClick={onCancel}>Cancelar</button>
-    </form>
+        </form>
+    </div>
+   
   );
 };
 
