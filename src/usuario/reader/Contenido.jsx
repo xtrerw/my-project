@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from 'gsap/all';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext'
+import { useLocation } from 'react-router-dom';
 const Contenido = () => {
     //hasta top en caso clic
     useEffect(() => {
@@ -18,6 +19,9 @@ const Contenido = () => {
     const {id}=useParams()
     
     const [contenidos,setContenidos]=useState([])
+
+    const location = useLocation();
+    const { categoriaId, subcategoriaId } = location.state || {};
       //navegacion
     const navigate = useNavigate();
     //conseguir los contenidos de los libros
@@ -95,6 +99,18 @@ const handleAgregarFavorito = () => {
 
   return (
         <div className="contenido-container">
+          <div
+             onClick={() => {
+                if (categoriaId && subcategoriaId) {
+                  navigate(`/${categoriaId}/${subcategoriaId}`);
+                } else {
+                  navigate('/404'); // 
+                }
+              }}
+            className="btn-volver"
+          >
+            < i className='bx  bx-chevron-left'  ></i> 
+          </div>
       {contenidos.map((contenido, index) => (
         <div key={index} className="contenido-item">
           <h1 className="contenido-titulo">{contenido.titulo}</h1>

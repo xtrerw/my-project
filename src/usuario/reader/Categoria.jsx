@@ -420,7 +420,7 @@ useGSAP(() => {
           )
         .map((libro, index) => (
             <div key={index} ref={el => libroRefs.current[index] = el} className='categoria-libro'>
-              <Link to={`/Libros/${libro._id}`} className='libro-item'>
+              <Link to={`/Libros/${libro._id}`} state={{categoriaId, subcategoriaId}} className='libro-item'>
               {librosConFormato[libro._id] && (
                 <div className="etiqueta-pdf">PDF</div>
               )}
