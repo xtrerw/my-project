@@ -55,7 +55,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// 👇 替换这个路由
+// Editar libros
 router.put('/libro/:id', upload.single('file'), async (req, res) => {
   const { id } = req.params;
   const {
@@ -79,7 +79,7 @@ router.put('/libro/:id', upload.single('file'), async (req, res) => {
         colleccion: [coleccionSeleccionada]
       }
     ];
-    const categoriaDefault = await ServerModel.Categoria.findOne({ nombre: 'Todos los libros' });
+    const categoriaDefault = await ServerModel.Categoria.findOne({ nombre: 'Imprescindibles' });
     if (categoriaDefault) {
       categorias.push({
         cateID: categoriaDefault._id,
