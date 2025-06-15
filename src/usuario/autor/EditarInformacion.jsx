@@ -11,7 +11,7 @@ import { validateEditarInformacion } from '../../utils/validateEditarInformacion
 import { useFormValidation } from '../../utils/useFormValidation';
 //Wei123@
 registerLocale("es", es); // Registra el locale español
-const EditarInformacion = ({onSuccess}) => {
+const EditarInformacion = ({onSuccess,tipoUsuario}) => {
     //Si hay error      
     const { errores, mensajeError, validar } = useFormValidation(validateEditarInformacion);
 
@@ -27,7 +27,7 @@ const [formData, setFormData] = useState({
   nacionalidad: "",
   genero: "",
   email: "",
-  tipo: "autor", // 
+  tipo: tipoUsuario, // 
 });
 
   // Cargar datos del usuario desde la API cuando el componente se monta
@@ -51,7 +51,7 @@ const [formData, setFormData] = useState({
             nacionalidad: data.nacionalidad || "",
             genero: data.genero || "",
             email: data.email || "",
-            tipo: data.tipo || "autor"
+            tipo: data.tipo || tipoUsuario || "autor"
           });
         })
         .catch(error => {
@@ -79,6 +79,8 @@ const [formData, setFormData] = useState({
     if (hayError) return; // Si hay errores, no enviar el formulario
     // Si no hay errores, proceder a enviar los datos
     
+    const { tipo, ...formDataSinTipo } = formData;
+
     if (userId) {
       // Realizar la solicitud PUT a la API para actualizar los datos del usuario
       fetch(`http://localhost:5001/autor/${userId}`, {
@@ -87,7 +89,7 @@ const [formData, setFormData] = useState({
           'Content-Type': 'application/json'
         },
         // Enviar los datos del formulario como JSON
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formDataSinTipo)
       })
         .then(response => response.json())
         .then(data => {
