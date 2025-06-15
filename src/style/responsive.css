@@ -225,7 +225,6 @@
   .libro-item{
     width: 150px !important;
     min-height: 0 !important;
-    height: 200px !important;
   }
   .libro-item img{
     width: 80px !important;
@@ -308,6 +307,18 @@
   .main-admin{
       min-height: 100vh !important;
   }
-  
+  /* editar libros */
+  /* titulo de libros */
+      .libro-item h2 {
+        font-size: 10px;
+    }
+    /* motivo */
+    .motivo-ocultacion{
+      font-size: 8px !important;
+    }
+    .mis-libros-container .btn-editar, .mis-libros-container .btn-eliminar, .mis-libros-container .btn-disabled{
+      font-size: 8px !important;
+      padding: 2px !important;
+    }
 }
 
