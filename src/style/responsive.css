@@ -72,6 +72,12 @@
       min-height: 300px;
       padding: 30px 20px;
    }
+   /* calendario */
+   .react-datepicker-popper {
+      height: 200px;
+      overflow-y: scroll;
+    }
+
    input,select{
       padding: 8px !important;
       margin: 5px 0 !important;

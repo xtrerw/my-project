@@ -129,8 +129,23 @@ const SubirLibro = () => {
         const fetchCategorias = async () => {
             try {
             const response = await fetch('http://localhost:5001/autor/categorias');
+            // Obtener datos del servidor
             const data = await response.json();
-            setCategorias(Array.isArray(data) ? data : []);
+
+            // Buscar la categoría llamada "Imprescindibles" (en plural, como aparece en la UI)
+            const impCategoria = data.find(c => c.nombre.toLowerCase() === "imprescindibles");
+
+            // Filtrar las categorías, excluyendo "Imprescindibles"
+            const categoriasFiltradas = data.filter(c => c.nombre.toLowerCase() !== "imprescindibles");
+
+            // Guardar las categorías filtradas en el estado
+            setCategorias(Array.isArray(categoriasFiltradas) ? categoriasFiltradas : []);
+
+            // Si la categoría seleccionada es "Imprescindibles", reiniciar la selección
+            if (impCategoria && categoriaSeleccionada === impCategoria._id) {
+              setCategoriaSeleccionada("");
+            }
+
             } catch (error) {
             console.error('Error fetching categories:', error);
             }

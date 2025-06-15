@@ -52,7 +52,23 @@ const [formData, setFormData] = useState({
 
       const resCat = await fetch('http://localhost:5001/autor/categorias');
       const dataCat = await resCat.json();
-      setCategorias(dataCat);
+      // Buscar la categoría "Imprescindibles" (nombre exacto en plural, según lo mostrado)
+      const impCategoria = dataCat.find(c => c.nombre.toLowerCase() === "imprescindibles");
+
+      // Filtrar la lista para excluir "Imprescindibles"
+      const categoriasFiltradas = dataCat.filter(c => c.nombre.toLowerCase() !== "imprescindibles");
+
+      // Guardar las categorías válidas en el estado
+      setCategorias(Array.isArray(categoriasFiltradas) ? categoriasFiltradas : []);
+
+      // Si la categoría actual seleccionada es "Imprescindibles", reiniciarla
+      if (impCategoria && formData.categoriaSeleccionada === impCategoria._id) {
+        setFormData(prev => ({
+          ...prev,
+          categoriaSeleccionada: "",
+          coleccionSeleccionada: ""
+        }));
+      }
     };
 
     if (libroId) cargarDatos();
@@ -159,7 +175,7 @@ const handleSubmit = async (e) => {
         <fieldset>
 
           <label>Contenido:
-            <input type="file" accept=".docx,.pdf,.epub,.mobi" onChange={handleFileUpload} />
+            <input type="file" accept=".docx,.pdf,.epub,.mobi" onChange={handleFileUpload} required/>
           </label>
 
           <label>Precio (€):
