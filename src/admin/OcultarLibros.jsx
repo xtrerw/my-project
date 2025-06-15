@@ -74,7 +74,7 @@ const OcultarLibros = () => {
             <input type="text" 
             value={searchTerm}
             onChange={(e)=>setSearchTerm(e.target.value.toLowerCase())}
-            placeholder='Buscar por título o autor'
+            placeholder='Buscar por título'
             className="buscador-ocultar-input"
             />
             <i className="bx bx-search" id='icon-buscador'/>
