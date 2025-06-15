@@ -62,6 +62,10 @@
    .bx-heart-circle{
       right: 10px !important;
    }
+   /* icon pdf */
+   .etiqueta-pdf{
+    left: -20px !important;
+   }
    /* iniciar sesion */
    /* form de iniciar sesion */
    .form-iniciar>form{
@@ -230,6 +234,10 @@
     width: 80px !important;
     height: 100px !important;
   }
+   .etiqueta-pdf{
+    left: -10px !important;
+    font-size: 10px !important;
+   }
   /* contenido */
   .contenido-container{
     min-height: 50vh !important;
