@@ -167,6 +167,8 @@
     display: flex !important;
     background: var(--bg-color-default) !important;
     color: var(--bg-color-main) !important;
+    overflow-y: scroll !important;
+    height: 200px !important;
   }
 
   .menu-item {
